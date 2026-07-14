@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-14 - Session: batch analysis and reporting
+
+- What was built: Added `POST /api/v1/analyse/batch`, batch summary generation, controlled-concurrency batch analysis, batch route integration tests, deterministic summary tests, `/dashboard/projects/[id]/batch`, and `/dashboard/projects/[id]/report`.
+- Problems found: The first lint run reported an unused import in the batch route; removed it before final checks. Batch/report storage is currently browser-local because persistent analysis storage has not been added yet.
+- Bugs fixed: Removed the unused batch route import and kept batch metrics in a reusable deterministic helper so identical stored input produces identical measured summaries.
+- Important technical decisions: Maximum batch size is 25 messages; invalid messages are returned in `failedResults` while valid messages continue through analysis; AI failures are contained by the existing deterministic fallback path; report metrics are recomputed from stored analysis results and kept separate from interpretation.
+- Tests performed: `npm test` passed with 53 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed.
+- New rules learned: Batch analysis must isolate per-message failures; reports must not invent counts and must derive all metrics from actual analysis results.
+
 ## 2026-07-14 - Session: analysis API and dashboard analyser
 
 - What was built: Added `POST /api/v1/analyse`, `GET /api/v1/health`, `GET /api/v1/rules`, API input validation, route-handler integration tests, a project message-analysis UI at `/dashboard/projects/[id]/analyse`, README API examples, and a default AI provider factory that safely falls back when OpenAI is not configured.

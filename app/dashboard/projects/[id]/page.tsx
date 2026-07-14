@@ -36,12 +36,26 @@ export default async function EditProjectPage({
           Update official documentation, verified links and response tone for
           this project.
         </p>
-        <Link
-          href={`/dashboard/projects/${project.id}/analyse`}
-          className="mt-5 inline-flex h-10 items-center justify-center rounded-lg bg-emerald-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
-        >
-          Analyse Message
-        </Link>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href={`/dashboard/projects/${project.id}/analyse`}
+            className="inline-flex h-10 items-center justify-center rounded-lg bg-emerald-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+          >
+            Analyse Message
+          </Link>
+          <Link
+            href={`/dashboard/projects/${project.id}/batch`}
+            className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
+          >
+            Batch Analysis
+          </Link>
+          <Link
+            href={`/dashboard/projects/${project.id}/report`}
+            className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
+          >
+            Report
+          </Link>
+        </div>
         <div className="mt-8">
           <ProjectForm
             action={updateProjectWithId}
