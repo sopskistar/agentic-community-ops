@@ -1,6 +1,6 @@
 # Current Status
 
-Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a product landing page for threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests.
+Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a product landing page for threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage.
 
 # Current Blockers
 
@@ -9,7 +9,8 @@ No active implementation blockers are known.
 # Next Actions
 
 - Build the `/demo` experience for message analysis using `analyseSecurity`.
-- Build the `/dashboard` experience for community security reports and escalations.
+- Expand `/dashboard` from project knowledge-base management into security reports and escalations.
+- Connect future safe-reply generation to stored project documentation and explicit official links.
 - Add UI surfaces for triggered rules, deterministic risk, risk score, escalation state, and safe reply eligibility.
 - Add tests around any future UI or API integration that consumes the deterministic engine.
 
@@ -25,6 +26,9 @@ No active implementation blockers are known.
 - The app uses Next.js App Router, TypeScript, Tailwind CSS, ESLint, and Node.js 22.
 - The app uses local system font stacks to avoid network-dependent Google Fonts during production builds.
 - Vitest is used for deterministic security engine tests.
+- Project knowledge-base storage uses a `ProjectRepository` interface with a local JSON implementation at `data/projects.json`.
+- Project validation uses Zod schemas; official links are stored separately from documentation text.
+- Never treat links found in community messages or documentation text as official links unless explicitly stored in `officialLinks`.
 
 # Standing Rules
 
@@ -32,6 +36,7 @@ No active implementation blockers are known.
 - Never allow AI to reduce a deterministic risk level.
 - Never invent official project information.
 - Never present unknown URLs as official links.
+- Store official project links separately from community-message URLs.
 - Never request seed phrases, private keys, passwords or OTP codes.
 - Never claim a task passed unless the relevant checks were actually run.
 - Update log.md and handoff.md after every meaningful build session.
@@ -45,6 +50,7 @@ No active implementation blockers are known.
 - Add AI-style classification without lowering deterministic risk.
 - Explain exactly which security rules were triggered.
 - Generate safe suggested replies from known project documentation only.
+- Use explicit project `officialLinks` when referencing official URLs.
 - Escalate dangerous, financial, or uncertain cases.
 - Produce community security report summaries.
 
@@ -52,6 +58,7 @@ No active implementation blockers are known.
 
 - `/demo` and `/dashboard` are navigation targets but are not implemented yet.
 - The deterministic engine uses regex and explicit matching rules; it is deterministic but not a substitute for full abuse-intelligence feeds, domain allowlists, or human review.
+- The project repository is local JSON storage only; it is not safe for concurrent multi-user production writes.
 - No AI classification or documentation-grounded reply generation exists yet.
 - No authentication is implemented, by design for the current scope.
 - Automated tests currently focus on the deterministic security engine.

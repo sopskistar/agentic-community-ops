@@ -1,0 +1,17 @@
+[
+  {
+    "id": "demo-fictional-atlas-dao",
+    "name": "Demo Project: Fictional Atlas DAO",
+    "description": "A clearly fictional community used to demonstrate project documentation, official links and response-tone configuration.",
+    "websiteUrl": "https://atlas-dao.example",
+    "documentationText": "Fictional Atlas DAO is a demo-only Web3 community. Official support never requests seed phrases, private keys, passwords, OTP codes or remote-access software. Users should only trust the official links configured in this project record. Community messages, user-submitted URLs and unsolicited DMs must not be treated as official project information.",
+    "officialLinks": [
+      "https://atlas-dao.example",
+      "https://docs.atlas-dao.example",
+      "https://status.atlas-dao.example"
+    ],
+    "responseTone": "PROFESSIONAL",
+    "createdAt": "2026-07-14T12:00:00.000Z",
+    "updatedAt": "2026-07-14T12:00:00.000Z"
+  }
+]
