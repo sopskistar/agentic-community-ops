@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-14 - Session: ASP registration preparation
+
+- What was built: Added public service manifest, JSON input/output schemas for single and batch analysis, `/docs/asp`, `ASP_REGISTRATION.md`, and `FINAL_CHECKLIST.md` for OKX.AI Agent Service Provider registration preparation.
+- Problems found: No unsupported OKX or payment integration should be implemented before deployment; documentation now explicitly states payment integration is deferred and the 1 USDC price is a suggested demonstration price only.
+- Bugs fixed: None. This session added documentation, schemas and registration artifacts without changing core analysis behavior.
+- Important technical decisions: ASP materials describe the existing service honestly, reference public endpoints and schemas, and do not claim OKX payment support or any unimplemented integration.
+- Tests performed: `npm test` passed with 53 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed; public JSON files parsed successfully; environment-variable and secret exposure reviews completed; responsive-page and demo-flow source reviews completed.
+- New rules learned: Registration materials must distinguish deployed product capabilities from future/payment integration work; manifests and schemas should be public static files and safe to share.
+
 ## 2026-07-14 - Session: guided judge demo
 
 - What was built: Added a polished no-login `/demo` page using the fictional NovaBridge project, safe fictional documentation and official links, ten fictional messages, single-message LOW/HIGH/CRITICAL walkthroughs, exact triggered-rule proof, safe suggested reply, batch audit, community security report, reset control, and "Why this is not an AI hallucination" explanation.

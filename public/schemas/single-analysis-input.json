@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-community-ops.example/schemas/single-analysis-input.json",
+  "title": "Single Analysis Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["projectId", "message"],
+  "properties": {
+    "projectId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content", "source"],
+      "properties": {
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "source": {
+          "type": "string",
+          "enum": ["MANUAL", "X", "DISCORD", "TELEGRAM", "EMAIL", "OTHER"]
+        },
+        "authorName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        }
+      }
+    }
+  }
+}

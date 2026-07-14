@@ -1,6 +1,6 @@
 # Current Status
 
-Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a product landing page for threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`. A guided no-setup judge demo now exists at `/demo` using the fictional NovaBridge project.
+Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a product landing page for threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`. A guided no-setup judge demo now exists at `/demo` using the fictional NovaBridge project. ASP registration preparation artifacts now exist at `/docs/asp`, `ASP_REGISTRATION.md`, `FINAL_CHECKLIST.md`, `public/service-manifest.json`, and `public/schemas/*.json`.
 
 # Current Blockers
 
@@ -9,6 +9,9 @@ No active implementation blockers are known.
 # Next Actions
 
 - Use `/demo` as the primary 90-second judge recording flow.
+- Deploy the application and replace placeholder deployment URLs in ASP materials.
+- Verify public manifest and schema URLs after deployment.
+- Submit ASP registration materials when deployment is stable.
 - Persist batch analysis results server-side if reports need to survive browser/session changes.
 - Add an escalation queue backed by persisted analysis results.
 - Connect safe-reply generation to stored project documentation and explicit official links.
@@ -29,6 +32,9 @@ No active implementation blockers are known.
 - `/api/v1/analyse/batch` accepts up to 25 messages, validates every message, uses controlled AI concurrency, isolates per-message failures, and returns `successfulResults`, `failedResults`, and measured summary metrics.
 - `/api/v1/rules` returns only the public deterministic rule list.
 - `/api/v1/health` returns service status and deterministic engine availability.
+- ASP public static files live at `public/service-manifest.json` and `public/schemas/*.json`.
+- `/docs/asp` is the human-readable ASP documentation page.
+- `ASP_REGISTRATION.md` and `FINAL_CHECKLIST.md` are registration/operator documents.
 - Batch summary metrics are computed in `lib/analysis/batch.ts` from actual analysis results.
 - Report UI recomputes measured metrics from stored batch results; interpretation must remain separate and must not invent numbers.
 - `/demo` is self-contained and uses a local NovaBridge mock AI provider with the real hybrid analysis and deterministic summary helpers, so no login, database or API key is required for judge review.
@@ -59,6 +65,8 @@ No active implementation blockers are known.
 - Never claim a task passed unless the relevant checks were actually run.
 - Batch and report metrics must come from actual analysis results.
 - Identical stored batch input must produce identical deterministic metrics.
+- Do not implement or claim OKX/payment integration until the core product is deployed and working.
+- Registration materials must not invent unsupported OKX capabilities.
 - Update log.md and handoff.md after every meaningful build session.
 - Preserve existing working functionality.
 
@@ -83,6 +91,8 @@ No active implementation blockers are known.
 # Known Limitations
 
 - `/demo` is implemented as a static guided judge demo, not an interactive persisted workflow.
+- ASP registration artifacts are prepared, but the app still needs a production deployment URL before final submission.
+- Payment integration is intentionally not implemented yet.
 - `/dashboard` currently supports project knowledge-base management, per-project message analysis, browser-local batch analysis, and browser-local reports; persistent security reports and escalation queues are not implemented yet.
 - Batch and report UI store the latest batch result in browser localStorage only.
 - The deterministic engine uses regex and explicit matching rules; it is deterministic but not a substitute for full abuse-intelligence feeds, domain allowlists, or human review.

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-community-ops.example/schemas/single-analysis-output.json",
+  "title": "Single Analysis Output",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "category",
+    "detectedIntent",
+    "shortSummary",
+    "deterministicRisk",
+    "aiSuggestedRisk",
+    "finalRisk",
+    "riskScore",
+    "triggeredRules",
+    "confidence",
+    "generatedReply",
+    "shouldEscalate",
+    "escalationReason",
+    "recommendedAction",
+    "answerGroundedInKnowledgeBase",
+    "evidenceUsed"
+  ],
+  "properties": {
+    "category": {
+      "type": "string",
+      "enum": [
+        "GENERAL_QUESTION",
+        "CUSTOMER_SUPPORT",
+        "TRANSACTION_ISSUE",
+        "SECURITY",
+        "SCAM",
+        "COMPLAINT",
+        "SALES_LEAD",
+        "PARTNERSHIP",
+        "SPAM",
+        "UNKNOWN"
+      ]
+    },
+    "detectedIntent": { "type": "string" },
+    "shortSummary": { "type": "string" },
+    "deterministicRisk": { "$ref": "#/$defs/risk" },
+    "aiSuggestedRisk": { "$ref": "#/$defs/risk" },
+    "finalRisk": { "$ref": "#/$defs/risk" },
+    "riskScore": { "type": "number", "minimum": 0, "maximum": 100 },
+    "triggeredRules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/triggeredRule" }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "generatedReply": { "type": "string" },
+    "shouldEscalate": { "type": "boolean" },
+    "escalationReason": { "type": ["string", "null"] },
+    "recommendedAction": { "type": "string" },
+    "answerGroundedInKnowledgeBase": { "type": "boolean" },
+    "evidenceUsed": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "risk": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+    },
+    "triggeredRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleId",
+        "name",
+        "description",
+        "matchedEvidence",
+        "severity",
+        "recommendedAction"
+      ],
+      "properties": {
+        "ruleId": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "matchedEvidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "severity": { "$ref": "#/$defs/risk" },
+        "recommendedAction": { "type": "string" }
+      }
+    }
+  }
+}

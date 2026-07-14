@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-community-ops.example/schemas/batch-analysis-output.json",
+  "title": "Batch Analysis Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["summary", "successfulResults", "failedResults"],
+  "properties": {
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "totalMessages",
+        "safeMessages",
+        "mediumRisk",
+        "highRisk",
+        "criticalRisk",
+        "escalations",
+        "mostTriggeredRules",
+        "topCategories"
+      ],
+      "properties": {
+        "totalMessages": { "type": "integer", "minimum": 0 },
+        "safeMessages": { "type": "integer", "minimum": 0 },
+        "mediumRisk": { "type": "integer", "minimum": 0 },
+        "highRisk": { "type": "integer", "minimum": 0 },
+        "criticalRisk": { "type": "integer", "minimum": 0 },
+        "escalations": { "type": "integer", "minimum": 0 },
+        "mostTriggeredRules": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ruleCount" }
+        },
+        "topCategories": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/categoryCount" }
+        }
+      }
+    },
+    "successfulResults": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/successfulResult" }
+    },
+    "failedResults": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/failedResult" }
+    }
+  },
+  "$defs": {
+    "risk": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+    },
+    "ruleCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ruleId", "name", "count"],
+      "properties": {
+        "ruleId": { "type": "string" },
+        "name": { "type": "string" },
+        "count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "categoryCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "count"],
+      "properties": {
+        "category": { "type": "string" },
+        "count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "successfulResult": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["index", "content", "source", "result"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0 },
+        "content": { "type": "string" },
+        "source": { "type": "string" },
+        "authorName": { "type": "string" },
+        "result": { "$ref": "/schemas/single-analysis-output.json" }
+      }
+    },
+    "failedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "error"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0 },
+        "content": { "type": "string" },
+        "error": { "type": "string" }
+      }
+    }
+  }
+}
