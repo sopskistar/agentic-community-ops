@@ -12,6 +12,7 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - Deploy the application and replace placeholder deployment URLs in ASP materials.
 - Verify public manifest and schema URLs after deployment.
 - Submit ASP registration materials when deployment is stable.
+- Replace local JSON project storage with durable storage before production multi-user use.
 - Persist batch analysis results server-side if reports need to survive browser/session changes.
 - Add an escalation queue backed by persisted analysis results.
 - Connect safe-reply generation to stored project documentation and explicit official links.
@@ -47,6 +48,7 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - The app uses local system font stacks to avoid network-dependent Google Fonts during production builds.
 - Vitest is used for deterministic security engine tests.
 - Project knowledge-base storage uses a `ProjectRepository` interface with a local JSON implementation at `data/projects.json`.
+- The local JSON repository is acceptable for MVP/demo reads but is not durable serverless production storage for project creation/editing.
 - Project validation uses Zod schemas; official links are stored separately from documentation text.
 - Never treat links found in community messages or documentation text as official links unless explicitly stored in `officialLinks`.
 
@@ -99,6 +101,7 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - Batch and report UI store the latest batch result in browser localStorage only.
 - The deterministic engine uses regex and explicit matching rules; it is deterministic but not a substitute for full abuse-intelligence feeds, domain allowlists, or human review.
 - The project repository is local JSON storage only; it is not safe for concurrent multi-user production writes.
+- Serverless deployments may treat local JSON writes as read-only, ephemeral or instance-local; use managed storage before relying on persistent project changes.
 - AI classification is connected through `/api/v1/analyse` and project analyse UI, but real AI calls require environment configuration.
 - Real AI calls require manually configured `OPENAI_API_KEY`; `OPENAI_BASE_URL` can point at an OpenAI-compatible endpoint; tests use mocked providers and do not require secrets.
 - No authentication is implemented, by design for the current scope.
@@ -114,6 +117,7 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - Local AI integration check: `OPENAI_API_KEY`, `OPENAI_MODEL` and `OPENAI_BASE_URL` were present, but values were not printed. The configured OpenRouter-compatible endpoint returned live AI output through the production `/api/v1/analyse` route.
 - Local API cases exercised successfully: safe documentation question, failed transaction, fake administrator, seed-phrase scam, prompt injection attempt and missing knowledge-base answer.
 - Latest check results: `npm test` passed with 55 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed.
+- Production deployment preparation confirmed `.env.local` is ignored by Git, AI env vars are only read in server-side modules, API errors are structured and sanitized, and `/demo` has no local JSON write dependency.
 - Route structure inspected and includes `/`, `/demo`, `/docs/asp`, dashboard routes, and all `/api/v1` endpoints.
 - Git history inspected through the latest MVP commits.
 - Secret exposure review found no committed secrets; one false positive was the phrase `risk-free` in a deterministic rule description.

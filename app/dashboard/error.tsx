@@ -1,7 +1,6 @@
 "use client";
 
 export default function DashboardError({
-  error,
   reset,
 }: {
   error: Error;
@@ -17,7 +16,8 @@ export default function DashboardError({
           Project data could not be loaded.
         </h1>
         <p className="mt-4 text-sm leading-6 text-slate-600">
-          {error.message}
+          The dashboard hit an unexpected issue. No sensitive diagnostic details
+          are shown in the browser.
         </p>
         <button
           type="button"

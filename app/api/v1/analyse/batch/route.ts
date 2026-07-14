@@ -1,5 +1,9 @@
 import { ZodError, z } from "zod";
 
+import {
+  apiErrorResponse,
+  zodIssuesToApiIssues,
+} from "../../../../../lib/api/responses";
 import { analyseMessage } from "../../../../../lib/analysis/analyse-message";
 import { messageSources } from "../../../../../lib/analysis/api-schemas";
 import { createBatchSummary } from "../../../../../lib/analysis/batch";
@@ -30,19 +34,21 @@ export async function POST(request: Request) {
     const parsedBatch = batchRequestSchema.parse(body);
 
     if (parsedBatch.messages.length > maxBatchSize) {
-      return Response.json(
-        { error: "Batch size must be 25 messages or fewer." },
-        { status: 400 },
-      );
+      return apiErrorResponse({
+        code: "BATCH_TOO_LARGE",
+        message: "Batch size must be 25 messages or fewer.",
+        status: 400,
+      });
     }
 
     const project = await projectRepository.getById(parsedBatch.projectId);
 
     if (!project) {
-      return Response.json(
-        { error: "Project not found." },
-        { status: 404 },
-      );
+      return apiErrorResponse({
+        code: "PROJECT_NOT_FOUND",
+        message: "Project not found.",
+        status: 404,
+      });
     }
 
     const failedResults: BatchFailedMessage[] = [];
@@ -118,29 +124,27 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     if (error instanceof ZodError) {
-      return Response.json(
-        {
-          error: "Invalid request.",
-          issues: error.issues.map((issue) => ({
-            path: issue.path.join("."),
-            message: issue.message,
-          })),
-        },
-        { status: 400 },
-      );
+      return apiErrorResponse({
+        code: "INVALID_REQUEST",
+        message: "Invalid request.",
+        status: 400,
+        issues: zodIssuesToApiIssues(error.issues),
+      });
     }
 
     if (error instanceof SyntaxError) {
-      return Response.json(
-        { error: "Request body must be valid JSON." },
-        { status: 400 },
-      );
+      return apiErrorResponse({
+        code: "INVALID_JSON",
+        message: "Request body must be valid JSON.",
+        status: 400,
+      });
     }
 
-    return Response.json(
-      { error: "Batch analysis request failed." },
-      { status: 500 },
-    );
+    return apiErrorResponse({
+      code: "BATCH_ANALYSIS_FAILED",
+      message: "Batch analysis request failed.",
+      status: 500,
+    });
   }
 }
 

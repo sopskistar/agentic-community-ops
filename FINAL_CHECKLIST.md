@@ -32,7 +32,7 @@
 ## Latest Audit Results
 
 - Date: 2026-07-14
-- Tests: `npm test` passed with 53 tests.
+- Tests: `npm test` passed with 55 tests.
 - ESLint: `npm run lint` passed.
 - TypeScript: `npx tsc --noEmit --incremental false` passed.
 - Production build: `npm run build` passed.
@@ -41,6 +41,7 @@
 - Route structure review: passed.
 - Git history review: passed.
 - Manifest/schema JSON parse review: passed.
+- Production deployment preparation: API errors are structured and sanitized; dashboard/root error UIs do not render raw exception messages; `.env.local` is ignored and untracked; AI secrets are read only by server-side modules; `/demo` is self-contained.
 
 ## Environment Variables
 
@@ -97,11 +98,30 @@ npm run build
 
 - HTTPS deployment URL.
 - Node.js 22-compatible deployment environment.
-- `npm ci` or equivalent dependency install.
-- `npm run build` must pass.
+- Install command: `npm ci`.
+- Build command: `npm run build`.
+- Optional Node runtime command: `npm start`.
 - `OPENAI_API_KEY` configured in runtime environment.
 - Optional `OPENAI_MODEL` configured if not using the default.
 - Optional `OPENAI_BASE_URL` configured if using an OpenAI-compatible endpoint.
+- Do not configure secret values as `NEXT_PUBLIC_*` variables.
+- Do not commit `.env.local`; `.env*` is ignored except `.env.example`.
+- Local JSON project storage is not durable on serverless platforms and must be replaced with managed storage before production multi-user use.
+
+## Exact Deployment Steps
+
+1. Confirm the deployment platform supports Next.js App Router route handlers and Node.js 22.
+2. Configure the install command as `npm ci`.
+3. Configure the build command as `npm run build`.
+4. Add runtime environment variables in the deployment platform: `OPENAI_API_KEY`, optional `OPENAI_MODEL`, and optional `OPENAI_BASE_URL`.
+5. Do not add secret values with a `NEXT_PUBLIC_` prefix.
+6. Deploy manually from the selected platform.
+7. Open the deployed `/api/v1/health` endpoint and confirm it returns `status: "healthy"`.
+8. Open `/demo` and confirm the no-login judge demo works without authentication, database setup, local JSON writes or API keys.
+9. Test public pages: `/`, `/docs/asp`, `/dashboard`, `/dashboard/projects/demo-fictional-atlas-dao`, `/dashboard/projects/demo-fictional-atlas-dao/analyse`, `/dashboard/projects/demo-fictional-atlas-dao/batch`, and `/dashboard/projects/demo-fictional-atlas-dao/report`.
+10. Test `POST /api/v1/analyse` and `POST /api/v1/analyse/batch` with the fictional demo project.
+11. Verify generated replies use only approved project links.
+12. Replace placeholder deployment URLs in ASP materials after the deployed URL is stable.
 
 ## Remaining ASP Registration Steps
 

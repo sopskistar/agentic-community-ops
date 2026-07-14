@@ -21,8 +21,13 @@ describe("POST /api/v1/analyse/batch", () => {
         })),
       }),
     );
+    const body = await response.json();
 
     expect(response.status).toBe(400);
+    expect(body.error).toEqual({
+      code: "BATCH_TOO_LARGE",
+      message: "Batch size must be 25 messages or fewer.",
+    });
   });
 
   it("returns successful and failed results separately", async () => {

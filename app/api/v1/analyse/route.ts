@@ -1,5 +1,9 @@
 import { ZodError } from "zod";
 
+import {
+  apiErrorResponse,
+  zodIssuesToApiIssues,
+} from "../../../../lib/api/responses";
 import { analyseMessage } from "../../../../lib/analysis/analyse-message";
 import { analyseApiRequestSchema } from "../../../../lib/analysis/api-schemas";
 import { createDefaultAiAnalysisProvider } from "../../../../lib/ai/default-provider";
@@ -12,10 +16,11 @@ export async function POST(request: Request) {
     const project = await projectRepository.getById(parsedRequest.projectId);
 
     if (!project) {
-      return Response.json(
-        { error: "Project not found." },
-        { status: 404 },
-      );
+      return apiErrorResponse({
+        code: "PROJECT_NOT_FOUND",
+        message: "Project not found.",
+        status: 404,
+      });
     }
 
     const result = await analyseMessage(
@@ -42,28 +47,26 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     if (error instanceof ZodError) {
-      return Response.json(
-        {
-          error: "Invalid request.",
-          issues: error.issues.map((issue) => ({
-            path: issue.path.join("."),
-            message: issue.message,
-          })),
-        },
-        { status: 400 },
-      );
+      return apiErrorResponse({
+        code: "INVALID_REQUEST",
+        message: "Invalid request.",
+        status: 400,
+        issues: zodIssuesToApiIssues(error.issues),
+      });
     }
 
     if (error instanceof SyntaxError) {
-      return Response.json(
-        { error: "Request body must be valid JSON." },
-        { status: 400 },
-      );
+      return apiErrorResponse({
+        code: "INVALID_JSON",
+        message: "Request body must be valid JSON.",
+        status: 400,
+      });
     }
 
-    return Response.json(
-      { error: "Analysis request failed." },
-      { status: 500 },
-    );
+    return apiErrorResponse({
+      code: "ANALYSIS_FAILED",
+      message: "Analysis request failed.",
+      status: 500,
+    });
   }
 }

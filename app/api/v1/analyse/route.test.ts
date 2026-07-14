@@ -24,7 +24,11 @@ describe("POST /api/v1/analyse", () => {
     const body = await response.json();
 
     expect(response.status).toBe(400);
-    expect(body.error).toBe("Invalid request.");
+    expect(body.error).toMatchObject({
+      code: "INVALID_REQUEST",
+      message: "Invalid request.",
+    });
+    expect(body.error.issues[0]).toHaveProperty("path");
   });
 
   it("limits message length", async () => {
@@ -54,7 +58,10 @@ describe("POST /api/v1/analyse", () => {
     const body = await response.json();
 
     expect(response.status).toBe(404);
-    expect(body.error).toBe("Project not found.");
+    expect(body.error).toEqual({
+      code: "PROJECT_NOT_FOUND",
+      message: "Project not found.",
+    });
   });
 
   it("returns deterministic results when AI is not configured", async () => {

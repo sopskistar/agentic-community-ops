@@ -54,7 +54,7 @@ const sections = [
     items: [
       "No payment integration is implemented yet.",
       "No authentication is implemented yet.",
-      "Project knowledge-base storage currently uses local JSON.",
+      "Project knowledge-base storage currently uses local JSON and is not durable production storage on serverless platforms.",
       "Batch/report dashboard state is browser-local until server-side persistence is added.",
     ],
   },
@@ -75,6 +75,7 @@ const sections = [
     items: [
       "Set OPENAI_API_KEY in the deployment environment.",
       "Optionally set OPENAI_MODEL.",
+      "Optionally set OPENAI_BASE_URL for OpenAI-compatible providers.",
       "Run tests, lint, TypeScript checking and production build.",
       "Confirm no real secrets are committed.",
       "Deploy over HTTPS and verify /api/v1/health.",

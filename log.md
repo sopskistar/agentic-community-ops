@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-14 - Session: production deployment preparation
+
+- What was built: Prepared the MVP for manual production deployment by replacing starter README content with deployment instructions, adding structured API error responses, adding generic production-safe root error UI, tightening dashboard error display, and documenting serverless/local JSON storage limitations.
+- Problems found: README still contained create-next-app starter guidance and outdated Google Fonts text. API error payloads were sanitized but not consistently structured. Dashboard error UI displayed raw error messages. Local JSON project storage remains an MVP limitation for serverless production writes.
+- Bugs fixed: Standardized API error envelopes as `{ error: { code, message, issues? } }`; replaced browser-visible error details with generic messages; documented that `.env.local` is ignored and that secrets must not use `NEXT_PUBLIC_*` names.
+- Important technical decisions: The no-login demo remains self-contained and does not depend on local JSON writes, authentication, database setup or AI API keys. Serverless deployment is acceptable for the demo and API reads, but project creation/editing and persistent reports require durable storage before production multi-user use.
+- Tests performed: `npm test` passed with 55 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed; `git status --short` reviewed before commit; `/api/v1/health` returned `healthy`; `.env.local` was confirmed ignored and untracked; secret/client-boundary scans found no client-side secret env usage.
+- New rules learned: Deployment readiness must distinguish a successful local build from manual deployment success; never claim deployment succeeded before the deployed URL is tested.
+
 ## 2026-07-14 - Session: OpenRouter live AI integration verification
 
 - What was built: Re-ran live AI integration against the configured OpenRouter-compatible endpoint through the production `/api/v1/analyse` route. Added a narrow compatibility normalization for AI responses that return `evidenceUsed` as a single string, and added a deterministic knowledge-base coverage guard so AI cannot mark missing project information as grounded without source coverage.
