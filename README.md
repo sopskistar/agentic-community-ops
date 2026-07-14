@@ -1,5 +1,14 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Project Memory
+
+This repository uses two root-level memory files for continuity between build sessions:
+
+- `log.md` records append-only session notes with the newest entry at the top, including what changed, problems found, fixes, decisions, checks, and rules learned.
+- `handoff.md` records the current project status, blockers, next actions, architecture decisions, standing rules, demo requirements, and known limitations.
+
+Read both files before meaningful changes and update them after each meaningful build session.
+
 ## Getting Started
 
 First, run the development server:
