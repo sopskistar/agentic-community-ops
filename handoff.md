@@ -1,6 +1,6 @@
 # Current Status
 
-Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a product landing page for threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`.
+Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a product landing page for threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`. A guided no-setup judge demo now exists at `/demo` using the fictional NovaBridge project.
 
 # Current Blockers
 
@@ -8,7 +8,7 @@ No active implementation blockers are known.
 
 # Next Actions
 
-- Decide whether `/demo` should reuse the project analysis UI or become a separate public demo flow.
+- Use `/demo` as the primary 90-second judge recording flow.
 - Persist batch analysis results server-side if reports need to survive browser/session changes.
 - Add an escalation queue backed by persisted analysis results.
 - Connect safe-reply generation to stored project documentation and explicit official links.
@@ -31,6 +31,7 @@ No active implementation blockers are known.
 - `/api/v1/health` returns service status and deterministic engine availability.
 - Batch summary metrics are computed in `lib/analysis/batch.ts` from actual analysis results.
 - Report UI recomputes measured metrics from stored batch results; interpretation must remain separate and must not invent numbers.
+- `/demo` is self-contained and uses a local NovaBridge mock AI provider with the real hybrid analysis and deterministic summary helpers, so no login, database or API key is required for judge review.
 - CRITICAL and HIGH rules require escalation by default; explicit MEDIUM escalation rules can also require escalation.
 - Suggested replies must be grounded in project documentation and must avoid unsafe financial or credential-handling instructions.
 - Dangerous, financial, or uncertain cases must be escalated rather than auto-resolved.
@@ -77,10 +78,11 @@ No active implementation blockers are known.
 - Include a proof view explaining deterministic rules, AI evidence, and final-risk merge behavior.
 - Support batch analysis with paste-one-message-per-line input, demo messages, filtering, JSON export, and high-risk highlighting.
 - Support report export as Markdown and JSON.
+- Keep `/demo` suitable for a 90-second recording: knowledge base, normal LOW case, fake-admin HIGH case, seed-phrase CRITICAL case, exact rule proof, safe reply, batch audit, report, and hallucination-proof explanation.
 
 # Known Limitations
 
-- `/demo` is not implemented yet.
+- `/demo` is implemented as a static guided judge demo, not an interactive persisted workflow.
 - `/dashboard` currently supports project knowledge-base management, per-project message analysis, browser-local batch analysis, and browser-local reports; persistent security reports and escalation queues are not implemented yet.
 - Batch and report UI store the latest batch result in browser localStorage only.
 - The deterministic engine uses regex and explicit matching rules; it is deterministic but not a substitute for full abuse-intelligence feeds, domain allowlists, or human review.

@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-14 - Session: guided judge demo
+
+- What was built: Added a polished no-login `/demo` page using the fictional NovaBridge project, safe fictional documentation and official links, ten fictional messages, single-message LOW/HIGH/CRITICAL walkthroughs, exact triggered-rule proof, safe suggested reply, batch audit, community security report, reset control, and "Why this is not an AI hallucination" explanation.
+- Problems found: The first lint run found an unused type import in the demo page; removed it before final checks.
+- Bugs fixed: Removed the unused import and kept the demo self-contained with a local mock AI provider so no external API key or setup is required.
+- Important technical decisions: The demo uses the real `analyseMessage` hybrid flow, deterministic security engine, and `createBatchSummary` metrics, but swaps in a local NovaBridge AI provider for reproducible no-setup judge recordings. Report numbers are measured from actual demo analysis results.
+- Tests performed: `npm test` passed with 53 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed.
+- New rules learned: Judge demos should be reproducible without secrets, clearly fictional, and short enough to record end-to-end in 90 seconds.
+
 ## 2026-07-14 - Session: batch analysis and reporting
 
 - What was built: Added `POST /api/v1/analyse/batch`, batch summary generation, controlled-concurrency batch analysis, batch route integration tests, deterministic summary tests, `/dashboard/projects/[id]/batch`, and `/dashboard/projects/[id]/report`.
