@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-14 - Session: hackathon UI and navigation polish
+
+- What was built: Polished the application UI for hackathon judging without changing architecture, deterministic security logic, AI analysis logic, API contracts, data models or storage. Added a consistent responsive root navigation bar, created a dedicated `/security-engine` rule catalog page, refreshed the landing page, improved Guided Judge Demo presentation, and aligned dashboard cards, forms, buttons, badges, panels and headers.
+- Problems found: The landing page had its own local navigation and linked Security Engine to an in-page anchor, creating inconsistent navigation and a weak Security Engine destination. Several pages used similar but not fully consistent spacing, card radius, button hover behavior and header treatment.
+- Bugs fixed: Removed navigation dead ends by adding global navigation across pages and a dedicated Security Engine route. Updated client-side error display to read the existing structured API error message cleanly.
+- Important technical decisions: UI polish stayed presentation-only. The deterministic engine, hybrid analysis service, API route contracts, project repository and storage implementation were not changed.
+- Tests performed: `npm test` passed with 55 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and included `/security-engine`; `git status --short` reviewed before commit.
+- New rules learned: Hackathon UI work should keep product navigation global and recoverable while preserving all security and analysis behavior unchanged.
+
 ## 2026-07-14 - Session: production deployment preparation
 
 - What was built: Prepared the MVP for manual production deployment by replacing starter README content with deployment instructions, adding structured API error responses, adding generic production-safe root error UI, tightening dashboard error display, and documenting serverless/local JSON storage limitations.

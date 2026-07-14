@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AppNav } from "./components/app-nav";
 
 export const metadata: Metadata = {
   title: "Agentic Community Ops",
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full bg-[#f7f8fb] text-slate-950">
+        <AppNav />
+        {children}
+      </body>
     </html>
   );
 }

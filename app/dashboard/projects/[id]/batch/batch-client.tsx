@@ -99,7 +99,7 @@ export function BatchClient({ project }: { project: Project }) {
       const body = await response.json();
 
       if (!response.ok) {
-        setError(body.error ?? "Batch analysis failed.");
+        setError(getApiErrorMessage(body, "Batch analysis failed."));
         return;
       }
 
@@ -126,7 +126,7 @@ export function BatchClient({ project }: { project: Project }) {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="grid gap-5">
           <label className="space-y-2">
             <span className="text-sm font-semibold text-slate-800">
@@ -165,7 +165,7 @@ export function BatchClient({ project }: { project: Project }) {
               <button
                 type="button"
                 onClick={() => setRawMessages(demoMessages.join("\n"))}
-                className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
+                className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
               >
                 Load Demo Messages
               </button>
@@ -173,7 +173,7 @@ export function BatchClient({ project }: { project: Project }) {
                 type="button"
                 onClick={runBatchAnalysis}
                 disabled={messages.length === 0 || messages.length > 25 || isLoading}
-                className="inline-flex h-11 items-center justify-center rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                className="inline-flex h-11 items-center justify-center rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
               >
                 {isLoading ? "Analysing..." : "Run Analysis"}
               </button>
@@ -257,13 +257,13 @@ export function BatchClient({ project }: { project: Project }) {
               <button
                 type="button"
                 onClick={exportJson}
-                className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
+                className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
               >
                 Export JSON
               </button>
               <Link
                 href={`/dashboard/projects/${project.id}/report`}
-                className="inline-flex h-10 items-center justify-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+                className="inline-flex h-10 items-center justify-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-slate-800"
               >
                 Open Report
               </Link>
@@ -305,6 +305,22 @@ export function BatchClient({ project }: { project: Project }) {
       ) : null}
     </div>
   );
+}
+
+function getApiErrorMessage(body: unknown, fallback: string) {
+  if (
+    typeof body === "object" &&
+    body !== null &&
+    "error" in body &&
+    typeof body.error === "object" &&
+    body.error !== null &&
+    "message" in body.error &&
+    typeof body.error.message === "string"
+  ) {
+    return body.error.message;
+  }
+
+  return fallback;
 }
 
 function Metric({ label, value }: { label: string; value: number }) {

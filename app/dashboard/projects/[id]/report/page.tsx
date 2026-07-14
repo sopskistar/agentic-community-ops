@@ -23,14 +23,16 @@ export default async function ProjectReportPage({
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f8fb] px-5 py-10 text-slate-950">
+    <main className="min-h-screen bg-[#f7f8fb] px-5 py-12 text-slate-950">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-8 flex flex-col gap-4 border-b border-slate-200 pb-6 md:flex-row md:items-end md:justify-between">
+        <div className="mb-8 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:flex-row md:items-end md:justify-between md:p-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
               Security Report
             </p>
-            <h1 className="mt-3 text-4xl font-semibold">{project.name}</h1>
+            <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+              {project.name}
+            </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
               Report metrics are recomputed from actual stored batch analysis
               results. Measured data is kept separate from interpretation.
@@ -38,7 +40,7 @@ export default async function ProjectReportPage({
           </div>
           <Link
             href={`/dashboard/projects/${project.id}/batch`}
-            className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
+            className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
           >
             Batch Analysis
           </Link>

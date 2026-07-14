@@ -72,7 +72,7 @@ export function AnalyseClient({ project }: { project: Project }) {
       const body = await response.json();
 
       if (!response.ok) {
-        setError(body.error ?? "Analysis failed.");
+        setError(getApiErrorMessage(body, "Analysis failed."));
         return;
       }
 
@@ -95,7 +95,7 @@ export function AnalyseClient({ project }: { project: Project }) {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="grid gap-5">
           <label className="space-y-2">
             <span className="text-sm font-semibold text-slate-800">
@@ -146,7 +146,7 @@ export function AnalyseClient({ project }: { project: Project }) {
                     key={example.label}
                     type="button"
                     onClick={() => setMessageContent(example.content)}
-                    className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+                    className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
                   >
                     {example.label}
                   </button>
@@ -159,7 +159,7 @@ export function AnalyseClient({ project }: { project: Project }) {
             type="button"
             onClick={analyseMessage}
             disabled={isLoading || messageContent.trim().length === 0}
-            className="inline-flex h-11 w-fit items-center justify-center rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="inline-flex h-11 w-fit items-center justify-center rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
           >
             {isLoading ? "Analysing..." : "Analyse"}
           </button>
@@ -211,7 +211,7 @@ export function AnalyseClient({ project }: { project: Project }) {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
-            <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               <h2 className="text-xl font-semibold">Triggered rules</h2>
               {analysis.triggeredRules.length === 0 ? (
                 <p className="mt-4 text-sm text-slate-600">
@@ -245,7 +245,7 @@ export function AnalyseClient({ project }: { project: Project }) {
             </div>
 
             <div className="space-y-6">
-              <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <h2 className="text-xl font-semibold">Generated safe reply</h2>
                 <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-slate-700">
                   {analysis.generatedReply}
@@ -253,13 +253,13 @@ export function AnalyseClient({ project }: { project: Project }) {
                 <button
                   type="button"
                   onClick={copyReply}
-                  className="mt-5 inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
+                  className="mt-5 inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
                 >
                   {copyState === "copied" ? "Copied" : "Copy Reply"}
                 </button>
               </div>
 
-              <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <h2 className="text-xl font-semibold">Recommended action</h2>
                 <p className="mt-4 text-sm leading-6 text-slate-700">
                   {analysis.recommendedAction}
@@ -274,7 +274,7 @@ export function AnalyseClient({ project }: { project: Project }) {
             </div>
           </div>
 
-          <details className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+          <details className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <summary className="cursor-pointer text-lg font-semibold">
               Show Proof
             </summary>
@@ -323,6 +323,22 @@ export function AnalyseClient({ project }: { project: Project }) {
   );
 }
 
+function getApiErrorMessage(body: unknown, fallback: string) {
+  if (
+    typeof body === "object" &&
+    body !== null &&
+    "error" in body &&
+    typeof body.error === "object" &&
+    body.error !== null &&
+    "message" in body.error &&
+    typeof body.error.message === "string"
+  ) {
+    return body.error.message;
+  }
+
+  return fallback;
+}
+
 function ResultCard({
   title,
   value,
@@ -333,7 +349,7 @@ function ResultCard({
   detail: string;
 }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <p className="text-sm font-semibold text-slate-600">{title}</p>
       <p className="mt-3 text-3xl font-semibold text-slate-950">{value}</p>
       <p className="mt-2 text-sm text-slate-600">{detail}</p>

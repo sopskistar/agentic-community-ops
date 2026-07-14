@@ -42,6 +42,7 @@
 - Git history review: passed.
 - Manifest/schema JSON parse review: passed.
 - Production deployment preparation: API errors are structured and sanitized; dashboard/root error UIs do not render raw exception messages; `.env.local` is ignored and untracked; AI secrets are read only by server-side modules; `/demo` is self-contained.
+- UI polish review: shared responsive navigation exists across pages; `/security-engine` builds as a dedicated published-rule page; landing, demo, dashboard and ASP docs use consistent green security branding, cards, buttons, badges, spacing and visible focus states.
 
 ## Environment Variables
 
@@ -78,6 +79,7 @@ npm run build
 ## Responsive-Page Review
 
 - Review `/`, `/demo`, `/docs/asp`, `/dashboard`, `/dashboard/projects/[id]/analyse`, `/dashboard/projects/[id]/batch` and `/dashboard/projects/[id]/report` on mobile and desktop widths.
+- Review `/security-engine` on mobile, tablet and desktop widths.
 - Confirm tables, cards, code blocks and long URLs wrap or scroll without overlap.
 
 ## Demo-Flow Review

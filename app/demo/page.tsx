@@ -117,13 +117,15 @@ export default async function DemoPage() {
   return (
     <main className="min-h-screen bg-[#f7f8fb] text-slate-950">
       <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-12 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
               Guided Judge Demo
             </p>
-            <h1 className="mt-3 text-5xl font-semibold">NovaBridge Security Desk</h1>
-            <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600">
+            <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+              NovaBridge Security Desk
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
               A complete 90-second walkthrough of deterministic Web3 community
               security analysis, safe reply generation, batch audits and a
               recomputable report. No login or external setup required.
@@ -132,7 +134,7 @@ export default async function DemoPage() {
           <form action="/demo">
             <button
               type="submit"
-              className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
+              className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-800 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-slate-50"
             >
               Reset Demo
             </button>
@@ -140,17 +142,22 @@ export default async function DemoPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl space-y-12 px-5 py-10 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-12 px-5 py-12 lg:px-8">
         <section className="grid gap-6 lg:grid-cols-[0.85fr_1fr]">
           <div>
-            <h2 className="text-3xl font-semibold">1. Knowledge base</h2>
+            <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
+              1
+            </span>
+            <h2 className="mt-4 text-3xl font-semibold">Knowledge base</h2>
             <p className="mt-3 text-sm leading-6 text-slate-600">
               NovaBridge is fictional. The demo uses only this project profile
               and its listed official links as trusted knowledge.
             </p>
           </div>
-          <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="text-2xl font-semibold">{novaBridgeProject.projectName}</h3>
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 className="text-2xl font-semibold">
+              {novaBridgeProject.projectName}
+            </h3>
             <p className="mt-3 text-sm leading-6 text-slate-600">
               {novaBridgeProject.projectDescription}
             </p>
@@ -161,7 +168,7 @@ export default async function DemoPage() {
               {novaBridgeProject.officialLinks.map((link) => (
                 <span
                   key={link}
-                  className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800"
+                  className="break-all rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800"
                 >
                   {link}
                 </span>
@@ -171,7 +178,12 @@ export default async function DemoPage() {
         </section>
 
         <section>
-          <h2 className="text-3xl font-semibold">2. Three single-message verdicts</h2>
+          <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
+            2
+          </span>
+          <h2 className="mt-4 text-3xl font-semibold">
+            Three single-message verdicts
+          </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
             These examples show the minimum deterministic risk changing from LOW
             to HIGH to CRITICAL. AI classification adds context, but cannot lower
@@ -200,12 +212,15 @@ export default async function DemoPage() {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[0.9fr_1fr]">
-          <div className="rounded-lg border border-red-200 bg-red-50 p-6">
-            <h2 className="text-3xl font-semibold text-red-950">
-              3. Exact triggered rule
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
+            <span className="inline-flex size-10 items-center justify-center rounded-lg bg-red-600 text-sm font-bold text-white">
+              3
+            </span>
+            <h2 className="mt-4 text-3xl font-semibold text-red-950">
+              Exact triggered rule
             </h2>
             {mostImportantSeedRule ? (
-              <div className="mt-5 rounded-lg bg-white p-5">
+              <div className="mt-5 rounded-xl bg-white p-5 shadow-sm">
                 <p className="text-sm font-semibold text-red-700">
                   {mostImportantSeedRule.ruleId} | {mostImportantSeedRule.severity}
                 </p>
@@ -222,8 +237,11 @@ export default async function DemoPage() {
             ) : null}
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-3xl font-semibold">4. Safe suggested reply</h2>
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
+              4
+            </span>
+            <h2 className="mt-4 text-3xl font-semibold">Safe suggested reply</h2>
             <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm font-medium text-amber-900">
               AI-generated replies are suggestions and should be reviewed before
               public use.
@@ -237,7 +255,12 @@ export default async function DemoPage() {
         <section>
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-3xl font-semibold">5. Batch audit: ten messages</h2>
+              <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
+                5
+              </span>
+              <h2 className="mt-4 text-3xl font-semibold">
+                Batch audit: ten messages
+              </h2>
               <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
                 The batch uses the same ten fictional inputs every time, so the
                 deterministic metrics are reproducible.
@@ -245,7 +268,7 @@ export default async function DemoPage() {
             </div>
             <Link
               href="#report"
-              className="inline-flex h-10 items-center justify-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+              className="inline-flex h-10 items-center justify-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-slate-800"
             >
               Jump to Report
             </Link>
@@ -254,7 +277,7 @@ export default async function DemoPage() {
             {batchResults.map((item) => (
               <div
                 key={item.index}
-                className={`rounded-lg border p-4 shadow-sm ${
+                className={`rounded-xl border p-4 shadow-sm transition-all hover:-translate-y-0.5 ${
                   item.result.finalRisk === "CRITICAL"
                     ? "border-red-300 bg-red-50"
                     : item.result.finalRisk === "HIGH"
@@ -283,8 +306,13 @@ export default async function DemoPage() {
           </div>
         </section>
 
-        <section id="report" className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-3xl font-semibold">6. Community security report</h2>
+        <section id="report" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
+            6
+          </span>
+          <h2 className="mt-4 text-3xl font-semibold">
+            Community security report
+          </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3 lg:grid-cols-6">
             <Metric label="Total" value={batchSummary.totalMessages} />
             <Metric label="Safe" value={batchSummary.safeMessages} />
@@ -323,7 +351,7 @@ export default async function DemoPage() {
           </div>
         </section>
 
-        <section className="rounded-lg border border-emerald-200 bg-emerald-50 p-6">
+        <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm">
           <h2 className="text-3xl font-semibold text-emerald-950">
             Why this is not an AI hallucination
           </h2>
@@ -335,7 +363,7 @@ export default async function DemoPage() {
               "AI cannot reduce deterministic risk.",
               "Reports can be recomputed.",
             ].map((item) => (
-              <div key={item} className="rounded-lg bg-white p-4 text-sm font-semibold text-emerald-900">
+              <div key={item} className="rounded-xl bg-white p-4 text-sm font-semibold text-emerald-900 shadow-sm">
                 {item}
               </div>
             ))}
@@ -429,7 +457,7 @@ function AnalysisCard({
   analysis: Awaited<ReturnType<typeof analyseDemoMessage>>;
 }) {
   return (
-    <article className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-950/5">
       <p className="text-sm font-semibold text-emerald-700">{title}</p>
       <h3 className="mt-2 text-xl font-semibold">{label}</h3>
       <p className="mt-3 text-sm leading-6 text-slate-600">{message}</p>
@@ -447,7 +475,7 @@ function AnalysisCard({
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
         {label}
       </p>
@@ -467,7 +495,7 @@ function MiniMetric({ label, value }: { label: string; value: string }) {
 
 function ReportList({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-5">
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
       <h3 className="text-lg font-semibold">{title}</h3>
       <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
         {items.length > 0 ? (
