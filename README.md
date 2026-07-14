@@ -9,6 +9,48 @@ This repository uses two root-level memory files for continuity between build se
 
 Read both files before meaningful changes and update them after each meaningful build session.
 
+## API Examples
+
+Health check:
+
+```bash
+curl http://localhost:3000/api/v1/health
+```
+
+Response:
+
+```json
+{
+  "service": "Agentic Community Ops",
+  "status": "healthy",
+  "version": "1.0.0",
+  "deterministicEngine": true
+}
+```
+
+List public deterministic security rules:
+
+```bash
+curl http://localhost:3000/api/v1/rules
+```
+
+Analyse a community message:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/analyse \
+  -H "content-type: application/json" \
+  -d '{
+    "projectId": "demo-fictional-atlas-dao",
+    "message": {
+      "content": "Support needs you to send your seed phrase to verify the wallet.",
+      "source": "DISCORD",
+      "authorName": "Fake Admin"
+    }
+  }'
+```
+
+The analyse endpoint validates input, loads the selected project, runs deterministic security analysis first, then runs AI analysis when configured. If AI analysis fails or is not configured, the response still includes deterministic results and a safe fallback reply.
+
 ## Getting Started
 
 First, run the development server:

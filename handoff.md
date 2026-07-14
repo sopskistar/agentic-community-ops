@@ -1,6 +1,6 @@
 # Current Status
 
-Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a product landing page for threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior.
+Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a product landing page for threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/health`, and `/api/v1/rules`, with a project analysis UI at `/dashboard/projects/[id]/analyse`.
 
 # Current Blockers
 
@@ -8,11 +8,11 @@ No active implementation blockers are known.
 
 # Next Actions
 
-- Build the `/demo` experience for message analysis using `analyseSecurity`.
+- Decide whether `/demo` should reuse the project analysis UI or become a separate public demo flow.
 - Expand `/dashboard` from project knowledge-base management into security reports and escalations.
-- Connect `/demo` to `analyseMessage` for hybrid deterministic and AI-assisted analysis.
+- Connect stored analysis runs to future dashboard reports and escalation queues.
 - Connect safe-reply generation to stored project documentation and explicit official links.
-- Add UI surfaces for triggered rules, deterministic risk, risk score, escalation state, and safe reply eligibility.
+- Add persistence for analysis results if reports need historical trends.
 - Add tests around any future UI or API integration that consumes the deterministic and hybrid analysis services.
 
 # Architecture Decisions
@@ -25,6 +25,9 @@ No active implementation blockers are known.
 - `finalRisk` must always be the higher of `deterministicRisk` and `aiSuggestedRisk`.
 - AI output is validated with Zod before merging; invalid AI output falls back to deterministic results and escalation.
 - OpenAI-compatible provider support is implemented in `lib/ai/openai-provider.ts` and requires `OPENAI_API_KEY`; `OPENAI_MODEL` is optional but documented.
+- `/api/v1/analyse` validates requests with Zod, caps message length at 2,000 characters, loads project context from the repository, and returns sanitized errors.
+- `/api/v1/rules` returns only the public deterministic rule list.
+- `/api/v1/health` returns service status and deterministic engine availability.
 - CRITICAL and HIGH rules require escalation by default; explicit MEDIUM escalation rules can also require escalation.
 - Suggested replies must be grounded in project documentation and must avoid unsafe financial or credential-handling instructions.
 - Dangerous, financial, or uncertain cases must be escalated rather than auto-resolved.
@@ -65,14 +68,16 @@ No active implementation blockers are known.
 - Use explicit project `officialLinks` when referencing official URLs.
 - Escalate dangerous, financial, or uncertain cases.
 - Produce community security report summaries.
+- Include the disclaimer: "AI-generated replies are suggestions and should be reviewed before public use."
+- Include a proof view explaining deterministic rules, AI evidence, and final-risk merge behavior.
 
 # Known Limitations
 
 - `/demo` is not implemented yet.
-- `/dashboard` currently supports project knowledge-base management, but security reports and escalations are not implemented yet.
+- `/dashboard` currently supports project knowledge-base management and per-project message analysis, but persistent security reports and escalation queues are not implemented yet.
 - The deterministic engine uses regex and explicit matching rules; it is deterministic but not a substitute for full abuse-intelligence feeds, domain allowlists, or human review.
 - The project repository is local JSON storage only; it is not safe for concurrent multi-user production writes.
-- AI classification exists as a library service but is not yet connected to a UI route.
+- AI classification is connected through `/api/v1/analyse` and project analyse UI, but real AI calls require environment configuration.
 - Real AI calls require manually configured `OPENAI_API_KEY`; tests use mocked providers and do not require secrets.
 - No authentication is implemented, by design for the current scope.
 - Automated tests currently cover the deterministic security engine, project repository and hybrid analysis merge behavior.

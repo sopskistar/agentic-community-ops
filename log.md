@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-14 - Session: analysis API and dashboard analyser
+
+- What was built: Added `POST /api/v1/analyse`, `GET /api/v1/health`, `GET /api/v1/rules`, API input validation, route-handler integration tests, a project message-analysis UI at `/dashboard/projects/[id]/analyse`, README API examples, and a default AI provider factory that safely falls back when OpenAI is not configured.
+- Problems found: Initial route-handler tests failed because the new API route imports walked one directory too high; corrected the relative import paths. The API must tolerate missing OpenAI configuration and still return deterministic results, so the default AI provider fails closed into the existing deterministic fallback path.
+- Bugs fixed: Fixed API route import paths for Vitest and ensured `.env.example` remains committable despite `.env*` ignore rules from a prior session.
+- Important technical decisions: API errors return sanitized messages only; stack traces and secrets are not exposed. The analyse endpoint limits message content to 2,000 characters, loads the selected project, runs deterministic analysis first, then AI analysis, and returns deterministic output even when AI is unavailable. The dashboard analysis UI posts to the API rather than calling analysis logic directly.
+- Tests performed: `npm test` passed with 48 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed.
+- New rules learned: Public API routes must sanitize validation and runtime errors; dashboard analysis output must show proof, escalation state, generated reply review disclaimers, and final risk evidence.
+
 ## 2026-07-14 - Session: hybrid message-analysis service
 
 - What was built: Added a hybrid message-analysis service under `lib/analysis/` and `lib/ai/` that runs deterministic security first, calls an OpenAI-compatible provider for structured AI classification, validates AI output with Zod, and merges results without allowing AI to reduce deterministic risk.

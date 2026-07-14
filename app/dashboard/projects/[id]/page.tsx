@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { projectRepository } from "@/lib/projects/local-json-project-repository";
@@ -35,6 +36,12 @@ export default async function EditProjectPage({
           Update official documentation, verified links and response tone for
           this project.
         </p>
+        <Link
+          href={`/dashboard/projects/${project.id}/analyse`}
+          className="mt-5 inline-flex h-10 items-center justify-center rounded-lg bg-emerald-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+        >
+          Analyse Message
+        </Link>
         <div className="mt-8">
           <ProjectForm
             action={updateProjectWithId}
