@@ -38,6 +38,8 @@ export async function analyseMessage(
     );
   }
 
+  aiAnalysis = enforceKnowledgeGrounding(parsedInput, aiAnalysis);
+
   const finalRisk = getHigherRisk(
     deterministicResult.deterministicRisk,
     aiAnalysis.aiSuggestedRisk,
@@ -110,4 +112,104 @@ function ensureSuggestedReply(reply: string) {
   }
 
   return `Suggested reply for human review: ${reply}`;
+}
+
+function enforceKnowledgeGrounding(
+  input: MessageAnalysisInput,
+  aiAnalysis: AiMessageAnalysis,
+): AiMessageAnalysis {
+  if (
+    !aiAnalysis.answerGroundedInKnowledgeBase ||
+    !looksLikeKnowledgeQuestion(input.messageContent)
+  ) {
+    return aiAnalysis;
+  }
+
+  if (hasKnowledgeCoverage(input)) {
+    return aiAnalysis;
+  }
+
+  return {
+    ...aiAnalysis,
+    shouldEscalate: true,
+    escalationReason:
+      "Knowledge base did not contain enough information for a grounded answer.",
+    answerGroundedInKnowledgeBase: false,
+    evidenceUsed: [
+      ...aiAnalysis.evidenceUsed,
+      "deterministic knowledge-base coverage check",
+    ],
+  };
+}
+
+function looksLikeKnowledgeQuestion(messageContent: string) {
+  return /\?|\b(what|where|which|how|does|do|can|is|are|when|why)\b/i.test(
+    messageContent,
+  );
+}
+
+function hasKnowledgeCoverage(input: MessageAnalysisInput) {
+  const knowledgeText = [
+    input.projectDescription,
+    input.documentationText,
+    ...input.officialLinks,
+  ]
+    .join(" ")
+    .toLowerCase();
+  const questionTerms = getSubstantiveQuestionTerms(input);
+
+  if (questionTerms.length === 0) {
+    return true;
+  }
+
+  const matchedTerms = questionTerms.filter((term) =>
+    knowledgeText.includes(term),
+  );
+  const requiredMatches =
+    questionTerms.length <= 2 ? 1 : Math.min(3, Math.ceil(questionTerms.length / 3));
+
+  return matchedTerms.length >= requiredMatches;
+}
+
+function getSubstantiveQuestionTerms(input: MessageAnalysisInput) {
+  const projectTerms = tokenize(input.projectName);
+  const ignoredTerms = new Set([
+    ...projectTerms,
+    "about",
+    "account",
+    "could",
+    "does",
+    "from",
+    "have",
+    "help",
+    "into",
+    "need",
+    "please",
+    "read",
+    "should",
+    "support",
+    "tell",
+    "that",
+    "their",
+    "there",
+    "this",
+    "user",
+    "users",
+    "what",
+    "when",
+    "where",
+    "which",
+    "with",
+    "would",
+  ]);
+
+  return tokenize(input.messageContent).filter((term) => !ignoredTerms.has(term));
+}
+
+function tokenize(value: string) {
+  return value
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9]+/g, " ")
+    .split(" ")
+    .filter((term) => term.length >= 4);
 }

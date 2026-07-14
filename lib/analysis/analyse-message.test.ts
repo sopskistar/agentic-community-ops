@@ -68,6 +68,22 @@ describe("analyseMessage", () => {
     expect(result.generatedReply).toContain("https://docs.atlas-dao.example");
   });
 
+  it("normalizes a single AI evidence string from compatible providers", async () => {
+    const result = await analyseMessage(
+      baseInput,
+      providerReturning({
+        ...createAiAnalysis(),
+        evidenceUsed: "official docs mention staking instructions",
+      }),
+    );
+
+    expect(result.category).toBe("GENERAL_QUESTION");
+    expect(result.evidenceUsed).toEqual([
+      "official docs mention staking instructions",
+    ]);
+    expect(result.finalRisk).toBe("LOW");
+  });
+
   it("handles a seed phrase scam", async () => {
     const result = await analyseMessage(
       {
@@ -187,6 +203,35 @@ describe("analyseMessage", () => {
       "Knowledge base did not contain enough information for a grounded answer.",
     );
     expect(result.answerGroundedInKnowledgeBase).toBe(false);
+  });
+
+  it("escalates when AI claims missing project knowledge is grounded", async () => {
+    const result = await analyseMessage(
+      {
+        ...baseInput,
+        messageContent:
+          "What is the validator slashing appeal policy and compensation schedule?",
+      },
+      providerReturning(
+        createAiAnalysis({
+          category: "GENERAL_QUESTION",
+          detectedIntent: "User asks about validator slashing details.",
+          answerGroundedInKnowledgeBase: true,
+          shouldEscalate: false,
+          escalationReason: null,
+          evidenceUsed: ["official docs"],
+        }),
+      ),
+    );
+
+    expect(result.shouldEscalate).toBe(true);
+    expect(result.escalationReason).toBe(
+      "Knowledge base did not contain enough information for a grounded answer.",
+    );
+    expect(result.answerGroundedInKnowledgeBase).toBe(false);
+    expect(result.evidenceUsed).toContain(
+      "deterministic knowledge-base coverage check",
+    );
   });
 
   it("does not allow AI to reduce deterministic risk", async () => {

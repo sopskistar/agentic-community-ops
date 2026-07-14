@@ -27,7 +27,9 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - Hybrid analysis is implemented in `lib/analysis/analyse-message.ts`.
 - `finalRisk` must always be the higher of `deterministicRisk` and `aiSuggestedRisk`.
 - AI output is validated with Zod before merging; invalid AI output falls back to deterministic results and escalation.
-- OpenAI-compatible provider support is implemented in `lib/ai/openai-provider.ts` and requires `OPENAI_API_KEY`; `OPENAI_MODEL` is optional but documented.
+- AI response compatibility allows a single-string `evidenceUsed` value to be normalized into a one-item array before validation.
+- After AI validation, deterministic knowledge-base coverage checks can force `answerGroundedInKnowledgeBase: false` and escalation when a user asks for project information not covered by the supplied project description, documentation or official links.
+- OpenAI-compatible provider support is implemented in `lib/ai/openai-provider.ts` and requires `OPENAI_API_KEY`; `OPENAI_MODEL` and `OPENAI_BASE_URL` are optional.
 - `/api/v1/analyse` validates requests with Zod, caps message length at 2,000 characters, loads project context from the repository, and returns sanitized errors.
 - `/api/v1/analyse/batch` accepts up to 25 messages, validates every message, uses controlled AI concurrency, isolates per-message failures, and returns `successfulResults`, `failedResults`, and measured summary metrics.
 - `/api/v1/rules` returns only the public deterministic rule list.
@@ -98,7 +100,7 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - The deterministic engine uses regex and explicit matching rules; it is deterministic but not a substitute for full abuse-intelligence feeds, domain allowlists, or human review.
 - The project repository is local JSON storage only; it is not safe for concurrent multi-user production writes.
 - AI classification is connected through `/api/v1/analyse` and project analyse UI, but real AI calls require environment configuration.
-- Real AI calls require manually configured `OPENAI_API_KEY`; tests use mocked providers and do not require secrets.
+- Real AI calls require manually configured `OPENAI_API_KEY`; `OPENAI_BASE_URL` can point at an OpenAI-compatible endpoint; tests use mocked providers and do not require secrets.
 - No authentication is implemented, by design for the current scope.
 - Automated tests currently cover the deterministic security engine, project repository and hybrid analysis merge behavior.
 
@@ -109,6 +111,9 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - `npm run lint`: passed.
 - `npx tsc --noEmit --incremental false`: passed.
 - `npm run build`: passed.
+- Local AI integration check: `OPENAI_API_KEY`, `OPENAI_MODEL` and `OPENAI_BASE_URL` were present, but values were not printed. The configured OpenRouter-compatible endpoint returned live AI output through the production `/api/v1/analyse` route.
+- Local API cases exercised successfully: safe documentation question, failed transaction, fake administrator, seed-phrase scam, prompt injection attempt and missing knowledge-base answer.
+- Latest check results: `npm test` passed with 55 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed.
 - Route structure inspected and includes `/`, `/demo`, `/docs/asp`, dashboard routes, and all `/api/v1` endpoints.
 - Git history inspected through the latest MVP commits.
 - Secret exposure review found no committed secrets; one false positive was the phrase `risk-free` in a deterministic rule description.

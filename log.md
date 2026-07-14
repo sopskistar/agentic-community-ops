@@ -1,5 +1,32 @@
 # Project Log
 
+## 2026-07-14 - Session: OpenRouter live AI integration verification
+
+- What was built: Re-ran live AI integration against the configured OpenRouter-compatible endpoint through the production `/api/v1/analyse` route. Added a narrow compatibility normalization for AI responses that return `evidenceUsed` as a single string, and added a deterministic knowledge-base coverage guard so AI cannot mark missing project information as grounded without source coverage.
+- Problems found: Some OpenRouter-compatible responses returned valid JSON but used a single string for `evidenceUsed`, causing the app to reject otherwise usable live AI output. A missing-knowledge prompt was initially marked grounded by the AI even though the project knowledge base did not contain validator slashing or compensation details. A generated `.next/dev` route type file from an earlier dev-server run was corrupted and caused one TypeScript check failure until the ignored dev cache was removed.
+- Bugs fixed: Normalized single-string `evidenceUsed` values into arrays before Zod validation; forced escalation and `answerGroundedInKnowledgeBase: false` when deterministic knowledge coverage is missing; removed the ignored `.next/dev` cache so TypeScript used clean generated types.
+- Important technical decisions: Deterministic risk merging remains unchanged; final risk must still be at least deterministic risk. Knowledge-grounding is now checked after AI validation using only supplied project description, documentation and official links.
+- Tests performed: Production server live checks passed for safe documentation, failed transaction, fake administrator, seed-phrase scam, prompt injection and missing-knowledge cases without printing secrets; `npm test` passed with 55 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed after clearing ignored generated dev cache; `npm run build` passed.
+- New rules learned: OpenAI-compatible providers can vary small structured-output shapes; normalize low-risk shape differences before validation, but keep missing/unsafe knowledge checks deterministic and fail closed.
+
+## 2026-07-14 - Session: local AI integration verification
+
+- What was built: No product features were added. Verified local AI integration wiring through the running `/api/v1/analyse` endpoint and checked AI environment-variable presence without printing values.
+- Problems found: `OPENAI_API_KEY` and `OPENAI_MODEL` are present, but the configured OpenAI-compatible provider returned `402 Insufficient credits`, so live AI-generated replies could not be confirmed with the current provider account. Local API responses correctly preserved deterministic fallback output when the AI call failed.
+- Bugs fixed: None; no implementation errors were found.
+- Important technical decisions: The API must continue to return deterministic-first fallback results when the AI provider fails for external reasons such as provider credits, authentication or network availability.
+- Tests performed: Local dev server started and `/api/v1/analyse` was exercised for safe documentation, failed transaction, fake administrator, seed-phrase scam, prompt injection and missing-knowledge cases; `npm test` passed with 53 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed.
+- New rules learned: Provider health checks may report presence and sanitized status metadata only; never print secret environment values or raw provider credentials.
+
+## 2026-07-14 - Session: OpenAI-compatible base URL support
+
+- What was built: Made the OpenAI analysis provider explicitly read optional `OPENAI_BASE_URL` configuration while preserving the default OpenAI endpoint when it is unset.
+- Problems found: The installed OpenAI SDK already supports a `baseURL` client option and documents `OPENAI_BASE_URL`; the project provider was not passing it explicitly.
+- Bugs fixed: None.
+- Important technical decisions: `OPENAI_BASE_URL` is optional, trimmed, and omitted when empty so the SDK keeps its default endpoint behavior.
+- Tests performed: `npm test` passed with 53 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed.
+- New rules learned: OpenAI-compatible provider configuration should expose API key, model, and optional base URL separately.
+
 ## 2026-07-14 - Session: complete MVP verification
 
 - What was built: No new product features were added. Audited the repository against the complete Agentic Community Ops MVP, inspected route structure and git history, verified public ASP artifacts, and confirmed final build readiness.

@@ -28,5 +28,8 @@ export const aiMessageAnalysisSchema = z.object({
   escalationReason: z.string().trim().min(1).nullable(),
   recommendedAction: z.string().trim().min(1),
   answerGroundedInKnowledgeBase: z.boolean(),
-  evidenceUsed: z.array(z.string().trim().min(1)).default([]),
+  evidenceUsed: z.preprocess(
+    (value) => (typeof value === "string" ? [value] : value),
+    z.array(z.string().trim().min(1)).default([]),
+  ),
 });

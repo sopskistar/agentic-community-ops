@@ -11,12 +11,14 @@ export class OpenAiAnalysisProvider implements AiAnalysisProvider {
 
   constructor({
     apiKey = process.env.OPENAI_API_KEY,
+    baseURL = process.env.OPENAI_BASE_URL?.trim() || undefined,
     model = process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
   }: {
     apiKey?: string;
+    baseURL?: string;
     model?: string;
   } = {}) {
-    this.client = new OpenAI({ apiKey });
+    this.client = new OpenAI({ apiKey, baseURL });
     this.model = model;
   }
 

@@ -36,7 +36,7 @@
 - ESLint: `npm run lint` passed.
 - TypeScript: `npx tsc --noEmit --incremental false` passed.
 - Production build: `npm run build` passed.
-- Environment-variable review: `.env.example` contains only `OPENAI_API_KEY=` and `OPENAI_MODEL=`.
+- Environment-variable review: `.env.example` contains `OPENAI_API_KEY=`, `OPENAI_MODEL=`, and `OPENAI_BASE_URL=`.
 - Secret exposure review: no committed secrets found; one false positive was the phrase `risk-free` in a rule description.
 - Route structure review: passed.
 - Git history review: passed.
@@ -46,6 +46,7 @@
 
 - Required: `OPENAI_API_KEY`
 - Optional: `OPENAI_MODEL`
+- Optional: `OPENAI_BASE_URL`
 - Do not commit real API keys.
 
 ## Final Audit Commands
@@ -64,6 +65,7 @@ npm run build
 - `.env.example` contains only placeholder variable names.
 - Real secrets must be configured in the deployment platform.
 - `OPENAI_API_KEY` is required for live AI provider calls.
+- `OPENAI_BASE_URL` is optional for OpenAI-compatible providers.
 - Demo route works without external setup.
 
 ## Secret Exposure Review
@@ -99,6 +101,7 @@ npm run build
 - `npm run build` must pass.
 - `OPENAI_API_KEY` configured in runtime environment.
 - Optional `OPENAI_MODEL` configured if not using the default.
+- Optional `OPENAI_BASE_URL` configured if using an OpenAI-compatible endpoint.
 
 ## Remaining ASP Registration Steps
 
