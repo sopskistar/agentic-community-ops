@@ -4,7 +4,7 @@ Agentic Community Ops is a Next.js App Router project for a Web3 community secur
 
 # Current Blockers
 
-No active implementation blockers are known.
+No repository blockers are known. Remaining blockers are external: deployment URL, production environment variables, and ASP registration submission.
 
 # Next Actions
 
@@ -101,3 +101,15 @@ No active implementation blockers are known.
 - Real AI calls require manually configured `OPENAI_API_KEY`; tests use mocked providers and do not require secrets.
 - No authentication is implemented, by design for the current scope.
 - Automated tests currently cover the deterministic security engine, project repository and hybrid analysis merge behavior.
+
+# Latest Verification
+
+- Date: 2026-07-14
+- `npm test`: passed with 53 tests.
+- `npm run lint`: passed.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed.
+- Route structure inspected and includes `/`, `/demo`, `/docs/asp`, dashboard routes, and all `/api/v1` endpoints.
+- Git history inspected through the latest MVP commits.
+- Secret exposure review found no committed secrets; one false positive was the phrase `risk-free` in a deterministic rule description.
+- Public manifest and schema JSON files parse successfully.
