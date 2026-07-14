@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-14 - Session: hybrid message-analysis service
+
+- What was built: Added a hybrid message-analysis service under `lib/analysis/` and `lib/ai/` that runs deterministic security first, calls an OpenAI-compatible provider for structured AI classification, validates AI output with Zod, and merges results without allowing AI to reduce deterministic risk.
+- Problems found: `openai` was not installed, so it was added as the only new required package. Vitest did not resolve the Next `@/*` alias for new library imports, so the new library modules use relative imports for test compatibility. A prompt-injection test correctly triggered both prompt-injection and OTP rules, raising final risk to CRITICAL.
+- Bugs fixed: Fixed test-runner import resolution for new analysis modules and corrected the prompt-injection test expectation to preserve the higher deterministic risk.
+- Important technical decisions: `finalRisk` is always the higher of `deterministicRisk` and `aiSuggestedRisk`; AI output is accepted only after Zod validation; provider/API failures and invalid AI JSON return deterministic results with a safe fallback reply and escalation; `.env.example` documents `OPENAI_API_KEY` and `OPENAI_MODEL`.
+- Tests performed: `npm test` passed with 42 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed.
+- New rules learned: Community messages are untrusted; AI replies must be suggestions for human review; AI must use only supplied official links; missing knowledge, financial, legal, account-security, missing-fund and AI failure cases require escalation.
+
 ## 2026-07-14 - Session: project knowledge base MVP
 
 - What was built: Added a local JSON-backed project knowledge-base system with TypeScript types, Zod validation schemas, a repository interface, a local JSON repository implementation, repository tests, dashboard project list, project creation page, and project editing page.
