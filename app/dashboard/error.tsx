@@ -7,8 +7,9 @@ export default function DashboardError({
   reset: () => void;
 }) {
   return (
-    <main className="min-h-screen bg-[#f7f8fb] px-5 py-10 text-slate-950">
-      <div className="mx-auto max-w-3xl rounded-lg border border-red-200 bg-white p-6 shadow-sm">
+    <main className="app-bg min-h-screen text-slate-950">
+      <div className="page-shell max-w-3xl">
+      <div className="section-card border-red-200 p-6">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-red-700">
           Dashboard error
         </p>
@@ -22,10 +23,11 @@ export default function DashboardError({
         <button
           type="button"
           onClick={reset}
-          className="mt-6 inline-flex h-11 items-center justify-center rounded-lg bg-red-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-red-700"
+          className="btn mt-6 bg-red-600 text-white hover:bg-red-700"
         >
           Try again
         </button>
+      </div>
       </div>
     </main>
   );

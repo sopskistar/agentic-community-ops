@@ -20,15 +20,15 @@ const severityCounts = publicSecurityRules.reduce<Record<RiskSeverity, number>>(
 
 export default function SecurityEnginePage() {
   return (
-    <main className="bg-[#f7f8fb] text-slate-950">
+    <main className="app-bg text-slate-950">
       <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[1fr_0.75fr] lg:items-end">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
+              <p className="kicker">
                 Security Engine
               </p>
-              <h1 className="mt-3 max-w-4xl text-4xl font-semibold text-slate-950 sm:text-5xl">
+              <h1 className="mt-3 max-w-4xl text-3xl font-semibold text-slate-950 sm:text-5xl">
                 Published deterministic rules with stable IDs.
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-7 text-slate-600">
@@ -42,7 +42,7 @@ export default function SecurityEnginePage() {
                 (severity) => (
                   <div
                     key={severity}
-                    className={`rounded-xl border p-4 shadow-sm ${severityStyles[severity]}`}
+                    className={`metric-card border p-4 ${severityStyles[severity]}`}
                   >
                     <p className="text-xs font-bold uppercase tracking-[0.14em]">
                       {severity}
@@ -58,7 +58,7 @@ export default function SecurityEnginePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Rule catalog</h2>
@@ -69,7 +69,7 @@ export default function SecurityEnginePage() {
           </div>
           <Link
             href="/dashboard"
-            className="inline-flex h-11 items-center justify-center rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-emerald-700"
+            className="btn btn-primary"
           >
             Open Dashboard
           </Link>
@@ -79,7 +79,7 @@ export default function SecurityEnginePage() {
           {publicSecurityRules.map((rule) => (
             <article
               key={rule.ruleId}
-              className="group flex min-h-full flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-950/5"
+              className="interactive-card group flex min-h-full flex-col p-5"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -91,7 +91,7 @@ export default function SecurityEnginePage() {
                   </h3>
                 </div>
                 <span
-                  className={`shrink-0 rounded-full border px-3 py-1 text-xs font-bold ${severityStyles[rule.severity]}`}
+                  className={`badge shrink-0 ${severityStyles[rule.severity]}`}
                 >
                   {rule.severity}
                 </span>

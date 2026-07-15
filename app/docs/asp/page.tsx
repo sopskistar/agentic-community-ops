@@ -6,7 +6,7 @@ const sections = [
     title: "Problem Solved",
     items: [
       "Web3 communities are attacked through fake admins, phishing links, wallet-verification scams, token-claim lures and credential requests.",
-      "Community teams need fast, explainable support triage without letting AI downgrade deterministic security risks.",
+      "Community teams need fast, explainable support review without letting AI downgrade deterministic security risks.",
     ],
   },
   {
@@ -95,13 +95,13 @@ const sections = [
 
 export default function AspDocsPage() {
   return (
-    <main className="min-h-screen bg-[#f7f8fb] px-5 py-12 text-slate-950">
-      <div className="mx-auto max-w-6xl">
-        <header className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
+    <main className="app-bg min-h-screen text-slate-950">
+      <div className="page-shell max-w-6xl">
+        <header className="section-card p-6 md:p-8">
+          <p className="kicker">
             ASP Documentation
           </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
             Community Message Security Audit
           </h1>
           <p className="mt-5 max-w-4xl text-base leading-7 text-slate-600">
@@ -109,7 +109,7 @@ export default function AspDocsPage() {
           </p>
         </header>
 
-        <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <section className="section-card mt-6 p-6">
           <h2 className="text-2xl font-semibold">Service Offering</h2>
           <dl className="mt-5 grid gap-5 md:grid-cols-3">
             <div>
@@ -135,11 +135,11 @@ export default function AspDocsPage() {
           </dl>
         </section>
 
-        <section className="mt-8 grid gap-5 md:grid-cols-2">
+        <section className="mt-6 grid gap-5 md:grid-cols-2">
           {sections.map((section) => (
             <article
               key={section.title}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"
+              className="interactive-card p-6"
             >
               <h2 className="text-xl font-semibold">{section.title}</h2>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
@@ -151,7 +151,7 @@ export default function AspDocsPage() {
           ))}
         </section>
 
-        <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <section className="section-card mt-6 p-6">
           <h2 className="text-2xl font-semibold">API Examples</h2>
           <div className="mt-5 grid gap-4 lg:grid-cols-2">
             <pre className="overflow-auto rounded-lg bg-slate-950 p-4 text-xs leading-6 text-slate-100">

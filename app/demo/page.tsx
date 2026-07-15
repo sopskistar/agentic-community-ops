@@ -115,14 +115,14 @@ export default async function DemoPage() {
   const mostImportantSeedRule = seedPhraseAnalysis.triggeredRules[0];
 
   return (
-    <main className="min-h-screen bg-[#f7f8fb] text-slate-950">
+    <main className="app-bg min-h-screen text-slate-950">
       <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-12 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-10 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
+            <p className="kicker">
               Guided Judge Demo
             </p>
-            <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+            <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">
               NovaBridge Security Desk
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
@@ -134,7 +134,7 @@ export default async function DemoPage() {
           <form action="/demo">
             <button
               type="submit"
-              className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-800 shadow-sm transition-all hover:-translate-y-0.5 hover:bg-slate-50"
+              className="btn btn-secondary"
             >
               Reset Demo
             </button>
@@ -142,7 +142,7 @@ export default async function DemoPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl space-y-12 px-5 py-12 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-8 px-4 py-10 sm:px-6 lg:px-8">
         <section className="grid gap-6 lg:grid-cols-[0.85fr_1fr]">
           <div>
             <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
@@ -154,7 +154,7 @@ export default async function DemoPage() {
               and its listed official links as trusted knowledge.
             </p>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="section-card p-5 md:p-6">
             <h3 className="text-2xl font-semibold">
               {novaBridgeProject.projectName}
             </h3>
@@ -212,7 +212,7 @@ export default async function DemoPage() {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[0.9fr_1fr]">
-          <div className="rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
+          <div className="section-card border-red-200 bg-red-50 p-5 md:p-6">
             <span className="inline-flex size-10 items-center justify-center rounded-lg bg-red-600 text-sm font-bold text-white">
               3
             </span>
@@ -220,7 +220,7 @@ export default async function DemoPage() {
               Exact triggered rule
             </h2>
             {mostImportantSeedRule ? (
-              <div className="mt-5 rounded-xl bg-white p-5 shadow-sm">
+              <div className="metric-card mt-5 p-5">
                 <p className="text-sm font-semibold text-red-700">
                   {mostImportantSeedRule.ruleId} | {mostImportantSeedRule.severity}
                 </p>
@@ -237,7 +237,7 @@ export default async function DemoPage() {
             ) : null}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="section-card p-5 md:p-6">
             <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
               4
             </span>
@@ -268,7 +268,7 @@ export default async function DemoPage() {
             </div>
             <Link
               href="#report"
-              className="inline-flex h-10 items-center justify-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-slate-800"
+              className="btn btn-dark"
             >
               Jump to Report
             </Link>
@@ -289,7 +289,7 @@ export default async function DemoPage() {
                   <p className="text-sm font-semibold">
                     {item.index + 1}. {demoMessages[item.index].label}
                   </p>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-800">
+                  <span className="badge bg-white text-slate-800">
                     {item.result.finalRisk}
                   </span>
                 </div>
@@ -306,7 +306,7 @@ export default async function DemoPage() {
           </div>
         </section>
 
-        <section id="report" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <section id="report" className="section-card p-5 md:p-6">
           <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
             6
           </span>
@@ -351,7 +351,7 @@ export default async function DemoPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm">
+        <section className="section-card border-emerald-200 bg-emerald-50 p-5 md:p-6">
           <h2 className="text-3xl font-semibold text-emerald-950">
             Why this is not an AI hallucination
           </h2>
@@ -363,7 +363,7 @@ export default async function DemoPage() {
               "AI cannot reduce deterministic risk.",
               "Reports can be recomputed.",
             ].map((item) => (
-              <div key={item} className="rounded-xl bg-white p-4 text-sm font-semibold text-emerald-900 shadow-sm">
+              <div key={item} className="metric-card p-4 text-sm font-semibold text-emerald-900">
                 {item}
               </div>
             ))}
@@ -457,7 +457,7 @@ function AnalysisCard({
   analysis: Awaited<ReturnType<typeof analyseDemoMessage>>;
 }) {
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-950/5">
+    <article className="interactive-card p-5">
       <p className="text-sm font-semibold text-emerald-700">{title}</p>
       <h3 className="mt-2 text-xl font-semibold">{label}</h3>
       <p className="mt-3 text-sm leading-6 text-slate-600">{message}</p>
@@ -475,7 +475,7 @@ function AnalysisCard({
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <div className="metric-card bg-slate-50 p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
         {label}
       </p>
@@ -495,7 +495,7 @@ function MiniMetric({ label, value }: { label: string; value: string }) {
 
 function ReportList({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
+    <div className="metric-card bg-slate-50 p-5">
       <h3 className="text-lg font-semibold">{title}</h3>
       <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
         {items.length > 0 ? (

@@ -1,6 +1,6 @@
 # Current Status
 
-Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a polished product landing page, shared responsive navigation, a dedicated `/security-engine` public rule catalog, threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`. A guided no-setup judge demo now exists at `/demo` using the fictional NovaBridge project. ASP registration preparation artifacts now exist at `/docs/asp`, `ASP_REGISTRATION.md`, `FINAL_CHECKLIST.md`, `public/service-manifest.json`, and `public/schemas/*.json`.
+Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a polished product landing page, shared responsive navigation with persistent Light/Dark mode, a clean shared footer, a dedicated `/security-engine` public rule catalog, threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`. A guided no-setup judge demo now exists at `/demo` using the fictional NovaBridge project. ASP registration preparation artifacts now exist at `/docs/asp`, `ASP_REGISTRATION.md`, `FINAL_CHECKLIST.md`, `public/service-manifest.json`, and `public/schemas/*.json`.
 
 # Current Blockers
 
@@ -37,6 +37,7 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - `/api/v1/rules` returns only the public deterministic rule list.
 - `/api/v1/health` returns service status and deterministic engine availability.
 - `app/components/app-nav.tsx` provides the shared responsive navigation across application pages.
+- The shared navigation includes a Light/Dark mode toggle, first-visit system preference detection, and localStorage persistence under `aco-theme`.
 - `/security-engine` renders the published deterministic rule catalog from the existing public rule list without changing engine behavior.
 - ASP public static files live at `public/service-manifest.json` and `public/schemas/*.json`.
 - `/docs/asp` is the human-readable ASP documentation page.
@@ -111,6 +112,15 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - Automated tests currently cover the deterministic security engine, project repository and hybrid analysis merge behavior.
 
 # Latest Verification
+
+- Date: 2026-07-15
+- `npm test`: passed with 55 tests.
+- `npm run lint`: passed.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed and generated 17 static pages/routes plus the dynamic API routes.
+- UI polish verification: shared nav/footer, Light/Dark mode persistence, landing page, `/security-engine`, `/demo`, `/dashboard`, dashboard project pages, batch/report pages, error/loading states and `/docs/asp` were source-reviewed for responsive layouts, no page-level horizontal overflow, consistent cards/buttons/forms/badges, accessible focus states and clearer message-review wording.
+
+# Previous Verification
 
 - Date: 2026-07-14
 - `npm test`: passed with 53 tests.

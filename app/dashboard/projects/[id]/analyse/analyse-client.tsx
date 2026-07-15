@@ -95,7 +95,7 @@ export function AnalyseClient({ project }: { project: Project }) {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="section-card p-5 md:p-6">
         <div className="grid gap-5">
           <label className="space-y-2">
             <span className="text-sm font-semibold text-slate-800">
@@ -106,7 +106,7 @@ export function AnalyseClient({ project }: { project: Project }) {
               onChange={(event) => setMessageContent(event.target.value)}
               maxLength={2000}
               rows={7}
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm leading-6 text-slate-950 outline-none transition-colors focus:border-emerald-600"
+              className="field leading-6"
               placeholder="Paste a community message for analysis."
             />
             <span className="block text-xs text-slate-500">
@@ -126,7 +126,7 @@ export function AnalyseClient({ project }: { project: Project }) {
                     event.target.value as (typeof messageSources)[number],
                   )
                 }
-                className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition-colors focus:border-emerald-600"
+                className="field"
               >
                 {messageSources.map((source) => (
                   <option key={source} value={source}>
@@ -146,7 +146,7 @@ export function AnalyseClient({ project }: { project: Project }) {
                     key={example.label}
                     type="button"
                     onClick={() => setMessageContent(example.content)}
-                    className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
+                    className="btn btn-secondary min-h-9 px-3 py-2 text-xs"
                   >
                     {example.label}
                   </button>
@@ -159,9 +159,9 @@ export function AnalyseClient({ project }: { project: Project }) {
             type="button"
             onClick={analyseMessage}
             disabled={isLoading || messageContent.trim().length === 0}
-            className="inline-flex h-11 w-fit items-center justify-center rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="btn btn-primary w-fit disabled:cursor-not-allowed"
           >
-            {isLoading ? "Analysing..." : "Analyse"}
+            {isLoading ? "Reviewing..." : "Review Message"}
           </button>
 
           <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-900">
@@ -211,7 +211,7 @@ export function AnalyseClient({ project }: { project: Project }) {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="section-card p-5 md:p-6">
               <h2 className="text-xl font-semibold">Triggered rules</h2>
               {analysis.triggeredRules.length === 0 ? (
                 <p className="mt-4 text-sm text-slate-600">
@@ -245,7 +245,7 @@ export function AnalyseClient({ project }: { project: Project }) {
             </div>
 
             <div className="space-y-6">
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="section-card p-5 md:p-6">
                 <h2 className="text-xl font-semibold">Generated safe reply</h2>
                 <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-slate-700">
                   {analysis.generatedReply}
@@ -253,13 +253,13 @@ export function AnalyseClient({ project }: { project: Project }) {
                 <button
                   type="button"
                   onClick={copyReply}
-                  className="mt-5 inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
+                  className="btn btn-secondary mt-5"
                 >
                   {copyState === "copied" ? "Copied" : "Copy Reply"}
                 </button>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="section-card p-5 md:p-6">
                 <h2 className="text-xl font-semibold">Recommended action</h2>
                 <p className="mt-4 text-sm leading-6 text-slate-700">
                   {analysis.recommendedAction}
@@ -274,7 +274,7 @@ export function AnalyseClient({ project }: { project: Project }) {
             </div>
           </div>
 
-          <details className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <details className="section-card p-5 md:p-6">
             <summary className="cursor-pointer text-lg font-semibold">
               Show Proof
             </summary>
@@ -349,7 +349,7 @@ function ResultCard({
   detail: string;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="metric-card p-5">
       <p className="text-sm font-semibold text-slate-600">{title}</p>
       <p className="mt-3 text-3xl font-semibold text-slate-950">{value}</p>
       <p className="mt-2 text-sm text-slate-600">{detail}</p>

@@ -126,7 +126,7 @@ export function BatchClient({ project }: { project: Project }) {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="section-card p-5 md:p-6">
         <div className="grid gap-5">
           <label className="space-y-2">
             <span className="text-sm font-semibold text-slate-800">
@@ -136,7 +136,7 @@ export function BatchClient({ project }: { project: Project }) {
               value={rawMessages}
               onChange={(event) => setRawMessages(event.target.value)}
               rows={10}
-              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm leading-6 text-slate-950 outline-none transition-colors focus:border-emerald-600"
+              className="field leading-6"
               placeholder="Paste one community message per line."
             />
           </label>
@@ -149,7 +149,7 @@ export function BatchClient({ project }: { project: Project }) {
               <select
                 value={source}
                 onChange={(event) => setSource(event.target.value)}
-                className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition-colors focus:border-emerald-600 md:w-56"
+                className="field md:w-56"
               >
                 {["MANUAL", "X", "DISCORD", "TELEGRAM", "EMAIL", "OTHER"].map(
                   (item) => (
@@ -165,7 +165,7 @@ export function BatchClient({ project }: { project: Project }) {
               <button
                 type="button"
                 onClick={() => setRawMessages(demoMessages.join("\n"))}
-                className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
+                className="btn btn-secondary"
               >
                 Load Demo Messages
               </button>
@@ -173,9 +173,9 @@ export function BatchClient({ project }: { project: Project }) {
                 type="button"
                 onClick={runBatchAnalysis}
                 disabled={messages.length === 0 || messages.length > 25 || isLoading}
-                className="inline-flex h-11 items-center justify-center rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                className="btn btn-primary disabled:cursor-not-allowed"
               >
-                {isLoading ? "Analysing..." : "Run Analysis"}
+                {isLoading ? "Reviewing..." : "Run Analysis"}
               </button>
             </div>
           </div>
@@ -226,7 +226,7 @@ export function BatchClient({ project }: { project: Project }) {
                   onChange={(event) =>
                     setRiskFilter(event.target.value as (typeof riskFilters)[number])
                   }
-                  className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm"
+                  className="field py-2"
                 >
                   {riskFilters.map((item) => (
                     <option key={item} value={item}>
@@ -242,7 +242,7 @@ export function BatchClient({ project }: { project: Project }) {
                 <select
                   value={categoryFilter}
                   onChange={(event) => setCategoryFilter(event.target.value)}
-                  className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm"
+                  className="field py-2"
                 >
                   <option value="ALL">ALL</option>
                   {categories.map((item) => (
@@ -257,13 +257,13 @@ export function BatchClient({ project }: { project: Project }) {
               <button
                 type="button"
                 onClick={exportJson}
-                className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
+                className="btn btn-secondary"
               >
                 Export JSON
               </button>
               <Link
                 href={`/dashboard/projects/${project.id}/report`}
-                className="inline-flex h-10 items-center justify-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-slate-800"
+                className="btn btn-dark"
               >
                 Open Report
               </Link>
@@ -325,7 +325,7 @@ function getApiErrorMessage(body: unknown, fallback: string) {
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="metric-card p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
         {label}
       </p>

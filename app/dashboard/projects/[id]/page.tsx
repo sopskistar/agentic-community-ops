@@ -26,12 +26,13 @@ export default async function EditProjectPage({
   const updateProjectWithId = updateProject.bind(null, project.id);
 
   return (
-    <main className="min-h-screen bg-[#f7f8fb] px-5 py-12 text-slate-950">
-      <div className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
+    <main className="app-bg min-h-screen text-slate-950">
+      <div className="page-shell max-w-4xl">
+      <div className="section-card p-6 md:p-8">
+        <p className="kicker">
           Edit Project
         </p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
           {project.name}
         </h1>
         <p className="mt-3 text-sm leading-6 text-slate-600">
@@ -41,19 +42,19 @@ export default async function EditProjectPage({
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
             href={`/dashboard/projects/${project.id}/analyse`}
-            className="inline-flex h-10 items-center justify-center rounded-lg bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-emerald-700"
+            className="btn btn-primary"
           >
-            Analyse Message
+            Review Message
           </Link>
           <Link
             href={`/dashboard/projects/${project.id}/batch`}
-            className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
+            className="btn btn-secondary"
           >
             Batch Analysis
           </Link>
           <Link
             href={`/dashboard/projects/${project.id}/report`}
-            className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
+            className="btn btn-secondary"
           >
             Report
           </Link>
@@ -65,6 +66,7 @@ export default async function EditProjectPage({
             project={project}
           />
         </div>
+      </div>
       </div>
     </main>
   );

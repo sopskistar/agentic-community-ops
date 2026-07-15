@@ -65,7 +65,7 @@ export function ReportClient({ project }: { project: Project }) {
 
   if (!storedBatch || !recomputedSummary || !report) {
     return (
-      <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center">
+      <div className="section-card border-dashed p-8 text-center">
         <h2 className="text-2xl font-semibold">No batch results stored</h2>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
           Run batch analysis for this project first. The report uses actual
@@ -81,21 +81,21 @@ export function ReportClient({ project }: { project: Project }) {
         <button
           type="button"
           onClick={recomputeReport}
-          className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
+          className="btn btn-secondary"
         >
           Recompute Report
         </button>
         <button
           type="button"
           onClick={exportMarkdown}
-          className="inline-flex h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:bg-slate-50"
+          className="btn btn-secondary"
         >
           Export as Markdown
         </button>
         <button
           type="button"
           onClick={exportJson}
-          className="inline-flex h-10 items-center justify-center rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-slate-800"
+          className="btn btn-dark"
         >
           Export as JSON
         </button>
@@ -128,7 +128,7 @@ export function ReportClient({ project }: { project: Project }) {
         />
       </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="section-card p-5 md:p-6">
         <h2 className="text-xl font-semibold">AI interpretation boundary</h2>
         <p className="mt-3 text-sm leading-6 text-slate-600">
           Measured data above comes directly from stored analysis results. Any
@@ -219,7 +219,7 @@ function createMeasuredReport(batch: StoredBatch, summary: BatchAnalysisSummary)
 
 function ReportPanel({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="section-card p-5 md:p-6">
       <h2 className="text-xl font-semibold">{title}</h2>
       <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
         {items.map((item) => (
@@ -232,7 +232,7 @@ function ReportPanel({ title, items }: { title: string; items: string[] }) {
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="metric-card p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
         {label}
       </p>

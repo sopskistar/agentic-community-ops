@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-15 - Session: responsive SaaS UI polish with dark mode
+
+- What was built: Polished the application UI across the shared shell, landing page, demo, dashboard, project forms, security engine, ASP docs, loading and error states. Added a persistent Light/Dark mode toggle in the shared navigation, first-visit system preference detection, a clean shared footer, stronger focus states, shared card/button/form styling, responsive page shells, compact dashboard cards, clearer message-review wording and subtle hover/transition behavior.
+- Problems found: The existing UI relied on repeated page-local Tailwind classes, had no dark mode, had some inconsistent page headers/cards/buttons, and still used confusing "triage" wording in user-facing copy. The first lint run flagged synchronous state initialization inside a theme effect.
+- Bugs fixed: Reworked theme initialization into a lazy client-safe initializer and document-sync effect so ESLint passes. Removed an invalid responsive utility from the landing page. Kept mobile navigation horizontally contained with an internal scrollable nav row and hidden page overflow.
+- Important technical decisions: Changes stayed presentation-only. The deterministic security engine, API behavior, AI analysis flow, project repository behavior, and report/batch calculations were not modified.
+- Tests performed: `npm test` passed with 55 tests; `npm run lint` passed after the theme initialization fix; `npx tsc --noEmit --incremental false` passed; `npm run build` passed.
+- New rules learned: Theme persistence should be initialized before paint and synchronized from React state without setState-in-effect patterns that violate the current React lint rules.
+
 ## 2026-07-14 - Session: hackathon UI and navigation polish
 
 - What was built: Polished the application UI for hackathon judging without changing architecture, deterministic security logic, AI analysis logic, API contracts, data models or storage. Added a consistent responsive root navigation bar, created a dedicated `/security-engine` rule catalog page, refreshed the landing page, improved Guided Judge Demo presentation, and aligned dashboard cards, forms, buttons, badges, panels and headers.
