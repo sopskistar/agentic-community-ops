@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-15 - Session: final responsive UI refinement
+
+- What was built: Completed a narrow UI-only refinement pass before feature completion. Added a hamburger navigation menu for small and tablet screens while preserving desktop navigation, improved spacing beneath the sticky header, tightened landing badge contrast in Light and Dark mode, aligned dashboard project tone badges with card titles, and normalized dashboard card height/alignment.
+- Problems found: Mobile/tablet navigation was still crowded as a horizontal scroll row. The landing hero badge depended on generic dark-mode color overrides instead of an explicit contrast treatment. Dashboard project tone badges were top-aligned against the full card header content rather than centered with the project title.
+- Bugs fixed: Removed the mobile horizontal nav scroller in favor of an accessible menu button with `aria-expanded`/`aria-controls`. Added a small content offset under the sticky header for mobile. Kept project card rows wrapping safely to avoid narrow-screen overflow.
+- Important technical decisions: No functionality, security engine logic, API behavior, AI behavior, data flow or route behavior was changed. Verification of the requested 360px, 390px, 768px, 1024px and 1440px breakpoints was source/CSS based because no Playwright/Cypress browser binary is installed in the project.
+- Tests performed: `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed.
+- New rules learned: Keep the desktop nav breakpoint explicit and use a menu below `lg` so 360px, 390px and 768px layouts do not depend on horizontal navigation scrolling.
+
 ## 2026-07-15 - Session: responsive SaaS UI polish with dark mode
 
 - What was built: Polished the application UI across the shared shell, landing page, demo, dashboard, project forms, security engine, ASP docs, loading and error states. Added a persistent Light/Dark mode toggle in the shared navigation, first-visit system preference detection, a clean shared footer, stronger focus states, shared card/button/form styling, responsive page shells, compact dashboard cards, clearer message-review wording and subtle hover/transition behavior.

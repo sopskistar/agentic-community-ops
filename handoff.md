@@ -38,6 +38,7 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - `/api/v1/health` returns service status and deterministic engine availability.
 - `app/components/app-nav.tsx` provides the shared responsive navigation across application pages.
 - The shared navigation includes a Light/Dark mode toggle, first-visit system preference detection, and localStorage persistence under `aco-theme`.
+- Small and tablet screens use a hamburger menu below the `lg` breakpoint; desktop navigation remains visible at `lg` and wider.
 - `/security-engine` renders the published deterministic rule catalog from the existing public rule list without changing engine behavior.
 - ASP public static files live at `public/service-manifest.json` and `public/schemas/*.json`.
 - `/docs/asp` is the human-readable ASP documentation page.
@@ -118,6 +119,7 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - `npm run lint`: passed.
 - `npx tsc --noEmit --incremental false`: passed.
 - `npm run build`: passed and generated 17 static pages/routes plus the dynamic API routes.
+- Final UI refinement verification: `npm run lint`, `npx tsc --noEmit --incremental false`, and `npm run build` passed after the hamburger nav, sticky-header spacing, landing badge contrast, and dashboard card alignment changes.
 - UI polish verification: shared nav/footer, Light/Dark mode persistence, landing page, `/security-engine`, `/demo`, `/dashboard`, dashboard project pages, batch/report pages, error/loading states and `/docs/asp` were source-reviewed for responsive layouts, no page-level horizontal overflow, consistent cards/buttons/forms/badges, accessible focus states and clearer message-review wording.
 
 # Previous Verification

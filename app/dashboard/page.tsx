@@ -54,19 +54,19 @@ export default async function DashboardPage() {
             {projects.map((project) => (
               <article
                 key={project.id}
-                className="interactive-card flex min-h-full flex-col p-5"
+                className="interactive-card flex min-h-[19rem] flex-col p-5"
               >
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <h2 className="text-2xl font-semibold">{project.name}</h2>
-                    <p className="mt-3 text-sm leading-6 text-slate-600">
-                      {project.description}
-                    </p>
-                  </div>
-                  <span className="badge border-emerald-200 bg-emerald-50 text-emerald-800">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h2 className="min-w-0 flex-1 text-2xl font-semibold leading-tight">
+                    {project.name}
+                  </h2>
+                  <span className="badge shrink-0 border-emerald-200 bg-emerald-50 text-emerald-800">
                     {project.responseTone}
                   </span>
                 </div>
+                <p className="mt-3 min-h-12 text-sm leading-6 text-slate-600">
+                  {project.description}
+                </p>
                 <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
                   <div className="rounded-lg bg-slate-50 p-4">
                     <dt className="font-semibold text-slate-800">Website</dt>

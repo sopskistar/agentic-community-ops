@@ -50,6 +50,16 @@ html {
   scroll-padding-top: 96px;
 }
 
+#main-content {
+  padding-top: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  #main-content {
+    padding-top: 0;
+  }
+}
+
 a,
 button,
 input,
@@ -212,6 +222,12 @@ summary:focus-visible {
   line-height: 1.2;
 }
 
+.hero-badge {
+  border-color: #99f6e4;
+  background: #f0fdfa;
+  color: #134e4a;
+}
+
 .kicker {
   color: var(--brand-strong);
   font-size: 0.75rem;
@@ -260,6 +276,12 @@ summary:focus-visible {
   color: #e5edf5;
 }
 
+.dark .hero-badge {
+  border-color: rgba(45, 212, 191, 0.34);
+  background: rgba(15, 23, 42, 0.94);
+  color: #ffffff;
+}
+
 .dark .btn-secondary:hover {
   border-color: #3f526f;
   background: #172033;
@@ -284,6 +306,10 @@ summary:focus-visible {
 .dark .bg-white\/90,
 .dark .bg-white\/95 {
   background-color: #0f172a !important;
+}
+
+.dark .bg-white\/95 {
+  background-color: rgba(15, 23, 42, 0.95) !important;
 }
 
 .dark .bg-slate-50,

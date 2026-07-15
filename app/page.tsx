@@ -53,7 +53,7 @@ export default function Home() {
         <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-teal-100/70 via-sky-50/70 to-transparent" />
         <div className="relative mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_0.82fr] lg:px-8 lg:py-18">
           <div className="flex flex-col justify-center">
-            <p className="badge border-teal-200 bg-teal-50 text-teal-800">
+            <p className="badge hero-badge">
               Web3 community security and support ASP
             </p>
             <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.04] text-slate-950 sm:text-5xl lg:text-7xl">
@@ -131,7 +131,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-5 md:grid-cols-3">
           {featureCards.map((item) => (
             <article
@@ -153,7 +153,7 @@ export default function Home() {
       </section>
 
       <section className="border-y border-slate-200 bg-white">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-12 sm:px-6 lg:grid-cols-[0.75fr_1fr] lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[0.75fr_1fr] lg:px-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
               Problem
@@ -172,7 +172,7 @@ export default function Home() {
       </section>
 
       <section className="bg-slate-950 text-white">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">
             How It Works
           </p>
@@ -198,7 +198,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[0.8fr_1fr] lg:px-8">
+      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[0.8fr_1fr] lg:px-8">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
             Deterministic Security
@@ -231,7 +231,7 @@ export default function Home() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="rounded-2xl bg-gradient-to-br from-teal-700 to-slate-950 px-6 py-9 text-white shadow-xl shadow-emerald-900/15 md:px-10">
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
