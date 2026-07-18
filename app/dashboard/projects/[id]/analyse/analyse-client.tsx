@@ -99,7 +99,7 @@ export function AnalyseClient({ project }: { project: Project }) {
         <div className="grid gap-5">
           <label className="space-y-2">
             <span className="text-sm font-semibold text-slate-800">
-              Message
+              Message to review
             </span>
             <textarea
               value={messageContent}
@@ -117,7 +117,7 @@ export function AnalyseClient({ project }: { project: Project }) {
           <div className="grid gap-4 md:grid-cols-[220px_1fr]">
             <label className="space-y-2">
               <span className="text-sm font-semibold text-slate-800">
-                Source
+                Message source
               </span>
               <select
                 value={messageSource}
@@ -138,7 +138,7 @@ export function AnalyseClient({ project }: { project: Project }) {
 
             <div className="space-y-2">
               <span className="text-sm font-semibold text-slate-800">
-                Example messages
+                Sample messages
               </span>
               <div className="flex flex-wrap gap-2">
                 {exampleMessages.map((example) => (
@@ -161,7 +161,7 @@ export function AnalyseClient({ project }: { project: Project }) {
             disabled={isLoading || messageContent.trim().length === 0}
             className="btn btn-primary w-fit disabled:cursor-not-allowed"
           >
-            {isLoading ? "Reviewing..." : "Review Message"}
+            {isLoading ? "Reviewing..." : "Run Review"}
           </button>
 
           <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-900">
@@ -246,7 +246,7 @@ export function AnalyseClient({ project }: { project: Project }) {
 
             <div className="space-y-6">
               <div className="section-card p-5 md:p-6">
-                <h2 className="text-xl font-semibold">Generated safe reply</h2>
+                <h2 className="text-xl font-semibold">Suggested reply</h2>
                 <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-slate-700">
                   {analysis.generatedReply}
                 </p>
@@ -276,7 +276,7 @@ export function AnalyseClient({ project }: { project: Project }) {
 
           <details className="section-card p-5 md:p-6">
             <summary className="cursor-pointer text-lg font-semibold">
-              Show Proof
+              Show decision proof
             </summary>
             <div className="mt-4 space-y-4 text-sm leading-6 text-slate-700">
               <p>

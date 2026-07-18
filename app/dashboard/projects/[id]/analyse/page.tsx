@@ -35,8 +35,8 @@ export default async function ProjectAnalysePage({
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
               Run deterministic rules first, then AI-assisted classification
-              and safe reply suggestions using this knowledge base. Today&apos;s
-              rules focus on Web3 community security.
+              and safe reply suggestions using this profile. Today&apos;s rule
+              module focuses on Web3 Community Security.
             </p>
           </div>
           <Link

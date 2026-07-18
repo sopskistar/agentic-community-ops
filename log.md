@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-18 - Session: platform UI and UX polish
+
+- What was built: Polished the existing platform UI without adding major features or redesigning the app. Tightened homepage hero spacing, CTA alignment, communication engine console hierarchy, Current MVP cards, platform pipeline status styling, roadmap phase badges and future-feature clarity. Improved dashboard terminology, real derived profile metrics, empty states, project/profile labels, analysis controls, batch filtering empty state, report empty state, demo orientation and security engine positioning.
+- Problems found: The homepage status labels were inconsistent enough that implemented and planned stages did not separate instantly; dashboard cards lacked high-level measured stats; some dashboard/demo/security labels still felt like separate crypto-specific surfaces instead of modules of one communication intelligence platform.
+- Bugs fixed: Fixed a TypeScript status-style indexing issue by making roadmap phase definitions literal typed data.
+- Important technical decisions: Kept deterministic rules, API contracts, integrations, OAuth, secrets, database/storage, OKX ASP registration, messaging foundation internals and current dashboard behavior unchanged. All new metrics are derived from existing local project data, not invented activity.
+- Tests performed: `npm test` passed with 65 tests across 9 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 19 static pages/routes plus dynamic API routes. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: UI polish should keep roadmap labels visually distinct enough that planned features cannot be mistaken for implemented product capability.
+
 ## 2026-07-18 - Session: platform positioning and BI foundation copy
 
 - What was built: Removed the duplicate decorative logo from the homepage console card, changed the navigation label from `Security Engine` to `Engine`, broadened homepage positioning around one AI communication engine, and added roadmap-only sections for Business Communication Intelligence inputs, Communication Contexts, platform-wide message pipeline and future platform architecture. Added a notice to `/demo` explaining that it showcases the current Web3 Community Security MVP and that future demos will cover business email, customer support, social messaging and omnichannel intelligence. Softened dashboard terminology toward message analysis and communication review without changing behavior.

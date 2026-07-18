@@ -42,7 +42,7 @@ export default async function ProjectReportPage({
             href={`/dashboard/projects/${project.id}/batch`}
             className="btn btn-secondary"
           >
-            Batch Analysis
+            Batch Review
           </Link>
         </div>
 

@@ -34,9 +34,9 @@ export default async function ProjectBatchPage({
               {project.name}
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-              Analyse up to 25 messages, filter by risk and category, export
+              Review up to 25 messages, filter by risk and category, export
               raw results, then generate a measured report. The current rule
-              set is tuned for Web3 community security.
+              module is tuned for Web3 Community Security.
             </p>
           </div>
           <Link

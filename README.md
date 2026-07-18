@@ -33,7 +33,7 @@ Future enterprise features include organizations, workspaces, teams, user accoun
 
 ## Capability Status
 
-- Implemented: Web3 Community Security, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public rules/analysis APIs, project knowledge bases and the normalized message model foundation.
+- Implemented: Web3 Community Security, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public rules/analysis APIs, project knowledge bases, polished platform positioning UI and the normalized message model foundation.
 - In progress: Product positioning and typed foundations for a broader communication intelligence platform.
 - Roadmap: business communication intelligence, file/document ingestion, channel-aware analysis, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation and developer integrations.
 - Future: enterprise organizations, workspaces, teams, user accounts, RBAC, tenant isolation, durable multi-tenant persistence, billing and administration.

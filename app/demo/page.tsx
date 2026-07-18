@@ -126,9 +126,10 @@ export default async function DemoPage() {
               NovaBridge Security Desk
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
-              A complete 90-second walkthrough of deterministic Web3 community
-              security analysis, safe reply generation, batch audits and a
-              recomputable report. No login or external setup required.
+              A 90-second walkthrough of the current Web3 Community Security
+              MVP: deterministic risk checks, AI-assisted classification, safe
+              reply suggestions, batch review and a recomputable report. No
+              login or external setup required.
             </p>
             <p className="mt-4 max-w-3xl rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold leading-6 text-emerald-900">
               This demo showcases the current Web3 Community Security MVP.
@@ -148,12 +149,35 @@ export default async function DemoPage() {
       </header>
 
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-10 sm:px-6 lg:px-8">
+        <section
+          aria-label="Demo overview"
+          className="grid gap-4 md:grid-cols-4"
+        >
+          {[
+            ["Context", "Fictional Web3 support desk"],
+            ["Input", "Ten reproducible messages"],
+            ["Decision", "Rules first, AI second"],
+            ["Output", "Risk, evidence and suggested reply"],
+          ].map(([label, value]) => (
+            <div key={label} className="metric-card p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                {label}
+              </p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-slate-800">
+                {value}
+              </p>
+            </div>
+          ))}
+        </section>
+
         <section className="grid gap-6 lg:grid-cols-[0.85fr_1fr]">
           <div>
             <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
               1
             </span>
-            <h2 className="mt-4 text-3xl font-semibold">Knowledge base</h2>
+            <h2 className="mt-4 text-3xl font-semibold">
+              Analysis knowledge base
+            </h2>
             <p className="mt-3 text-sm leading-6 text-slate-600">
               NovaBridge is fictional. The demo uses only this project profile
               and its listed official links as trusted knowledge.
@@ -187,7 +211,7 @@ export default async function DemoPage() {
             2
           </span>
           <h2 className="mt-4 text-3xl font-semibold">
-            Three single-message verdicts
+            Single-message verdicts
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
             These examples show the minimum deterministic risk changing from LOW
@@ -316,7 +340,7 @@ export default async function DemoPage() {
             6
           </span>
           <h2 className="mt-4 text-3xl font-semibold">
-            Community security report
+            Measured security report
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3 lg:grid-cols-6">
             <Metric label="Total" value={batchSummary.totalMessages} />
@@ -358,7 +382,7 @@ export default async function DemoPage() {
 
         <section className="section-card border-emerald-200 bg-emerald-50 p-5 md:p-6">
           <h2 className="text-3xl font-semibold text-emerald-950">
-            Why this is not an AI hallucination
+            Why the results are auditable
           </h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
             {[

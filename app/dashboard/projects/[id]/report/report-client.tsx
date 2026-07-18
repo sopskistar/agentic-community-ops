@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { createBatchSummary } from "../../../../../lib/analysis/batch";
@@ -71,6 +72,12 @@ export function ReportClient({ project }: { project: Project }) {
           Run batch analysis for this project first. The report uses actual
           analysis results stored in this browser.
         </p>
+        <Link
+          href={`/dashboard/projects/${project.id}/batch`}
+          className="btn btn-primary mt-6"
+        >
+          Open Batch Review
+        </Link>
       </div>
     );
   }

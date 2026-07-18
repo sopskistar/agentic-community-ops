@@ -9,13 +9,13 @@ const currentMvp = [
   "Batch analysis",
   "Community security reports",
   "A2A service capability",
-];
+] as const;
 
 const roadmapPhases = [
   {
     phase: "Phase 1",
     title: "Universal Web3 Community Security",
-    status: "Current MVP plus near-term hardening",
+    status: "Current MVP",
     items: [
       "Strengthen the existing security engine",
       "Expand the A2A API beyond the OKX ecosystem",
@@ -26,7 +26,7 @@ const roadmapPhases = [
   {
     phase: "Phase 2",
     title: "Business Intelligence Dashboard",
-    status: "Roadmap",
+    status: "Planned",
     items: [
       "Copy and paste messages or conversations",
       "CSV, Excel, PDF, Word and plain-text uploads",
@@ -39,7 +39,7 @@ const roadmapPhases = [
   {
     phase: "Phase 3",
     title: "Channel Intelligence and Communication Integrations",
-    status: "Roadmap",
+    status: "Planned",
     items: [
       "Facebook Pages",
       "Instagram Business",
@@ -52,7 +52,7 @@ const roadmapPhases = [
   {
     phase: "Phase 4",
     title: "AI Customer Operations",
-    status: "Roadmap",
+    status: "Future",
     items: [
       "AI reply suggestions",
       "Human approval",
@@ -66,7 +66,7 @@ const roadmapPhases = [
   {
     phase: "Phase 5",
     title: "Omnichannel Expansion",
-    status: "Roadmap",
+    status: "Future",
     items: [
       "Discord",
       "Telegram",
@@ -80,7 +80,7 @@ const roadmapPhases = [
   {
     phase: "Phase 6",
     title: "Workflow Automation and Developer Platform",
-    status: "Roadmap",
+    status: "Future",
     items: [
       "REST API",
       "A2A",
@@ -91,7 +91,7 @@ const roadmapPhases = [
       "External application integration",
     ],
   },
-];
+] as const;
 
 const channelAwareness = [
   {
@@ -140,37 +140,37 @@ const communicationContexts = [
     context: "Web3 Communities",
     detail:
       "The current MVP applies deterministic security rules and AI-assisted review to community safety workflows.",
-    status: "Implemented MVP context",
+    status: "Current MVP",
   },
   {
     context: "Customer Support",
     detail:
       "Planned analysis will identify support intent, urgency, complaint patterns and recommended next actions.",
-    status: "Roadmap",
+    status: "Planned",
   },
   {
     context: "Sales Conversations",
     detail:
       "Planned scoring will separate product questions, buying signals, objections and follow-up opportunities.",
-    status: "Roadmap",
+    status: "Planned",
   },
   {
     context: "Lead Qualification",
     detail:
       "Planned workflows will flag high-intent prospects and route them with relevant context.",
-    status: "Roadmap",
+    status: "Planned",
   },
   {
     context: "Business Email",
     detail:
       "Planned email intelligence will handle formal threads, attachments, action items and summaries.",
-    status: "Roadmap",
+    status: "Planned",
   },
   {
     context: "Social Media",
     detail:
       "Planned social analysis will adapt to campaigns, comments, DMs, engagement and brand risk.",
-    status: "Roadmap",
+    status: "Planned",
   },
   {
     context: "Internal Team Communication",
@@ -181,15 +181,56 @@ const communicationContexts = [
 ];
 
 const pipelineStages = [
-  { label: "Incoming Message", status: "Current input" },
-  { label: "Normalize", status: "Foundation implemented" },
-  { label: "Identify Context", status: "Roadmap" },
-  { label: "Deterministic Rules", status: "Implemented for Web3 security" },
-  { label: "AI Analysis", status: "Implemented for message review" },
-  { label: "Risk & Intent Classification", status: "Partial MVP" },
-  { label: "Suggested Action", status: "Partial MVP" },
-  { label: "Human Review / Automation", status: "Roadmap" },
-];
+  {
+    label: "Incoming Message",
+    status: "Manual and API input exist today.",
+    state: "Implemented",
+  },
+  {
+    label: "Normalize",
+    status: "Typed foundation exists; adapters are next.",
+    state: "In Progress",
+  },
+  {
+    label: "Identify Context",
+    status: "Roadmap for broader business use cases.",
+    state: "Planned",
+  },
+  {
+    label: "Deterministic Rules",
+    status: "Implemented for Web3 Community Security.",
+    state: "Implemented",
+  },
+  {
+    label: "AI Analysis",
+    status: "Implemented for message classification and replies.",
+    state: "Implemented",
+  },
+  {
+    label: "Risk & Intent Classification",
+    status: "Risk works today; broader intent is planned.",
+    state: "Partial MVP",
+  },
+  {
+    label: "Suggested Action",
+    status: "Reply suggestions exist; automation is future.",
+    state: "Partial MVP",
+  },
+  {
+    label: "Human Review / Automation",
+    status: "Roadmap with safe external-send controls.",
+    state: "Planned",
+  },
+] as const;
+
+const statusStyles = {
+  Implemented: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  "Current MVP": "border-emerald-200 bg-emerald-50 text-emerald-800",
+  "In Progress": "border-sky-200 bg-sky-50 text-sky-800",
+  "Partial MVP": "border-teal-200 bg-teal-50 text-teal-800",
+  Planned: "border-amber-200 bg-amber-50 text-amber-800",
+  Future: "border-slate-200 bg-slate-50 text-slate-700",
+} as const;
 
 const architectureNodes = [
   {
@@ -248,16 +289,16 @@ export default function Home() {
   return (
     <main className="app-bg text-slate-950">
       <section className="relative overflow-hidden border-b border-slate-200 bg-white">
-        <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-teal-100/70 via-sky-50/70 to-transparent" />
-        <div className="relative mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_0.72fr] lg:px-8 lg:py-16">
+        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-teal-100/70 via-sky-50/70 to-transparent" />
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.68fr)] lg:px-8 lg:py-20">
           <div className="flex flex-col justify-center">
             <p className="badge hero-badge">
               AI Communication Intelligence Platform
             </p>
-            <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.04] text-slate-950 sm:text-5xl lg:text-7xl">
+            <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.04] text-slate-950 sm:text-5xl lg:text-6xl">
               Agentic Ops
             </h1>
-            <p className="mt-5 max-w-2xl text-xl leading-8 text-teal-800">
+            <p className="mt-5 max-w-3xl text-xl leading-8 text-teal-800">
               One AI communication engine for modern customer conversations.
             </p>
             <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
@@ -267,7 +308,7 @@ export default function Home() {
               intelligence, document intelligence, channel-aware analysis and AI
               customer operations.
             </p>
-            <div className="mt-7 grid gap-3 sm:flex sm:flex-row">
+            <div className="mt-8 grid gap-3 sm:flex sm:flex-row sm:items-center">
               <Link href="/demo" className="btn btn-primary min-h-12 px-6">
                 Launch Web3 Security Demo
               </Link>
@@ -278,41 +319,54 @@ export default function Home() {
                 View Engine
               </Link>
             </div>
-            <dl className="mt-8 grid max-w-2xl grid-cols-3 gap-3">
-              <HeroStat label="Rules" value="15" />
+            <dl className="mt-9 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+              <HeroStat label="Security rules" value="15" />
               <HeroStat label="Batch limit" value="25" />
               <HeroStat label="Current setup" value="MVP" />
             </dl>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-950 p-5 text-white shadow-2xl shadow-slate-300/80">
+          <div className="self-center rounded-2xl border border-slate-800 bg-slate-950 p-5 text-white shadow-2xl shadow-slate-300/80">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
-                  Communication engine
+                  Communication Engine
                 </p>
                 <h2 className="mt-2 text-2xl font-semibold">
                   One pipeline, many channels
                 </h2>
+                <p className="mt-2 text-sm leading-6 text-slate-400">
+                  Current console preview using today&apos;s Web3 security context.
+                </p>
               </div>
-              <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-100">
+              <span className="shrink-0 rounded-full border border-emerald-300/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-100">
                 Current MVP
               </span>
             </div>
-            <div className="mt-5 space-y-3">
+            <div className="mt-6 space-y-4">
               <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-                <p className="text-sm font-medium text-slate-300">
-                  Current MVP
-                </p>
-                <p className="mt-2 text-base leading-6">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+                    Incoming Message
+                  </p>
+                  <span className="rounded-full bg-slate-800 px-2.5 py-1 text-[0.68rem] font-bold uppercase text-slate-300">
+                    Web3
+                  </span>
+                </div>
+                <p className="mt-3 text-base leading-6 text-slate-100">
                   &quot;I am the official admin. DM me and connect your wallet
                   now.&quot;
                 </p>
               </div>
-              <div className="grid gap-3 sm:grid-cols-3">
-                <ConsoleMetric label="Rules" value="SEC-004" tone="emerald" />
-                <ConsoleMetric label="AI label" value="Scam" tone="amber" />
-                <ConsoleMetric label="Action" value="Escalate" tone="red" />
+              <div className="rounded-lg border border-white/10 bg-white/[0.04] p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+                  Analysis Output
+                </p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                  <ConsoleMetric label="Rule" value="SEC-004" tone="emerald" />
+                  <ConsoleMetric label="Intent" value="Scam" tone="amber" />
+                  <ConsoleMetric label="Action" value="Escalate" tone="red" />
+                </div>
               </div>
               <div className="rounded-lg border border-emerald-300/20 bg-emerald-400/10 p-4">
                 <p className="text-sm font-semibold text-emerald-100">
@@ -347,9 +401,12 @@ export default function Home() {
             {currentMvp.map((item) => (
               <div
                 key={item}
-                className="interactive-card p-4 text-sm font-semibold text-slate-700"
+                className="interactive-card flex items-start gap-3 p-4 text-sm font-semibold text-slate-700"
               >
-                {item}
+                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-[0.7rem] font-black text-emerald-800">
+                  ✓
+                </span>
+                <span>{item}</span>
               </div>
             ))}
           </div>
@@ -436,7 +493,15 @@ export default function Home() {
                   <h3 className="text-lg font-semibold text-slate-950">
                     {item.context}
                   </h3>
-                  <span className="badge border-slate-200 bg-slate-50 text-slate-700">
+                  <span
+                    className={`badge ${
+                      item.status === "Current MVP"
+                        ? statusStyles["Current MVP"]
+                        : item.status === "Future"
+                          ? statusStyles.Future
+                          : statusStyles.Planned
+                    }`}
+                  >
                     {item.status}
                   </span>
                 </div>
@@ -460,10 +525,33 @@ export default function Home() {
           <div className="mt-10 grid gap-3 lg:grid-cols-4">
             {pipelineStages.map((stage, index) => (
               <div key={stage.label} className="relative">
-                <div className="h-full rounded-xl border border-white/10 bg-white/[0.06] p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-200">
-                    Step {index + 1}
-                  </p>
+                <div
+                  className={`h-full rounded-xl border p-5 ${
+                    stage.state === "Implemented"
+                      ? "border-emerald-300/35 bg-emerald-400/10"
+                      : stage.state === "In Progress" ||
+                          stage.state === "Partial MVP"
+                        ? "border-sky-300/30 bg-sky-400/10"
+                        : "border-white/10 bg-white/[0.05]"
+                  }`}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-200">
+                      Step {index + 1}
+                    </p>
+                    <span
+                      className={`rounded-full border px-2.5 py-1 text-[0.68rem] font-bold uppercase ${
+                        stage.state === "Implemented"
+                          ? "border-emerald-300/40 bg-emerald-400/15 text-emerald-100"
+                          : stage.state === "In Progress" ||
+                              stage.state === "Partial MVP"
+                            ? "border-sky-300/40 bg-sky-400/15 text-sky-100"
+                            : "border-white/15 bg-white/5 text-slate-300"
+                      }`}
+                    >
+                      {stage.state}
+                    </span>
+                  </div>
                   <h3 className="mt-3 text-lg font-semibold">{stage.label}</h3>
                   <p className="mt-3 text-sm leading-6 text-slate-300">
                     {stage.status}
@@ -499,7 +587,7 @@ export default function Home() {
               <article key={phase.phase} className="interactive-card p-6">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <p className="kicker">{phase.phase}</p>
-                  <span className="badge border-slate-200 bg-slate-50 text-slate-700">
+                  <span className={`badge ${statusStyles[phase.status]}`}>
                     {phase.status}
                   </span>
                 </div>

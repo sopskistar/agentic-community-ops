@@ -130,7 +130,7 @@ export function BatchClient({ project }: { project: Project }) {
         <div className="grid gap-5">
           <label className="space-y-2">
             <span className="text-sm font-semibold text-slate-800">
-              Messages, one per line
+              Messages to review
             </span>
             <textarea
               value={rawMessages}
@@ -144,7 +144,7 @@ export function BatchClient({ project }: { project: Project }) {
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <label className="space-y-2">
               <span className="text-sm font-semibold text-slate-800">
-                Source
+                Message source
               </span>
               <select
                 value={source}
@@ -175,7 +175,7 @@ export function BatchClient({ project }: { project: Project }) {
                 disabled={messages.length === 0 || messages.length > 25 || isLoading}
                 className="btn btn-primary disabled:cursor-not-allowed"
               >
-                {isLoading ? "Reviewing..." : "Run Analysis"}
+                {isLoading ? "Reviewing..." : "Run Review"}
               </button>
             </div>
           </div>
@@ -189,11 +189,17 @@ export function BatchClient({ project }: { project: Project }) {
                 Maximum batch size is 25 messages.
               </p>
             ) : null}
-            <ol className="mt-3 max-h-48 list-decimal space-y-2 overflow-auto pl-5 text-sm text-slate-600">
-              {messages.map((message, index) => (
-                <li key={`${message}-${index}`}>{message}</li>
-              ))}
-            </ol>
+            {messages.length === 0 ? (
+              <p className="mt-3 text-sm text-slate-600">
+                Paste messages or load the demo set to preview the batch.
+              </p>
+            ) : (
+              <ol className="mt-3 max-h-48 list-decimal space-y-2 overflow-auto pl-5 text-sm text-slate-600">
+                {messages.map((message, index) => (
+                  <li key={`${message}-${index}`}>{message}</li>
+                ))}
+              </ol>
+            )}
           </div>
         </div>
       </section>
@@ -271,6 +277,11 @@ export function BatchClient({ project }: { project: Project }) {
           </div>
 
           <div className="space-y-3">
+            {filteredResults.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-600">
+                No messages match the selected filters.
+              </div>
+            ) : null}
             {filteredResults.map((item) => (
               <article
                 key={item.index}

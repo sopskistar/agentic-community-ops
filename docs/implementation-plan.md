@@ -12,6 +12,8 @@ The official logo asset is `public/logo/Agentic-Ops.jpg`. It should be reused as
 
 The homepage now uses platform-wide positioning: one AI communication engine, multiple future communication channels, and Web3 Community Security as the first implemented context. It includes roadmap-only sections for Business Communication Intelligence, Communication Contexts, the platform-wide message pipeline and future architecture.
 
+On 2026-07-18, the platform UI received a polish pass without adding features or changing contracts. Homepage status labels, roadmap cards, the communication pipeline, demo framing, rules catalog, dashboard profile cards and empty states were tightened so implemented capabilities and roadmap items are easier to distinguish.
+
 ## Stage 1: Universal Web3 Community Security
 
 1. Add a type-only normalized message model. Completed 2026-07-18.

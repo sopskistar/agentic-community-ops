@@ -6,13 +6,13 @@ Date: 2026-07-18
 
 Agentic Ops is positioned as an AI Communication Intelligence Platform. The current working MVP is Web3 Community Security: deterministic scam/phishing/impersonation detection, AI-assisted message analysis, moderator reply suggestions, batch analysis, community security reports and A2A service capability.
 
-The roadmap expands into broader business communication intelligence through document ingestion, channel-aware analysis, approval workflows, safe AI customer operations and developer platform APIs. Roadmap features must stay clearly labeled until implemented; the application must not claim live Facebook, Instagram, email, live chat, OAuth, auto-send, enterprise tenancy or database-backed functionality before those features exist.
+The roadmap expands into broader business communication intelligence through document ingestion, channel-aware analysis, approval workflows, safe AI customer operations and developer platform APIs. Roadmap features must stay clearly labeled until implemented; the application must not claim live Facebook, Instagram, email, live chat, OAuth, auto-send, enterprise tenancy or database-backed functionality before those features exist. The current UI uses status labels such as Implemented, Current MVP, In Progress, Planned and Future to preserve that distinction.
 
 The official logo asset is served from `public/logo/Agentic-Ops.jpg` and used by application branding and metadata without altering the supplied JPG. Next.js app icon files also use exact copies at `app/icon.jpg` and `app/apple-icon.jpg`; the existing `app/favicon.ico` remains because the favicon convention is `.ico` only.
 
 ## Capability Status
 
-- Implemented: Web3 Community Security as the first supported communication context, deterministic security rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public analysis/rules endpoints, local project knowledge bases and the normalized message model foundation.
+- Implemented: Web3 Community Security as the first supported communication context, deterministic security rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public analysis/rules endpoints, local project knowledge bases, polished platform UI/UX and the normalized message model foundation.
 - In progress: platform positioning, message foundation hardening and internal normalization work.
 - Roadmap: business communication intelligence, document intelligence, channel adapters, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation, persistent audit history and developer APIs.
 - Future: organizations, workspaces, teams, user accounts, RBAC, permissions, secure tenant data isolation, durable multi-tenant persistence, per-organization API keys, billing/subscription management and enterprise administration.

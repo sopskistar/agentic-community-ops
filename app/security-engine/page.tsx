@@ -29,14 +29,26 @@ export default function SecurityEnginePage() {
                 Analysis Engine
               </p>
               <h1 className="mt-3 max-w-4xl text-3xl font-semibold text-slate-950 sm:text-5xl">
-                Published deterministic rules for the current MVP.
+                Deterministic rules for the current MVP.
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-7 text-slate-600">
-                The deterministic engine decides the minimum risk level before
-                AI analysis runs. Today&apos;s rules focus on Web3 community
-                security; future rule suites can use the same analysis
-                foundation for broader communication intelligence.
+                Deterministic rules are one module of the broader communication
+                intelligence engine. They set the minimum risk level before AI
+                analysis runs. Today&apos;s rule catalog focuses on Web3 Community
+                Security; future rule suites can use the same foundation for
+                other communication contexts.
               </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <span className="badge border-emerald-200 bg-emerald-50 text-emerald-800">
+                  Implemented Today
+                </span>
+                <span className="badge border-slate-200 bg-slate-50 text-slate-700">
+                  AI cannot lower risk
+                </span>
+                <span className="badge border-slate-200 bg-slate-50 text-slate-700">
+                  Explainable decisions
+                </span>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2">
               {(["LOW", "MEDIUM", "HIGH", "CRITICAL"] as RiskSeverity[]).map(
@@ -62,7 +74,7 @@ export default function SecurityEnginePage() {
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold">Rule catalog</h2>
+            <h2 className="text-2xl font-semibold">Published rule catalog</h2>
             <p className="mt-2 text-sm leading-6 text-slate-600">
               AI may add classification and suggested replies, but final risk is
               never allowed to fall below these deterministic results.

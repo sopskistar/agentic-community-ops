@@ -8,6 +8,8 @@ On 2026-07-18, branding and website positioning were updated to use the official
 
 On 2026-07-18, the homepage and terminology were refined again to reduce crypto-only positioning. The homepage now frames Web3 Community Security as the first implemented communication context, adds planned Business Communication Intelligence inputs, adds Communication Contexts, replaces Web3-only flow language with a platform-wide message pipeline, and adds a simple future architecture illustration. The duplicate logo inside the hero console card was removed. No functionality, API contracts, integrations, OAuth, secrets, database or OKX ASP materials were changed.
 
+On 2026-07-18, a scoped UI/UX polish pass tightened the existing platform experience without adding major features or redesigning the app. The homepage hero, communication engine card, Current MVP section, pipeline states and roadmap cards now have clearer hierarchy and status labels. Dashboard pages now use broader communication profile terminology, real derived profile metrics, cleaner empty states and more consistent controls. The demo and security engine pages now better explain that Web3 Community Security is the current MVP module inside a broader communication intelligence platform. No API contracts, integrations, OAuth, secrets, database, OKX ASP registration, messaging foundation internals or deterministic analysis behavior were changed.
+
 # Current Blockers
 
 Repository blockers for Stages 1-4: no durable multi-tenant persistence, no authentication or tenant boundary, no message normalization mappers wired to existing requests, no channel adapter contracts, no file ingestion, no approval workflow, no audit-log persistence, and no outbound-send authorization layer. Existing external blockers remain: deployment URL, production environment variables, and ASP registration submission.
@@ -72,6 +74,7 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - Navigation label changed from `Security Engine` to `Engine` while preserving the `/security-engine` route and existing page functionality.
 - Decorative duplicate logo usage inside the homepage console card was removed; the logo remains in navigation, app icons and metadata.
 - Dashboard terminology now uses broader message-analysis and communication-review language where possible while preserving current Web3 security rule behavior.
+- UI status labels now consistently use `Implemented`, `Current MVP`, `In Progress`, `Planned` and `Future` to prevent roadmap features from reading as live capabilities.
 
 # Architecture Decisions
 
@@ -174,9 +177,9 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 # Latest Verification
 
 - Date: 2026-07-18
-- Platform positioning and business intelligence foundation copy update completed.
+- Platform UI and UX polish completed.
 - `npm test`: passed with 65 tests across 9 files.
-- `npm run lint`: passed after escaping two JSX apostrophes.
+- `npm run lint`: passed.
 - `npx tsc --noEmit --incremental false`: passed.
 - `npm run build`: passed and generated 19 static pages/routes plus dynamic API routes.
 - Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured. No deployment URL was invented for this task.
