@@ -31,6 +31,17 @@ Phase 6 adds workflow automation and developer platform capabilities: REST API, 
 
 Future enterprise features include organizations, workspaces, teams, user accounts, role-based access control, permissions, secure tenant data isolation, durable multi-tenant persistence, audit logs, API keys per organization, billing/subscription management and enterprise administration. These are roadmap items and are not implemented in the current MVP.
 
+## Capability Status
+
+- Implemented: Web3 Community Security, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public rules/analysis APIs, project knowledge bases and the normalized message model foundation.
+- In progress: Product positioning and typed foundations for a broader communication intelligence platform.
+- Roadmap: business communication intelligence, file/document ingestion, channel-aware analysis, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation and developer integrations.
+- Future: enterprise organizations, workspaces, teams, user accounts, RBAC, tenant isolation, durable multi-tenant persistence, billing and administration.
+
+## Planned Business Communication Intelligence
+
+Future product phases should support Email, PDF, Word, CSV, Excel, customer support tickets, website live chat, Facebook messages, Instagram messages, Discord and Telegram through one normalized message pipeline. None of these new ingestion or external-channel capabilities are connected yet.
+
 ## Brand Assets
 
 The official application logo is served from:

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 const currentMvp = [
@@ -122,6 +121,95 @@ const channelAwareness = [
   },
 ];
 
+const plannedBusinessInputs = [
+  "Email",
+  "PDF",
+  "Word",
+  "CSV",
+  "Excel",
+  "Customer Support Tickets",
+  "Website Live Chat",
+  "Facebook Messages",
+  "Instagram Messages",
+  "Discord",
+  "Telegram",
+];
+
+const communicationContexts = [
+  {
+    context: "Web3 Communities",
+    detail:
+      "The current MVP applies deterministic security rules and AI-assisted review to community safety workflows.",
+    status: "Implemented MVP context",
+  },
+  {
+    context: "Customer Support",
+    detail:
+      "Planned analysis will identify support intent, urgency, complaint patterns and recommended next actions.",
+    status: "Roadmap",
+  },
+  {
+    context: "Sales Conversations",
+    detail:
+      "Planned scoring will separate product questions, buying signals, objections and follow-up opportunities.",
+    status: "Roadmap",
+  },
+  {
+    context: "Lead Qualification",
+    detail:
+      "Planned workflows will flag high-intent prospects and route them with relevant context.",
+    status: "Roadmap",
+  },
+  {
+    context: "Business Email",
+    detail:
+      "Planned email intelligence will handle formal threads, attachments, action items and summaries.",
+    status: "Roadmap",
+  },
+  {
+    context: "Social Media",
+    detail:
+      "Planned social analysis will adapt to campaigns, comments, DMs, engagement and brand risk.",
+    status: "Roadmap",
+  },
+  {
+    context: "Internal Team Communication",
+    detail:
+      "Planned team workflows will summarize decisions, requests, blockers and follow-up ownership.",
+    status: "Future",
+  },
+];
+
+const pipelineStages = [
+  { label: "Incoming Message", status: "Current input" },
+  { label: "Normalize", status: "Foundation implemented" },
+  { label: "Identify Context", status: "Roadmap" },
+  { label: "Deterministic Rules", status: "Implemented for Web3 security" },
+  { label: "AI Analysis", status: "Implemented for message review" },
+  { label: "Risk & Intent Classification", status: "Partial MVP" },
+  { label: "Suggested Action", status: "Partial MVP" },
+  { label: "Human Review / Automation", status: "Roadmap" },
+];
+
+const architectureNodes = [
+  {
+    title: "Future Channels",
+    text: "Email, documents, live chat, social messages, communities and APIs.",
+  },
+  {
+    title: "Normalized Message Model",
+    text: "A shared typed foundation now exists for future adapters.",
+  },
+  {
+    title: "Intelligence Engine",
+    text: "Deterministic rules and AI analysis classify risk, intent and actions.",
+  },
+  {
+    title: "Outputs",
+    text: "Reports, automation, APIs and developer platform workflows.",
+  },
+];
+
 const enterpriseFeatures = [
   "Organizations",
   "Workspaces",
@@ -140,11 +228,11 @@ const enterpriseFeatures = [
 const workflowSteps = [
   {
     title: "Normalize",
-    text: "Future channels convert incoming payloads into one shared message model before analysis.",
+    text: "Incoming payloads move toward one shared message model before analysis.",
   },
   {
     title: "Detect",
-    text: "The current MVP runs deterministic Web3 security rules before AI enrichment.",
+    text: "The current MVP runs deterministic Web3 security rules as the first supported context.",
   },
   {
     title: "Explain",
@@ -170,14 +258,14 @@ export default function Home() {
               Agentic Ops
             </h1>
             <p className="mt-5 max-w-2xl text-xl leading-8 text-teal-800">
-              Web3 security today. Broader communication intelligence next.
+              One AI communication engine for modern customer conversations.
             </p>
             <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-              The working MVP helps teams analyse Web3 community messages for
-              scams, phishing, impersonation and unsafe support requests. The
-              roadmap expands the same normalized message pipeline into
-              business intelligence, channel-aware analysis and AI customer
-              operations.
+              Analyze conversations across channels using one intelligent
+              pipeline. The current MVP supports Web3 Community Security as the
+              first communication context; the roadmap expands into business
+              intelligence, document intelligence, channel-aware analysis and AI
+              customer operations.
             </p>
             <div className="mt-7 grid gap-3 sm:flex sm:flex-row">
               <Link href="/demo" className="btn btn-primary min-h-12 px-6">
@@ -187,7 +275,7 @@ export default function Home() {
                 href="/security-engine"
                 className="btn btn-secondary min-h-12 px-6"
               >
-                View Security Engine
+                View Engine
               </Link>
             </div>
             <dl className="mt-8 grid max-w-2xl grid-cols-3 gap-3">
@@ -201,20 +289,15 @@ export default function Home() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
-                  Official brand
+                  Communication engine
                 </p>
                 <h2 className="mt-2 text-2xl font-semibold">
-                  Communication Intelligence Console
+                  One pipeline, many channels
                 </h2>
               </div>
-              <Image
-                src="/logo/Agentic-Ops.jpg"
-                alt="Agentic Ops logo"
-                width={80}
-                height={80}
-                priority
-                className="size-20 rounded-xl border border-white/10 bg-white object-contain"
-              />
+              <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-100">
+                Current MVP
+              </span>
             </div>
             <div className="mt-5 space-y-3">
               <div className="rounded-lg border border-white/10 bg-white/5 p-4">
@@ -255,8 +338,9 @@ export default function Home() {
             </h2>
             <p className="mt-5 text-base leading-7 text-slate-600">
               The implemented product focuses on explainable message review for
-              Web3 moderators and projects. Roadmap items below are clearly
-              labeled and are not claimed as live.
+              Web3 communities. It is the first supported context for a broader
+              communication intelligence platform. Roadmap items below are
+              clearly labeled and are not claimed as live.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -294,6 +378,104 @@ export default function Home() {
                   {step.text}
                 </p>
               </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[0.75fr_1fr]">
+          <div>
+            <p className="kicker">Business Communication Intelligence</p>
+            <h2 className="mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl">
+              Future inputs for the same intelligent pipeline.
+            </h2>
+            <p className="mt-5 text-base leading-7 text-slate-600">
+              These inputs are planned and not yet implemented. The next
+              product phases will add ingestion and analysis one narrow,
+              testable capability at a time.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {plannedBusinessInputs.map((input) => (
+              <div key={input} className="interactive-card p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-sm font-semibold text-slate-800">
+                    {input}
+                  </p>
+                  <span className="rounded-full border border-dashed border-amber-300 bg-amber-50 px-2.5 py-1 text-[0.68rem] font-bold uppercase text-amber-800">
+                    Planned
+                  </span>
+                </div>
+                <p className="mt-2 text-xs font-medium text-slate-500">
+                  Not yet implemented
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-slate-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <p className="kicker">Communication Contexts</p>
+            <h2 className="mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl">
+              One model that adapts to the work behind each message.
+            </h2>
+            <p className="mt-5 text-base leading-7 text-slate-600">
+              The same normalized message foundation can support different
+              communication contexts while keeping analysis, reporting and
+              review workflows consistent.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {communicationContexts.map((item) => (
+              <article key={item.context} className="interactive-card p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h3 className="text-lg font-semibold text-slate-950">
+                    {item.context}
+                  </h3>
+                  <span className="badge border-slate-200 bg-slate-50 text-slate-700">
+                    {item.status}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  {item.detail}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-slate-950 text-white">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">
+            Message Pipeline
+          </p>
+          <h2 className="mt-3 max-w-3xl text-3xl font-semibold sm:text-4xl">
+            Platform-wide flow from incoming message to action.
+          </h2>
+          <div className="mt-10 grid gap-3 lg:grid-cols-4">
+            {pipelineStages.map((stage, index) => (
+              <div key={stage.label} className="relative">
+                <div className="h-full rounded-xl border border-white/10 bg-white/[0.06] p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-200">
+                    Step {index + 1}
+                  </p>
+                  <h3 className="mt-3 text-lg font-semibold">{stage.label}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-300">
+                    {stage.status}
+                  </p>
+                </div>
+                {index < pipelineStages.length - 1 ? (
+                  <div
+                    aria-hidden="true"
+                    className="mx-auto h-3 w-px bg-emerald-300/50 lg:absolute lg:right-[-0.45rem] lg:top-1/2 lg:h-px lg:w-3"
+                  />
+                ) : null}
+              </div>
             ))}
           </div>
         </div>
@@ -364,6 +546,47 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="border-y border-slate-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <p className="kicker">Platform Architecture</p>
+            <h2 className="mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl">
+              Future expansion without fragmenting the engine.
+            </h2>
+            <p className="mt-5 text-base leading-7 text-slate-600">
+              This is an architecture illustration only. It shows how planned
+              channels can feed the implemented normalized model and later power
+              reports, automation, APIs and developer tools.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-4 lg:grid-cols-4">
+            {architectureNodes.map((node, index) => (
+              <article key={node.title} className="interactive-card p-5">
+                <p className="kicker">Layer {index + 1}</p>
+                <h3 className="mt-3 text-xl font-semibold text-slate-950">
+                  {node.title}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  {node.text}
+                </p>
+              </article>
+            ))}
+          </div>
+          <div className="mt-6 grid gap-3 md:grid-cols-4">
+            {["Reports", "Automation", "API", "Developer Platform"].map(
+              (output) => (
+                <div
+                  key={output}
+                  className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm font-semibold text-slate-700"
+                >
+                  {output}
+                </div>
+              ),
+            )}
+          </div>
+        </div>
+      </section>
+
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -399,8 +622,8 @@ export default function Home() {
                 Try the implemented MVP
               </p>
               <h2 className="mt-3 max-w-2xl text-3xl font-semibold">
-                Review Web3 community messages with deterministic proof and
-                AI-assisted moderator replies.
+                Try the current Web3 Community Security MVP with deterministic
+                proof and AI-assisted reply suggestions.
               </h2>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">

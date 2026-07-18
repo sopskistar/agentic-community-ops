@@ -137,7 +137,7 @@ export function BatchClient({ project }: { project: Project }) {
               onChange={(event) => setRawMessages(event.target.value)}
               rows={10}
               className="field leading-6"
-              placeholder="Paste one community message per line."
+              placeholder="Paste one message per line."
             />
           </label>
 

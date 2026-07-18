@@ -26,15 +26,16 @@ export default function SecurityEnginePage() {
           <div className="grid gap-8 lg:grid-cols-[1fr_0.75fr] lg:items-end">
             <div>
               <p className="kicker">
-                Security Engine
+                Analysis Engine
               </p>
               <h1 className="mt-3 max-w-4xl text-3xl font-semibold text-slate-950 sm:text-5xl">
-                Published deterministic rules with stable IDs.
+                Published deterministic rules for the current MVP.
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-7 text-slate-600">
                 The deterministic engine decides the minimum risk level before
-                AI analysis runs. These public rules make every verdict
-                explainable, reproducible and auditable.
+                AI analysis runs. Today&apos;s rules focus on Web3 community
+                security; future rule suites can use the same analysis
+                foundation for broader communication intelligence.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2">

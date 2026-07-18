@@ -37,14 +37,14 @@ export default async function EditProjectPage({
         </h1>
         <p className="mt-3 text-sm leading-6 text-slate-600">
           Update official documentation, verified links and response tone for
-          this project.
+          this message analysis profile.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
             href={`/dashboard/projects/${project.id}/analyse`}
             className="btn btn-primary"
           >
-            Review Message
+            Analyse Message
           </Link>
           <Link
             href={`/dashboard/projects/${project.id}/batch`}

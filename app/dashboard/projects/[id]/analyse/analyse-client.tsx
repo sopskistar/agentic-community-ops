@@ -107,7 +107,7 @@ export function AnalyseClient({ project }: { project: Project }) {
               maxLength={2000}
               rows={7}
               className="field leading-6"
-              placeholder="Paste a community message for analysis."
+              placeholder="Paste a message for analysis."
             />
             <span className="block text-xs text-slate-500">
               {messageContent.length}/2000 characters
@@ -205,7 +205,7 @@ export function AnalyseClient({ project }: { project: Project }) {
               detail={
                 analysis.shouldEscalate
                   ? "Escalate for review"
-                  : "Eligible for safe reply review"
+                  : "Eligible for reply review"
               }
             />
           </div>

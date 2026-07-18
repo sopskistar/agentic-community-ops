@@ -6,6 +6,8 @@ On 2026-07-18, a current-state audit and staged expansion plan were added under 
 
 On 2026-07-18, branding and website positioning were updated to use the official supplied logo at `public/logo/Agentic-Ops.jpg` and to present the product vision as an AI Communication Intelligence Platform. The landing page clearly separates current Web3 security MVP capabilities from roadmap phases and future enterprise features. No external APIs, OAuth, secrets, database, existing API contracts, OKX ASP registration or messaging foundation internals were changed.
 
+On 2026-07-18, the homepage and terminology were refined again to reduce crypto-only positioning. The homepage now frames Web3 Community Security as the first implemented communication context, adds planned Business Communication Intelligence inputs, adds Communication Contexts, replaces Web3-only flow language with a platform-wide message pipeline, and adds a simple future architecture illustration. The duplicate logo inside the hero console card was removed. No functionality, API contracts, integrations, OAuth, secrets, database or OKX ASP materials were changed.
+
 # Current Blockers
 
 Repository blockers for Stages 1-4: no durable multi-tenant persistence, no authentication or tenant boundary, no message normalization mappers wired to existing requests, no channel adapter contracts, no file ingestion, no approval workflow, no audit-log persistence, and no outbound-send authorization layer. Existing external blockers remain: deployment URL, production environment variables, and ASP registration submission.
@@ -67,6 +69,9 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - The app title now uses Agentic Ops for brand presentation while current API health and ASP registration artifacts remain unchanged to avoid contract or registration drift.
 - Landing page copy presents current MVP capabilities first and labels roadmap phases and future enterprise features as not yet implemented.
 - Channel-aware roadmap copy explains that Facebook Pages, Instagram Business, email, website live chat, Discord and Telegram should use one normalized message pipeline with source-specific analysis priorities.
+- Navigation label changed from `Security Engine` to `Engine` while preserving the `/security-engine` route and existing page functionality.
+- Decorative duplicate logo usage inside the homepage console card was removed; the logo remains in navigation, app icons and metadata.
+- Dashboard terminology now uses broader message-analysis and communication-review language where possible while preserving current Web3 security rule behavior.
 
 # Architecture Decisions
 
@@ -163,13 +168,15 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - No file upload or document parsing exists yet for CSV, Excel, PDF, Word or plain-text uploads.
 - No real Discord, Telegram, email, website live chat, Facebook Pages or Instagram Business integration is connected.
 - No human approval queue, automation rules, outbound channel send layer or immutable audit log exists yet.
+- Business Communication Intelligence homepage sections are roadmap positioning only; Email, PDF, Word, CSV, Excel, customer support tickets, live chat, Facebook messages and Instagram messages are not implemented yet.
+- Communication Contexts and platform architecture sections are explanatory roadmap illustrations, not connected capabilities.
 
 # Latest Verification
 
 - Date: 2026-07-18
-- Branding and product roadmap update completed.
+- Platform positioning and business intelligence foundation copy update completed.
 - `npm test`: passed with 65 tests across 9 files.
-- `npm run lint`: passed.
+- `npm run lint`: passed after escaping two JSX apostrophes.
 - `npx tsc --noEmit --incremental false`: passed.
 - `npm run build`: passed and generated 19 static pages/routes plus dynamic API routes.
 - Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured. No deployment URL was invented for this task.

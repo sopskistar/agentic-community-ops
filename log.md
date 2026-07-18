@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-18 - Session: platform positioning and BI foundation copy
+
+- What was built: Removed the duplicate decorative logo from the homepage console card, changed the navigation label from `Security Engine` to `Engine`, broadened homepage positioning around one AI communication engine, and added roadmap-only sections for Business Communication Intelligence inputs, Communication Contexts, platform-wide message pipeline and future platform architecture. Added a notice to `/demo` explaining that it showcases the current Web3 Community Security MVP and that future demos will cover business email, customer support, social messaging and omnichannel intelligence. Softened dashboard terminology toward message analysis and communication review without changing behavior.
+- Problems found: The homepage still felt crypto-first after the branding pass because the hero led with "Web3 security today" and the console card repeated the logo decoratively.
+- Bugs fixed: None. This was positioning, copy and non-functional presentation work only.
+- Important technical decisions: Kept `/security-engine` route, current API contracts, current dashboard behavior, ASP docs and OKX materials unchanged. All BI inputs and broader contexts are labeled planned, roadmap or future.
+- Tests performed: `npm test` passed with 65 tests across 9 files; `npm run lint` passed after escaping two JSX apostrophes; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 19 static pages/routes plus dynamic API routes. Build emitted the existing metadataBase warning for relative Open Graph images because no production deployment URL is configured.
+- New rules learned: Web3 should be described as the first implemented communication context, not as the whole product category.
+
 ## 2026-07-18 - Session: branding and roadmap update
 
 - What was built: Confirmed `public-logo/Agentic-Ops.jpg`, copied it unchanged to `public/logo/Agentic-Ops.jpg`, added exact unchanged copies at `app/icon.jpg` and `app/apple-icon.jpg`, updated shared navigation/footer branding, metadata icon/Open Graph branding, and repositioned the landing page around Agentic Ops as an AI Communication Intelligence Platform. Added current MVP, roadmap phases, channel-aware analysis and future enterprise feature sections. Updated `README.md`, `docs/architecture.md`, `docs/implementation-plan.md`, and `handoff.md`.

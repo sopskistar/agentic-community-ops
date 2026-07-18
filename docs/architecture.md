@@ -10,6 +10,13 @@ The roadmap expands into broader business communication intelligence through doc
 
 The official logo asset is served from `public/logo/Agentic-Ops.jpg` and used by application branding and metadata without altering the supplied JPG. Next.js app icon files also use exact copies at `app/icon.jpg` and `app/apple-icon.jpg`; the existing `app/favicon.ico` remains because the favicon convention is `.ico` only.
 
+## Capability Status
+
+- Implemented: Web3 Community Security as the first supported communication context, deterministic security rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public analysis/rules endpoints, local project knowledge bases and the normalized message model foundation.
+- In progress: platform positioning, message foundation hardening and internal normalization work.
+- Roadmap: business communication intelligence, document intelligence, channel adapters, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation, persistent audit history and developer APIs.
+- Future: organizations, workspaces, teams, user accounts, RBAC, permissions, secure tenant data isolation, durable multi-tenant persistence, per-organization API keys, billing/subscription management and enterprise administration.
+
 ## Current Architecture
 
 Agentic Ops is a Next.js 16 App Router application with public pages, dashboard pages, route handlers, and domain logic in `lib/`. The current product is a Web3 community security and support MVP.
@@ -120,6 +127,37 @@ Recommended boundaries:
 - Persistence: introduce repository interfaces first, then a managed database implementation after approval.
 - Authentication and tenant boundaries: require organization IDs on persisted resources before live integrations.
 - Audit logging: record recommendations, approval decisions, automation actions, external sends, and failures.
+
+## Platform-Wide Message Pipeline
+
+The public homepage now illustrates the intended platform-wide flow:
+
+```text
+Incoming Message
+  -> Normalize
+  -> Identify Context
+  -> Deterministic Rules
+  -> AI Analysis
+  -> Risk & Intent Classification
+  -> Suggested Action
+  -> Human Review / Automation
+```
+
+Implemented today: incoming manual/API messages, the normalized message model foundation, deterministic Web3 security rules, AI-assisted analysis, partial risk/intent classification, suggested replies and browser-local reporting.
+
+Roadmap: context identification across business domains, non-Web3 deterministic rule suites, document/channel ingestion, approval queues, configurable automation and durable audit history.
+
+## Communication Contexts
+
+The same normalized message model should support multiple communication contexts while allowing context-specific priorities:
+
+- Web3 Communities: current MVP context for scams, phishing, impersonation and unsafe support workflows.
+- Customer Support: planned support intent, urgency, complaint and recommended-action detection.
+- Sales Conversations: planned purchase intent, objections, product questions and follow-up detection.
+- Lead Qualification: planned routing for high-intent prospects.
+- Business Email: planned formal thread, attachment, action-item and summary support.
+- Social Media: planned campaign, DM, comment, engagement and brand-risk analysis.
+- Internal Team Communication: future decision, blocker, request and ownership summaries.
 
 ## Messaging Foundation
 

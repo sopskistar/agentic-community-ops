@@ -10,6 +10,8 @@ The website now presents Agentic Ops as an AI Communication Intelligence Platfor
 
 The official logo asset is `public/logo/Agentic-Ops.jpg`. It should be reused as-is and not regenerated, recolored, cropped, distorted or substituted.
 
+The homepage now uses platform-wide positioning: one AI communication engine, multiple future communication channels, and Web3 Community Security as the first implemented context. It includes roadmap-only sections for Business Communication Intelligence, Communication Contexts, the platform-wide message pipeline and future architecture.
+
 ## Stage 1: Universal Web3 Community Security
 
 1. Add a type-only normalized message model. Completed 2026-07-18.
@@ -42,6 +44,8 @@ The official logo asset is `public/logo/Agentic-Ops.jpg`. It should be reused as
    - Tests: repository contract tests.
 
 ## Stage 2: Business Intelligence Dashboard
+
+Status: roadmap. Homepage and documentation describe these capabilities as planned only; no uploads, external integrations or BI-specific analysis have been implemented yet.
 
 1. Add BI analysis types and schemas.
    - Scope: intent, sentiment, priority, leads, FAQ candidate, escalation requirement, summary, and actions.

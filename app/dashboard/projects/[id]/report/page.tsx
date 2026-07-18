@@ -28,7 +28,7 @@ export default async function ProjectReportPage({
         <div className="section-card mb-6 flex flex-col gap-4 p-6 md:flex-row md:items-end md:justify-between md:p-7">
           <div>
             <p className="kicker">
-              Security Report
+              Analysis Report
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
               {project.name}

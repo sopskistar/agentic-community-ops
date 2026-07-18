@@ -14,12 +14,12 @@ export default async function DashboardPage() {
               Dashboard
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
-              Project knowledge base
+              Communication knowledge base
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-              Store official project documentation and verified links for safe
-              response generation. Community-message links are not treated as
-              official links.
+              Store official documentation, verified links and response tone
+              for the current message analysis workflow. User-submitted links
+              are not treated as official links.
             </p>
           </div>
           <Link
@@ -39,7 +39,7 @@ export default async function DashboardPage() {
             <h2 className="text-2xl font-semibold">No projects yet</h2>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
               Create a project to add official documentation, response tone and
-              verified links for safe community support workflows.
+              verified links for safe communication review workflows.
             </p>
             <Link
               href="/dashboard/projects/new"

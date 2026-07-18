@@ -88,7 +88,7 @@ export function ProjectForm({
         />
         <span className="block text-xs leading-5 text-slate-500">
           One URL per line. Only these explicit links are treated as official;
-          links found in community messages are never promoted automatically.
+          links found in submitted messages are never promoted automatically.
         </span>
       </label>
 

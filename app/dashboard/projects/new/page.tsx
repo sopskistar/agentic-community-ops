@@ -10,11 +10,11 @@ export default function NewProjectPage() {
           New Project
         </p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
-          Create project knowledge base
+          Create communication knowledge base
         </h1>
         <p className="mt-3 text-sm leading-6 text-slate-600">
           Add official project documentation and verified links. Links from
-          community messages are never imported or treated as official sources.
+          submitted messages are never imported or treated as official sources.
         </p>
         <div className="mt-8">
           <ProjectForm action={createProject} submitLabel="Create Project" />

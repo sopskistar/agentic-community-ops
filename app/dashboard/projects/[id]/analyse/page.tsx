@@ -28,15 +28,15 @@ export default async function ProjectAnalysePage({
         <div className="section-card mb-6 flex flex-col gap-4 p-6 md:flex-row md:items-end md:justify-between md:p-7">
           <div>
             <p className="kicker">
-              Message Review
+              Message Analysis
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
               {project.name}
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-              Run deterministic security analysis first, then AI-assisted
-              classification and safe reply generation using this project
-              knowledge base.
+              Run deterministic rules first, then AI-assisted classification
+              and safe reply suggestions using this knowledge base. Today&apos;s
+              rules focus on Web3 community security.
             </p>
           </div>
           <Link

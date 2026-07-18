@@ -4,6 +4,8 @@ Date: 2026-07-18
 
 ## Stage Comparison
 
+The website now positions the product as one AI communication engine for multiple communication contexts. The only implemented communication context remains Web3 Community Security.
+
 Stage 1 is partially implemented. The deterministic Web3 security engine, AI-assisted suggestions, single/batch APIs, and report UI exist. Discord and Telegram are currently source labels only; there are no reusable adapter interfaces or live channel connectors.
 
 Stage 2 is early. The current dashboard can paste one message or paste one-message-per-line batches, and AI categories include several business-intelligence labels. Full conversations, file upload ingestion, sentiment, priority, leads, FAQs, document parsing, and durable BI reporting are not implemented.

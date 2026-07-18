@@ -130,6 +130,11 @@ export default async function DemoPage() {
               security analysis, safe reply generation, batch audits and a
               recomputable report. No login or external setup required.
             </p>
+            <p className="mt-4 max-w-3xl rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold leading-6 text-emerald-900">
+              This demo showcases the current Web3 Community Security MVP.
+              Future demos will include business email, customer support,
+              social messaging and omnichannel communication intelligence.
+            </p>
           </div>
           <form action="/demo">
             <button
