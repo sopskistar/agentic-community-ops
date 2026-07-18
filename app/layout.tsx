@@ -1,11 +1,31 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 import { AppNav } from "./components/app-nav";
 
 export const metadata: Metadata = {
-  title: "Agentic Community Ops",
-  description: "Detect threats. Protect communities. Respond safely.",
+  title: "Agentic Ops | AI Communication Intelligence Platform",
+  description:
+    "Agentic Ops is an AI Communication Intelligence Platform. The current MVP focuses on Web3 community security, with a roadmap for broader business communication intelligence.",
+  icons: {
+    icon: "/logo/Agentic-Ops.jpg",
+    shortcut: "/logo/Agentic-Ops.jpg",
+  },
+  openGraph: {
+    title: "Agentic Ops | AI Communication Intelligence Platform",
+    description:
+      "Current MVP: Web3 community security. Roadmap: omnichannel business communication intelligence.",
+    siteName: "Agentic Ops",
+    images: [
+      {
+        url: "/logo/Agentic-Ops.jpg",
+        width: 440,
+        height: 440,
+        alt: "Agentic Ops logo",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -36,11 +56,20 @@ export default function RootLayout({
         <footer className="border-t border-slate-200/80 bg-white/90 transition-colors duration-300">
           <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-6 text-sm text-slate-600 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
             <div>
-              <p className="font-semibold text-slate-950">
-                Agentic Community Ops
-              </p>
+              <div className="flex items-center gap-3">
+                <Image
+                  src="/logo/Agentic-Ops.jpg"
+                  alt="Agentic Ops logo"
+                  width={36}
+                  height={36}
+                  className="rounded-lg border border-slate-200 object-contain"
+                />
+                <p className="font-semibold text-slate-950">
+                  Agentic Ops
+                </p>
+              </div>
               <p className="mt-1 text-xs">
-                Copyright 2026 Agentic Community Ops. All rights reserved.
+                Copyright 2026 Agentic Ops. All rights reserved.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2">

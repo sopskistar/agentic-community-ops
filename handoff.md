@@ -1,13 +1,18 @@
 # Current Status
 
-Agentic Community Ops is a Next.js App Router project for a Web3 community security and support Agent Service Provider. The current app has a polished product landing page, shared responsive navigation with persistent Light/Dark mode, a clean shared footer, a dedicated `/security-engine` public rule catalog, threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`. A guided no-setup judge demo now exists at `/demo` using the fictional NovaBridge project. ASP registration preparation artifacts now exist at `/docs/asp`, `ASP_REGISTRATION.md`, `FINAL_CHECKLIST.md`, `public/service-manifest.json`, and `public/schemas/*.json`.
+Agentic Ops is a Next.js App Router project positioned as an AI Communication Intelligence Platform. The current working MVP is Web3 Community Security and support for an Agent Service Provider use case. The current app has a polished product landing page, shared responsive navigation with persistent Light/Dark mode, a clean shared footer, a dedicated `/security-engine` public rule catalog, threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`. A guided no-setup judge demo now exists at `/demo` using the fictional NovaBridge project. ASP registration preparation artifacts now exist at `/docs/asp`, `ASP_REGISTRATION.md`, `FINAL_CHECKLIST.md`, `public/service-manifest.json`, and `public/schemas/*.json`.
+
+On 2026-07-18, a current-state audit and staged expansion plan were added under `docs/architecture.md`, `docs/feature-gap-analysis.md`, and `docs/implementation-plan.md`. The first approved implementation task then added the reusable messaging foundation under `lib/messages/`. No production UI, API behavior, environment variables, OKX/ASP identity, external integrations, or storage implementation were changed.
+
+On 2026-07-18, branding and website positioning were updated to use the official supplied logo at `public/logo/Agentic-Ops.jpg` and to present the product vision as an AI Communication Intelligence Platform. The landing page clearly separates current Web3 security MVP capabilities from roadmap phases and future enterprise features. No external APIs, OAuth, secrets, database, existing API contracts, OKX ASP registration or messaging foundation internals were changed.
 
 # Current Blockers
 
-No repository blockers are known. Remaining blockers are external: deployment URL, production environment variables, and ASP registration submission.
+Repository blockers for Stages 1-4: no durable multi-tenant persistence, no authentication or tenant boundary, no message normalization mappers wired to existing requests, no channel adapter contracts, no file ingestion, no approval workflow, no audit-log persistence, and no outbound-send authorization layer. Existing external blockers remain: deployment URL, production environment variables, and ASP registration submission.
 
 # Next Actions
 
+- Recommended next Codex prompt: "Implement Stage 1 Task 2 only: add message normalization helpers that map the existing `/api/v1/analyse` and `/api/v1/analyse/batch` request message shape into `NormalizedMessage` internally. Preserve current API request/response contracts, UI behavior, storage, environment variables and integrations. Add mapper tests for manual/API, Discord and Telegram source labels."
 - Use `/demo` as the primary 90-second judge recording flow.
 - Use `/security-engine` when judges ask for the published deterministic rule list.
 - Deploy the application and replace placeholder deployment URLs in ASP materials.
@@ -19,6 +24,49 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - Connect safe-reply generation to stored project documentation and explicit official links.
 - Add report trend views once analysis results are persisted.
 - Add tests around any future UI or API integration that consumes the deterministic and hybrid analysis services.
+
+# Latest Audit Scope
+
+- Inspected root project instructions and memory: `AGENTS.md`, `README.md`, `log.md`, `handoff.md`.
+- Inspected package/config/deployment assumptions: `package.json`, `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `.env.example`, `ASP_REGISTRATION.md`, `FINAL_CHECKLIST.md`, public manifest and public schemas.
+- Inspected Next.js local docs relevant to App Router route handlers under `node_modules/next/dist/docs/01-app/`.
+- Inspected pages and UI clients under `app/`, including dashboard, demo, security engine, ASP docs, error/loading files, shared nav, batch/report clients, and project form.
+- Inspected API routes under `app/api/v1`.
+- Inspected domain modules under `lib/security`, `lib/analysis`, `lib/ai`, `lib/projects`, and `lib/api`.
+- Inspected tests under `lib/**.test.ts` and `app/api/v1/**.test.ts`.
+- Searched for partially implemented roadmap/integration work and found no live Discord, Telegram, Meta, email, live chat, file upload, approval, audit, auth, database, MCP, OKX payment, or outbound-send implementation.
+
+# Audit Documentation Created
+
+- `docs/architecture.md`: current architecture, deterministic/AI flow, target modular architecture, normalized message model proposal, and integration requirement levels.
+- `docs/feature-gap-analysis.md`: Stage 1-4 comparison, feature-gap matrix, technical debt, and non-gaps.
+- `docs/implementation-plan.md`: staged, independently testable implementation order and external integration approval matrix.
+
+# Messaging Foundation Added
+
+- `lib/messages/constants.ts`: message source, risk level, intent category, reply state, audit event, sender role, recipient type, sentiment and priority constants.
+- `lib/messages/types.ts`: reusable `NormalizedMessage`, `Attachment`, `Sender`, `Recipient`, `Conversation`, `AnalysisResult`, `ReplyRecommendation` and `AuditEvent` types.
+- `lib/messages/schemas.ts`: Zod schemas for safe parsing of all new message foundation models.
+- `lib/messages/channel-profiles.ts`: metadata-only profiles for Discord, Telegram, Facebook Pages, Instagram Business, email, website live chat and uploaded documents.
+- `lib/messages/index.ts`: barrel exports for future internal use.
+- `lib/messages/schemas.test.ts`: unit coverage for valid/invalid message parsing, enum validation, channel profiles, attachments, reply states and audit events.
+
+# Messaging Foundation Decisions
+
+- Message source enum values use product-readable names such as `Discord`, `WebsiteChat`, `UploadedDocument`, `CSV`, `Excel`, `PDF`, `Word` and `PlainText`.
+- `organizationId` is optional for future tenant use because no auth or persistence exists yet.
+- `recipient` is an array to support channel, page, inbox, group and multi-recipient email cases.
+- Channel profiles are structured metadata only and must not be treated as AI prompts.
+- The new package is currently isolated from existing routes to preserve API behavior until the next approved mapper task.
+
+# Branding And Roadmap Decisions
+
+- The official supplied logo was confirmed at `public-logo/Agentic-Ops.jpg` and copied unchanged to `public/logo/Agentic-Ops.jpg` for application serving.
+- Exact unchanged copies were also placed at `app/icon.jpg` and `app/apple-icon.jpg` for Next.js app icon conventions; existing `app/favicon.ico` remains because favicon files are `.ico` only.
+- Navigation, footer branding, page metadata, icon shortcut metadata and Open Graph image metadata reference the official logo.
+- The app title now uses Agentic Ops for brand presentation while current API health and ASP registration artifacts remain unchanged to avoid contract or registration drift.
+- Landing page copy presents current MVP capabilities first and labels roadmap phases and future enterprise features as not yet implemented.
+- Channel-aware roadmap copy explains that Facebook Pages, Instagram Business, email, website live chat, Discord and Telegram should use one normalized message pipeline with source-specific analysis priorities.
 
 # Architecture Decisions
 
@@ -111,16 +159,20 @@ No repository blockers are known. Remaining blockers are external: deployment UR
 - Real AI calls require manually configured `OPENAI_API_KEY`; `OPENAI_BASE_URL` can point at an OpenAI-compatible endpoint; tests use mocked providers and do not require secrets.
 - No authentication is implemented, by design for the current scope.
 - Automated tests currently cover the deterministic security engine, project repository and hybrid analysis merge behavior.
+- A normalized message model exists under `lib/messages`, but existing API routes do not map into it yet.
+- No file upload or document parsing exists yet for CSV, Excel, PDF, Word or plain-text uploads.
+- No real Discord, Telegram, email, website live chat, Facebook Pages or Instagram Business integration is connected.
+- No human approval queue, automation rules, outbound channel send layer or immutable audit log exists yet.
 
 # Latest Verification
 
-- Date: 2026-07-15
-- `npm test`: passed with 55 tests.
+- Date: 2026-07-18
+- Branding and product roadmap update completed.
+- `npm test`: passed with 65 tests across 9 files.
 - `npm run lint`: passed.
 - `npx tsc --noEmit --incremental false`: passed.
-- `npm run build`: passed and generated 17 static pages/routes plus the dynamic API routes.
-- Final UI refinement verification: `npm run lint`, `npx tsc --noEmit --incremental false`, and `npm run build` passed after the hamburger nav, sticky-header spacing, landing badge contrast, and dashboard card alignment changes.
-- UI polish verification: shared nav/footer, Light/Dark mode persistence, landing page, `/security-engine`, `/demo`, `/dashboard`, dashboard project pages, batch/report pages, error/loading states and `/docs/asp` were source-reviewed for responsive layouts, no page-level horizontal overflow, consistent cards/buttons/forms/badges, accessible focus states and clearer message-review wording.
+- `npm run build`: passed and generated 19 static pages/routes plus dynamic API routes.
+- Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured. No deployment URL was invented for this task.
 
 # Previous Verification
 

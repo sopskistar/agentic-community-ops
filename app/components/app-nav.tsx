@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -41,15 +42,20 @@ export function AppNav() {
             href="/"
             className="group flex w-fit items-center gap-3 rounded-xl"
           >
-            <span className="grid size-10 place-items-center rounded-xl bg-slate-950 text-sm font-bold text-white shadow-sm shadow-slate-900/20 transition-transform group-hover:-translate-y-0.5">
-              AO
-            </span>
+            <Image
+              src="/logo/Agentic-Ops.jpg"
+              alt="Agentic Ops logo"
+              width={44}
+              height={44}
+              priority
+              className="size-11 rounded-xl border border-slate-200 bg-white object-contain shadow-sm shadow-slate-900/20 transition-transform group-hover:-translate-y-0.5"
+            />
             <span>
               <span className="block text-sm font-bold tracking-wide text-slate-950">
-                Agentic Community Ops
+                Agentic Ops
               </span>
               <span className="block text-xs font-medium text-slate-500">
-                Web3 security desk
+                AI communication intelligence
               </span>
             </span>
           </Link>

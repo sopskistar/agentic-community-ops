@@ -1,6 +1,45 @@
-# Agentic Community Ops
+# Agentic Ops
 
-Agentic Community Ops is a Web3 community security and support MVP. It audits community messages with deterministic security rules first, then uses an OpenAI-compatible AI layer for classification, explanation and safe suggested replies. AI output can never reduce the deterministic risk level.
+Agentic Ops is an AI Communication Intelligence Platform. The current working MVP focuses on Web3 Community Security: it audits community messages with deterministic security rules first, then uses an OpenAI-compatible AI layer for classification, explanation and safe moderator reply suggestions. AI output can never reduce the deterministic risk level.
+
+The product roadmap expands the same normalized message pipeline into broader business communication intelligence, document intelligence, channel-aware analysis and AI customer operations. Roadmap features are not claimed as live until implemented and verified.
+
+## Current MVP
+
+- Web3 Community Security
+- AI-powered message analysis
+- Scam and phishing detection
+- Explainable deterministic decisions
+- AI-generated moderator reply suggestions
+- Batch analysis
+- Community security reports
+- A2A service capability
+
+## Roadmap
+
+Phase 1 strengthens Universal Web3 Community Security, expands reusable A2A capability beyond the OKX ecosystem, improves documentation, and prepares Discord and Telegram channel architecture.
+
+Phase 2 adds a Business Intelligence Dashboard for pasted messages, full conversations, CSV, Excel, PDF, Word and plain-text uploads, conversation summaries, customer intent, complaints, leads, FAQs, priority detection and recommended actions.
+
+Phase 3 adds Channel Intelligence and Communication Integrations for Facebook Pages, Instagram Business, Email and Website Live Chat. Every channel should enter the same normalized message pipeline while applying channel-aware analysis.
+
+Phase 4 adds AI Customer Operations: reply suggestions, human approval, configurable auto-reply rules, escalation rules, confidence/risk controls, audit history and a safe default that never sends external replies without explicit authorization.
+
+Phase 5 expands omnichannel coverage to Discord, Telegram, X, TikTok, WhatsApp Business, Slack and additional channels based on demand.
+
+Phase 6 adds workflow automation and developer platform capabilities: REST API, A2A, MCP, SDKs, webhooks, configurable if/then workflows and external application integration.
+
+Future enterprise features include organizations, workspaces, teams, user accounts, role-based access control, permissions, secure tenant data isolation, durable multi-tenant persistence, audit logs, API keys per organization, billing/subscription management and enterprise administration. These are roadmap items and are not implemented in the current MVP.
+
+## Brand Assets
+
+The official application logo is served from:
+
+```text
+/logo/Agentic-Ops.jpg
+```
+
+Next.js app icon files also use the supplied logo unchanged at `app/icon.jpg` and `app/apple-icon.jpg`. The existing `app/favicon.ico` remains in place because the favicon file convention requires `.ico`.
 
 ## Project Memory
 

@@ -1,5 +1,32 @@
 # Project Log
 
+## 2026-07-18 - Session: branding and roadmap update
+
+- What was built: Confirmed `public-logo/Agentic-Ops.jpg`, copied it unchanged to `public/logo/Agentic-Ops.jpg`, added exact unchanged copies at `app/icon.jpg` and `app/apple-icon.jpg`, updated shared navigation/footer branding, metadata icon/Open Graph branding, and repositioned the landing page around Agentic Ops as an AI Communication Intelligence Platform. Added current MVP, roadmap phases, channel-aware analysis and future enterprise feature sections. Updated `README.md`, `docs/architecture.md`, `docs/implementation-plan.md`, and `handoff.md`.
+- Problems found: Existing API health and ASP registration artifacts still use the original Agentic Community Ops service naming; those were intentionally left unchanged to avoid modifying public API contract expectations or ASP registration materials in this branding-only task.
+- Bugs fixed: None. This was scoped to branding, copy, public asset placement and documentation.
+- Important technical decisions: The JPG logo is reused without visual alteration; roadmap features are explicitly labeled as future work; no external APIs, OAuth, secrets, database, API contract changes, OKX ASP changes or messaging foundation internals were modified.
+- Tests performed: `npm test` passed with 65 tests across 9 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 19 static pages/routes plus dynamic API routes. Build emitted the expected Next metadataBase warning for relative Open Graph images because no production deployment URL is configured in this repository.
+- New rules learned: Brand positioning can expand to Agentic Ops while current MVP and ASP materials must keep live capability claims precise until implementation catches up.
+
+## 2026-07-18 - Session: messaging foundation
+
+- What was built: Added the reusable normalized messaging foundation under `lib/messages/`, including constants/enums, TypeScript models, Zod schemas, metadata-only channel profiles, barrel exports, and unit tests. Updated `docs/architecture.md`, `docs/implementation-plan.md`, and `handoff.md` for the completed phase and next prompt scope.
+- Problems found: The initial focused run caught a test import pointing at the wrong module and missing explicit `relatedSources` fields in channel profile objects; both were fixed before full validation.
+- Bugs fixed: None in existing production behavior. This change is isolated infrastructure and does not modify UI, existing API responses, environment variables, storage, integrations, OKX ASP registration or deployed identity.
+- Important technical decisions: `organizationId` remains optional for future tenant boundaries; `recipient` is an array to support page, inbox, group and email cases; channel profiles are structured metadata only, not AI prompts; existing routes are not wired to the new model until the next approved mapper task.
+- Tests performed: `npm test` passed with 65 tests across 9 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 17 static pages/routes plus dynamic API routes.
+- New rules learned: Future channel adapters must normalize payloads into `NormalizedMessage` before analysis, but outbound sending and persistence still require separate approval.
+
+## 2026-07-18 - Session: staged expansion architecture audit
+
+- What was built: Completed a repository current-state audit for the Stage 1-4 expansion plan and added `docs/architecture.md`, `docs/feature-gap-analysis.md`, and `docs/implementation-plan.md`. Updated `handoff.md` with inspected files, created documentation, architecture findings, blockers, and the exact recommended next Codex prompt.
+- Problems found: The MVP has strong deterministic-first Web3 analysis, public APIs, batch analysis and browser-local reports, but lacks a normalized message model, durable multi-tenant persistence, authentication, file ingestion, channel adapters, webhook handling, approval workflows, automation rules, outbound-send authorization, and audit logs.
+- Bugs fixed: None. This was documentation and audit work only.
+- Important technical decisions: Preserve existing production UI/API behavior. Treat Discord, Telegram, Meta, email and live chat as future adapters feeding one normalized pipeline. Do not connect external APIs, add secrets, mutate OKX/ASP identity, or introduce a database before approval.
+- Tests performed: `npm test` passed with 55 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 17 static pages/routes plus dynamic API routes.
+- New rules learned: Stage 1 should start with a type-only normalized message model and schemas before adapters, file ingestion, durable storage or auto-reply workflows are implemented.
+
 ## 2026-07-15 - Session: final responsive UI refinement
 
 - What was built: Completed a narrow UI-only refinement pass before feature completion. Added a hamburger navigation menu for small and tablet screens while preserving desktop navigation, improved spacing beneath the sticky header, tightened landing badge contrast in Light and Dark mode, aligned dashboard project tone badges with card titles, and normalized dashboard card height/alignment.
