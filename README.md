@@ -33,14 +33,16 @@ Future enterprise features include organizations, workspaces, teams, user accoun
 
 ## Capability Status
 
-- Implemented: Web3 Community Security, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public rules/analysis APIs, project knowledge bases, polished platform positioning UI and the normalized message model foundation.
-- In progress: Product positioning and typed foundations for a broader communication intelligence platform.
-- Roadmap: business communication intelligence, file/document ingestion, channel-aware analysis, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation and developer integrations.
+- Implemented: Web3 Community Security, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public rules/analysis APIs, project knowledge bases, polished platform positioning UI, normalized message model foundation and the `/business` Business Intelligence Dashboard MVP.
+- In progress: Typed foundations for a broader communication intelligence platform.
+- Roadmap: advanced business communication intelligence, PDF/DOCX/CSV/Excel ingestion, channel-aware analysis, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation and developer integrations.
 - Future: enterprise organizations, workspaces, teams, user accounts, RBAC, tenant isolation, durable multi-tenant persistence, billing and administration.
 
 ## Planned Business Communication Intelligence
 
-Future product phases should support Email, PDF, Word, CSV, Excel, customer support tickets, website live chat, Facebook messages, Instagram messages, Discord and Telegram through one normalized message pipeline. None of these new ingestion or external-channel capabilities are connected yet.
+The `/business` route now provides a local Business Intelligence Dashboard MVP for normal business communications. It supports paste text, TXT upload, business profile selection, communication purpose selection and explainable local demonstration analysis for summary, intent, priority, sentiment, risk, requested actions, important entities, recommended next step, confidence, key topics, suggested actions and reply outline.
+
+PDF extraction, Word/DOCX parsing, CSV ingestion, Excel ingestion, CRM sync, email integrations, Slack, Microsoft Teams, Google Workspace, ticket creation, Salesforce and HubSpot are still roadmap items and are not connected.
 
 ## Brand Assets
 
@@ -178,6 +180,7 @@ Test these public routes after manual deployment:
 
 - `/`
 - `/demo`
+- `/business`
 - `/docs/asp`
 - `/dashboard`
 - `/dashboard/projects/new`

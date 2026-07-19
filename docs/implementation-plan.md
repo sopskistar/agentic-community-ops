@@ -47,11 +47,12 @@ On 2026-07-18, the platform UI received a polish pass without adding features or
 
 ## Stage 2: Business Intelligence Dashboard
 
-Status: roadmap. Homepage and documentation describe these capabilities as planned only; no uploads, external integrations or BI-specific analysis have been implemented yet.
+Status: MVP started 2026-07-19. The `/business` route now provides the second working communication context after Web3 Community Security. It supports pasted text, TXT upload, business profile selection, analysis purpose selection, local demonstration analysis and explainable structured results. It does not connect external AI, extract PDF/DOCX content, parse CSV/Excel, sync CRMs, send email or persist business analyses.
 
-1. Add BI analysis types and schemas.
-   - Scope: intent, sentiment, priority, leads, FAQ candidate, escalation requirement, summary, and actions.
-   - Tests: schema and merge-policy tests.
+1. Add BI analysis types and local demonstration analyzer. Completed 2026-07-19.
+   - Scope: summary, intent, sentiment, priority, risk, requested actions, entities, recommendations, reply outline and explanations.
+   - Delivered: `lib/business/types.ts`, `lib/business/profiles.ts`, `lib/business/analyse-business-communication.ts`, `lib/business/analyse-business-communication.test.ts`, `app/business/page.tsx` and `app/business/business-client.tsx`.
+   - Tests: analyzer tests cover sales intent, sensitive/high-risk language and safe default behavior.
 
 2. Add conversation paste support.
    - Scope: parser that splits pasted conversation text into normalized messages with stable ordering.

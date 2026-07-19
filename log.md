@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-19 - Session: business intelligence dashboard MVP
+
+- What was built: Added `/business` as the second working communication context after Web3 Community Security. Added local business communication analysis under `lib/business/`, a professional Business Intelligence Dashboard page, paste input, TXT upload, business profile selector, analysis purpose selector, structured results, explainability, shared pipeline illustration and planned integrations panel. Added `Business` to the navbar between Dashboard and ASP Docs.
+- Problems found: Stage 2 was still documented as roadmap-only. Documentation now distinguishes the implemented `/business` MVP from still-planned PDF/DOCX/CSV/Excel parsing, CRM sync, email integrations, Slack, Teams, Google Workspace, Salesforce, HubSpot and ticket creation.
+- Bugs fixed: None in existing Web3 behavior. The Web3 deterministic engine, API routes, dashboard project analysis and OKX/ASP materials were not modified.
+- Important technical decisions: Business analysis uses local demonstration logic only and is labeled as such in the UI and result payload. TXT upload reads in the browser; no external APIs, OAuth, secrets, database, CRM, email sending or document extraction were added.
+- Tests performed: `npm test` passed with 68 tests across 10 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 20 static pages/routes plus dynamic API routes, including `/business`. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: Business Intelligence can now be treated as a working MVP context, but unsupported file formats and integrations must remain visibly marked Coming Soon or Planned.
+
 ## 2026-07-18 - Session: platform UI and UX polish
 
 - What was built: Polished the existing platform UI without adding major features or redesigning the app. Tightened homepage hero spacing, CTA alignment, communication engine console hierarchy, Current MVP cards, platform pipeline status styling, roadmap phase badges and future-feature clarity. Improved dashboard terminology, real derived profile metrics, empty states, project/profile labels, analysis controls, batch filtering empty state, report empty state, demo orientation and security engine positioning.

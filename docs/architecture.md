@@ -12,7 +12,7 @@ The official logo asset is served from `public/logo/Agentic-Ops.jpg` and used by
 
 ## Capability Status
 
-- Implemented: Web3 Community Security as the first supported communication context, deterministic security rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public analysis/rules endpoints, local project knowledge bases, polished platform UI/UX and the normalized message model foundation.
+- Implemented: Web3 Community Security as the first supported communication context, deterministic security rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public analysis/rules endpoints, local project knowledge bases, polished platform UI/UX, the normalized message model foundation and the `/business` Business Intelligence Dashboard MVP for pasted/TXT business communications.
 - In progress: platform positioning, message foundation hardening and internal normalization work.
 - Roadmap: business communication intelligence, document intelligence, channel adapters, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation, persistent audit history and developer APIs.
 - Future: organizations, workspaces, teams, user accounts, RBAC, permissions, secure tenant data isolation, durable multi-tenant persistence, per-organization API keys, billing/subscription management and enterprise administration.
@@ -25,6 +25,7 @@ Current pages:
 
 - `/`: product landing page.
 - `/demo`: no-login guided NovaBridge demo using the real hybrid analysis flow with a local mock AI provider.
+- `/business`: local Business Intelligence Dashboard MVP using demonstration logic for normal business communications.
 - `/security-engine`: public deterministic rule catalog.
 - `/docs/asp`: human-readable ASP registration documentation.
 - `/dashboard`: local project knowledge-base list.
@@ -47,6 +48,7 @@ Current domain modules:
 - `lib/analysis/`: hybrid analysis types, Zod schemas, AI merge logic, risk ordering, batch metrics, and tests.
 - `lib/ai/`: provider interface, OpenAI-compatible provider, and default provider fallback.
 - `lib/messages/`: normalized message foundation, channel/source enums, reusable message/conversation/reply/audit types, Zod schemas, and channel profile metadata for future adapters.
+- `lib/business/`: local demonstration business communication analysis types, profiles, heuristic analyzer and tests.
 - `lib/projects/`: project knowledge-base types, Zod validation, repository interface, local JSON repository, and tests.
 - `lib/api/`: structured API error responses.
 
@@ -55,6 +57,27 @@ Current persistence:
 - Project profiles are stored in `data/projects.json` through `ProjectRepository`.
 - Batch and report UI state is stored in browser `localStorage`.
 - There is no tenant, user, organization, webhook, message, analysis, approval, or audit-log persistence.
+- `/business` keeps analysis state in the browser only and does not persist business messages or profile changes.
+
+## Business Intelligence Dashboard MVP
+
+The `/business` page is the second working communication context after Web3 Community Security. It does not modify the Web3 deterministic security engine or existing analysis APIs.
+
+Implemented now:
+
+- Paste normal business communication text.
+- Upload TXT files in the browser.
+- Select a demonstration business profile: Default, Acme Corp, Demo SaaS or Support Center.
+- Select one analysis purpose: Customer Support, Business Email, Sales Conversation, Internal Team or General Communication.
+- Generate structured local demonstration analysis: summary, intent, priority, sentiment, risk level, requested actions, important entities, recommended next step, confidence, key topics, suggested actions and recommended reply outline.
+- Show explainability notes describing why recommendations were produced.
+
+Not implemented:
+
+- PDF extraction, DOCX parsing, CSV ingestion and Excel ingestion.
+- External AI calls for the business page.
+- CRM sync, email sending, Slack, Microsoft Teams, Google Workspace, Salesforce, HubSpot or ticket creation.
+- Durable persistence, tenant-specific business profiles or audit-log storage.
 
 Current deployment assumptions:
 

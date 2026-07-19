@@ -10,13 +10,15 @@ On 2026-07-18, the homepage and terminology were refined again to reduce crypto-
 
 On 2026-07-18, a scoped UI/UX polish pass tightened the existing platform experience without adding major features or redesigning the app. The homepage hero, communication engine card, Current MVP section, pipeline states and roadmap cards now have clearer hierarchy and status labels. Dashboard pages now use broader communication profile terminology, real derived profile metrics, cleaner empty states and more consistent controls. The demo and security engine pages now better explain that Web3 Community Security is the current MVP module inside a broader communication intelligence platform. No API contracts, integrations, OAuth, secrets, database, OKX ASP registration, messaging foundation internals or deterministic analysis behavior were changed.
 
+On 2026-07-19, the Business Intelligence Dashboard MVP was added at `/business` as the second working communication context after Web3 Community Security. It supports pasted business text, TXT upload, business profile selection, purpose selection, local demonstration analysis and explainable structured results. PDF, DOCX, CSV, Excel, CRM, email, Slack, Teams, Google Workspace, Salesforce, HubSpot, ticket creation, durable persistence and external sending remain explicitly marked as not implemented.
+
 # Current Blockers
 
 Repository blockers for Stages 1-4: no durable multi-tenant persistence, no authentication or tenant boundary, no message normalization mappers wired to existing requests, no channel adapter contracts, no file ingestion, no approval workflow, no audit-log persistence, and no outbound-send authorization layer. Existing external blockers remain: deployment URL, production environment variables, and ASP registration submission.
 
 # Next Actions
 
-- Recommended next Codex prompt: "Implement Stage 1 Task 2 only: add message normalization helpers that map the existing `/api/v1/analyse` and `/api/v1/analyse/batch` request message shape into `NormalizedMessage` internally. Preserve current API request/response contracts, UI behavior, storage, environment variables and integrations. Add mapper tests for manual/API, Discord and Telegram source labels."
+- Recommended next Codex prompt: "Prompt 4: harden the Business Intelligence Dashboard MVP by adding schema validation and a normalized-message mapper for `/business` inputs. Preserve existing UI behavior and keep PDF/DOCX/CSV/Excel plus integrations as Coming Soon. Add tests for mapping pasted text and TXT-upload content into `NormalizedMessage` without changing Web3 API contracts."
 - Use `/demo` as the primary 90-second judge recording flow.
 - Use `/security-engine` when judges ask for the published deterministic rule list.
 - Deploy the application and replace placeholder deployment URLs in ASP materials.
@@ -54,6 +56,16 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - `lib/messages/channel-profiles.ts`: metadata-only profiles for Discord, Telegram, Facebook Pages, Instagram Business, email, website live chat and uploaded documents.
 - `lib/messages/index.ts`: barrel exports for future internal use.
 - `lib/messages/schemas.test.ts`: unit coverage for valid/invalid message parsing, enum validation, channel profiles, attachments, reply states and audit events.
+
+# Business Intelligence Dashboard Added
+
+- `app/business/page.tsx`: server page shell, metadata, route heading and current-capability status cards.
+- `app/business/business-client.tsx`: interactive paste/TXT input, business profile selection, purpose radio controls, local analysis trigger, results panel, explainability, shared pipeline and planned integrations panel.
+- `lib/business/types.ts`: BI purpose, priority, sentiment, risk, profile and result types.
+- `lib/business/profiles.ts`: local demonstration business profiles.
+- `lib/business/analyse-business-communication.ts`: local demonstration analyzer for normal business communications.
+- `lib/business/analyse-business-communication.test.ts`: analyzer unit tests.
+- `app/components/app-nav.tsx`: adds `Business` to navigation between Dashboard and ASP Docs.
 
 # Messaging Foundation Decisions
 
@@ -168,13 +180,24 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - No authentication is implemented, by design for the current scope.
 - Automated tests currently cover the deterministic security engine, project repository and hybrid analysis merge behavior.
 - A normalized message model exists under `lib/messages`, but existing API routes do not map into it yet.
-- No file upload or document parsing exists yet for CSV, Excel, PDF, Word or plain-text uploads.
+- No document parsing exists yet for PDF, DOCX, CSV or Excel uploads.
+- `/business` supports TXT upload only; PDF, DOCX, CSV and Excel are visible Coming Soon placeholders.
 - No real Discord, Telegram, email, website live chat, Facebook Pages or Instagram Business integration is connected.
 - No human approval queue, automation rules, outbound channel send layer or immutable audit log exists yet.
-- Business Communication Intelligence homepage sections are roadmap positioning only; Email, PDF, Word, CSV, Excel, customer support tickets, live chat, Facebook messages and Instagram messages are not implemented yet.
+- `/business` implements a local paste/TXT Business Intelligence Dashboard MVP; broader homepage roadmap items such as Email, PDF, Word, CSV, Excel, customer support tickets, live chat, Facebook messages and Instagram messages are not implemented yet.
 - Communication Contexts and platform architecture sections are explanatory roadmap illustrations, not connected capabilities.
 
 # Latest Verification
+
+- Date: 2026-07-19
+- Business Intelligence Dashboard MVP completed.
+- `npm test`: passed with 68 tests across 10 files.
+- `npm run lint`: passed.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed and generated 20 static pages/routes plus dynamic API routes, including `/business`.
+- Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured. No deployment URL was invented for this task.
+
+# Previous Verification
 
 - Date: 2026-07-18
 - Platform UI and UX polish completed.
@@ -183,8 +206,6 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - `npx tsc --noEmit --incremental false`: passed.
 - `npm run build`: passed and generated 19 static pages/routes plus dynamic API routes.
 - Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured. No deployment URL was invented for this task.
-
-# Previous Verification
 
 - Date: 2026-07-14
 - `npm test`: passed with 53 tests.

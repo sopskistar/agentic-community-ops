@@ -10,6 +10,7 @@ const navItems = [
   { label: "Engine", href: "/security-engine" },
   { label: "Demo", href: "/demo" },
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Business", href: "/business" },
   { label: "ASP Docs", href: "/docs/asp" },
 ];
 
