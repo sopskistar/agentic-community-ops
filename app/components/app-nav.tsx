@@ -11,6 +11,7 @@ const navItems = [
   { label: "Demo", href: "/demo" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "Business", href: "/business" },
+  { label: "Integrations", href: "/integrations" },
   { label: "ASP Docs", href: "/docs/asp" },
 ];
 

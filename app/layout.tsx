@@ -85,6 +85,18 @@ export default function RootLayout({
               >
                 Documentation
               </Link>
+              <Link
+                href="/privacy"
+                className="font-semibold text-slate-700 transition-colors hover:text-teal-700"
+              >
+                Privacy
+              </Link>
+              <Link
+                href="/data-deletion"
+                className="font-semibold text-slate-700 transition-colors hover:text-teal-700"
+              >
+                Data Deletion
+              </Link>
               <span className="badge border-slate-200 bg-slate-50 text-slate-700">
                 Version 0.1.0
               </span>

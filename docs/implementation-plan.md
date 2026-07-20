@@ -76,9 +76,12 @@ Status: MVP started 2026-07-19. The `/business` route now provides the second wo
 
 ## Stage 3: Communication Integrations
 
-1. Add integration registry and channel adapter test harness.
-   - Scope: provider-neutral configuration types, enabled/disabled states, and fixture tests.
-   - Tests: disabled integrations cannot ingest or send.
+Status: foundation started 2026-07-20. Google/Gmail, Meta, Telegram and Discord now have analyze-only integration infrastructure. Production use still requires deployment URL configuration, provider console setup, durable encrypted storage, authentication/tenant ownership and human-approval workflows.
+
+1. Add integration registry and channel adapter test harness. Completed 2026-07-20 as foundation.
+   - Scope: provider-neutral normalized message model, adapters, webhook validation, dedupe, event log and analyze-only processing.
+   - Delivered: `lib/integrations/`, Google OAuth routes, Gmail readonly routes, Meta webhook route, Telegram webhook route, internal worker endpoint and Discord worker entry point.
+   - Tests: OAuth helper, token refresh, Meta verification/signature rejection, Telegram normalization, Discord normalization, dedupe, secret redaction and normalized-message validation.
 
 2. Implement website live chat as the first local-first channel.
    - Scope: no external account required; normalized messages enter the same pipeline.
@@ -99,6 +102,19 @@ Status: MVP started 2026-07-19. The `/business` route now provides the second wo
 6. Implement Facebook Pages and Instagram Business development-mode adapters.
    - Scope: webhook verification, payload normalization, no production claims.
    - Tests: Meta fixture events and credential-missing failures.
+
+## Future Roadmap Groups
+
+These groups are roadmap only unless explicitly marked implemented above.
+
+- Planned Communication Intelligence: Discord, Telegram, Gmail, Facebook Messenger, Instagram, Website Live Chat, WhatsApp Business, Slack and Microsoft Teams.
+- Future Social and Community Intelligence: X, YouTube comments, LinkedIn company pages and comments, TikTok, Reddit, social listening, sentiment analysis, brand-risk detection, lead identification and complaint identification.
+- Future AI Marketing Intelligence: Meta Ads, X Ads, LinkedIn Ads, TikTok Ads, Google Ads, YouTube campaign intelligence, campaign recommendations, audience suggestions, ad-copy generation, creative briefs, performance monitoring and human approval before campaign launch or budget changes.
+- Future AI Email Workspace: `gmail.modify`, `gmail.send`, labels, archive, follow-up workflows, human-approved sending, phishing detection and priority detection.
+- Future Business Intelligence: BigQuery, Cloud Platform integrations, KPI analysis, customer segmentation, business reporting, trend detection and anomaly detection.
+- Future AI Business Operator: cross-channel workflows, task routing, approvals, audit history, executive summaries and controlled automation.
+
+The current integration foundation uses Gmail readonly only and does not request Gmail modify/send permissions, ad-management permissions, Cloud Platform scopes or production automation privileges.
 
 ## Stage 4: AI Auto-Reply And Human Approval
 

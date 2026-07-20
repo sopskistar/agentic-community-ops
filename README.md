@@ -31,6 +31,15 @@ Phase 6 adds workflow automation and developer platform capabilities: REST API, 
 
 Future enterprise features include organizations, workspaces, teams, user accounts, role-based access control, permissions, secure tenant data isolation, durable multi-tenant persistence, audit logs, API keys per organization, billing/subscription management and enterprise administration. These are roadmap items and are not implemented in the current MVP.
 
+Additional future capability groups are tracked as roadmap items only:
+
+- Communication Intelligence: Discord, Telegram, Gmail, Facebook Messenger, Instagram, Website Live Chat, WhatsApp Business, Slack and Microsoft Teams.
+- Social and Community Intelligence: X, YouTube comments, LinkedIn company pages and comments, TikTok, Reddit, social listening, sentiment analysis, brand-risk detection, lead identification and complaint identification.
+- AI Marketing Intelligence: Meta Ads, X Ads, LinkedIn Ads, TikTok Ads, Google Ads, YouTube campaign intelligence, campaign recommendations, audience suggestions, ad-copy generation, creative briefs, performance monitoring and human approval before campaign launch or budget changes.
+- AI Email Workspace: future Gmail permissions such as `gmail.modify` and `gmail.send`, labels, archive, follow-up workflows, human-approved sending, phishing detection and priority detection.
+- Business Intelligence: BigQuery, Cloud Platform integrations, KPI analysis, customer segmentation, business reporting, trend detection and anomaly detection.
+- AI Business Operator: cross-channel workflows, task routing, approvals, audit history, executive summaries and controlled automation.
+
 ## Capability Status
 
 - Implemented: Web3 Community Security, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public rules/analysis APIs, project knowledge bases, polished platform positioning UI, normalized message model foundation and the `/business` Business Intelligence Dashboard MVP.
@@ -110,8 +119,58 @@ Set these in the deployment platform environment. Do not commit `.env.local`.
 - `OPENAI_API_KEY`: required for live AI analysis.
 - `OPENAI_MODEL`: optional; defaults to the provider configured in code when unset.
 - `OPENAI_BASE_URL`: optional; set this for OpenAI-compatible providers such as OpenRouter.
+- `NEXT_PUBLIC_APP_URL`: public deployed app URL used for callback display, for example `https://YOUR_DEPLOYMENT_URL`.
+- `APP_BASE_URL`: server-side base URL used by workers, for example `https://YOUR_DEPLOYMENT_URL`.
+- `INTERNAL_INTEGRATION_SECRET`: shared secret for the Discord worker to call server-side processing.
+- `OAUTH_TOKEN_ENCRYPTION_KEY`: required for development encrypted OAuth token storage.
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`: Google OAuth configuration.
+- `META_APP_ID`, `META_APP_SECRET`, `META_VERIFY_TOKEN`, `META_PAGE_ACCESS_TOKEN`: Meta app/webhook configuration. Page access is reserved for future approved outbound features and is not used for auto-replies.
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`: Telegram bot and webhook validation configuration.
+- `DISCORD_APPLICATION_ID`, `DISCORD_PUBLIC_KEY`, `DISCORD_BOT_TOKEN`: Discord app and worker configuration.
 
 These variables are read only from server-side modules under `lib/ai/` and API route execution. Do not create `NEXT_PUBLIC_*` variants for secrets, because `NEXT_PUBLIC_*` values are bundled into client-side JavaScript.
+
+## Communication Integrations
+
+Implemented foundation:
+
+- Google OAuth start and callback routes at `/api/integrations/google/auth` and `/api/integrations/google/callback`.
+- Gmail readonly inbox listing and manual analyze-only processing at `/integrations/gmail`.
+- Meta webhook verification and signed webhook receiver at `/api/webhooks/meta`.
+- Telegram webhook receiver at `/api/webhooks/telegram`.
+- Discord Gateway worker entry point at `workers/discord-bot.mjs`.
+- Integration status page at `/integrations`.
+- Privacy Policy at `/privacy` and Data Deletion Instructions at `/data-deletion`.
+
+Development-only limitations:
+
+- OAuth tokens are stored with encrypted local file storage under `.agenticops/`; production must replace this with durable encrypted database or secret storage.
+- Integration event logs are in memory and redacted; they are not production audit logs.
+- Discord requires a persistent worker runtime such as Render, Railway, Fly.io or a VM. Do not run the Gateway worker inside a Vercel request lifecycle.
+- All external channels are analyze-only. No automatic replies, moderation, email mutation, post publishing, ad management or user actions are implemented.
+
+Callback and webhook URLs:
+
+- Google OAuth localhost redirect URI: `http://localhost:3000/api/integrations/google/callback`
+- Google OAuth production redirect URI: `https://YOUR_DEPLOYMENT_URL/api/integrations/google/callback`
+- Meta production webhook callback URL: `https://YOUR_DEPLOYMENT_URL/api/webhooks/meta`
+- Telegram production webhook URL: `https://YOUR_DEPLOYMENT_URL/api/webhooks/telegram`
+
+Telegram webhook setup:
+
+```bash
+curl "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
+  -d "url=https://YOUR_DEPLOYMENT_URL/api/webhooks/telegram" \
+  -d "secret_token=$TELEGRAM_WEBHOOK_SECRET"
+```
+
+Discord worker setup:
+
+```bash
+npm run worker:discord
+```
+
+The worker requires `DISCORD_BOT_TOKEN`, `APP_BASE_URL` and `INTERNAL_INTEGRATION_SECRET`. The bot needs Guilds, Guild Messages and Message Content intent access where permitted.
 
 ## Storage Limitations
 
@@ -181,6 +240,10 @@ Test these public routes after manual deployment:
 - `/`
 - `/demo`
 - `/business`
+- `/integrations`
+- `/integrations/gmail`
+- `/privacy`
+- `/data-deletion`
 - `/docs/asp`
 - `/dashboard`
 - `/dashboard/projects/new`

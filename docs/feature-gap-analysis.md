@@ -1,6 +1,6 @@
 # Feature Gap Analysis
 
-Date: 2026-07-18
+Date: 2026-07-20
 
 ## Stage Comparison
 
@@ -10,7 +10,7 @@ Stage 1 is partially implemented. The deterministic Web3 security engine, AI-ass
 
 Stage 2 is early. The current dashboard can paste one message or paste one-message-per-line batches, and AI categories include several business-intelligence labels. Full conversations, file upload ingestion, sentiment, priority, leads, FAQs, document parsing, and durable BI reporting are not implemented.
 
-Stage 3 is not implemented. Instagram Business, Facebook Pages, email, and website live chat are not connected. There are no external webhooks, OAuth flows, provider credentials, or channel adapter contracts yet.
+Stage 3 foundation is partially implemented. Google OAuth/Gmail readonly, Meta webhook verification/reception, Telegram webhook reception, a Discord worker entry point, provider adapters, webhook deduplication, redacted development event logging and analyze-only normalized processing now exist. Production usage still requires provider console configuration, deployed callback/webhook URLs, durable encrypted token storage, authentication/tenant ownership, and human approval workflows. Website live chat is still not implemented.
 
 Stage 4 is not implemented beyond safe reply suggestions and escalation flags. There is no persisted approval queue, automation rule engine, outbound send layer, external authorization model, or audit log.
 
@@ -30,8 +30,8 @@ Stage 4 is not implemented beyond safe reply suggestions and escalation flags. T
 | Community security reports | Browser-local | `report-client.tsx`, `createBatchSummary` | Server-side persisted reports and trend history | Persistence | Medium | Stage 1/2 |
 | Public A2A API | Basic HTTP API exists | `/api/v1/analyse`, `/api/v1/analyse/batch`, public schemas | Authentication, rate limits, tenant scoping, versioning, OKX payment if approved | Auth, persistence, deployment URL | High | Stage 1 |
 | OKX ASP materials | Prepared docs/artifacts | `ASP_REGISTRATION.md`, `/docs/asp`, `public/service-manifest.json` | Deployment URL replacement and external submission | Production deployment, user approval | High | Stage 1 |
-| Discord support | Source enum only | `messageSources`, UI selects | Adapter interface, webhook/bot payload normalization, tests | Discord developer app and credentials | High | Stage 1/3 |
-| Telegram support | Source enum only | `messageSources`, UI selects | Adapter interface, webhook payload normalization, tests | Telegram bot token | High | Stage 1/3 |
+| Discord support | Development worker foundation | `workers/discord-bot.mjs`, `lib/integrations/adapters/discord.ts` | Persistent worker deployment, install flow, tenant mapping, durable logs | Discord bot token, Gateway intents, worker runtime | High | Stage 1/3 |
+| Telegram support | Webhook foundation | `/api/webhooks/telegram`, `lib/integrations/adapters/telegram.ts` | Production webhook registration, tenant mapping, durable logs | Telegram bot token, webhook secret | High | Stage 1/3 |
 | Paste individual messages | Implemented | Analyse dashboard and API | Tenant/user context | Auth/persistence later | Low | Stage 2 |
 | Paste conversations | Not implemented | None | Conversation parser and multi-message grouping | Normalized message model | Medium | Stage 2 |
 | CSV upload | Not implemented | None | Upload UI/API, parser, mapping, tests | Parser dependency, storage limits | Medium | Stage 2 |
@@ -49,9 +49,9 @@ Stage 4 is not implemented beyond safe reply suggestions and escalation flags. T
 | Leads | Partial category only | `SALES_LEAD` | Lead fields, routing, export | BI schema/persistence | Medium | Stage 2 |
 | Conversation summaries | Not implemented | None | Conversation grouping and summarizer | Normalized conversations, AI provider | Medium | Stage 2 |
 | Recommended actions | Implemented at message level | AI output and rules | BI-specific action taxonomy | BI schema | Medium | Stage 2 |
-| Instagram Business | Not implemented | None | OAuth, webhook verification, payload mapping, outbound policy | Meta app, review | High | Stage 3 |
-| Facebook Pages | Not implemented | None | OAuth, webhook verification, page permissions, mapping | Meta app, review | High | Stage 3 |
-| Email | Not implemented | None | Inbound parser, provider adapter, outbound gating | Email provider credentials | Medium | Stage 3 |
+| Instagram Business | Webhook foundation only | `/api/webhooks/meta`, `lib/integrations/adapters/meta.ts` | Meta app review, OAuth/page subscriptions, tenant mapping, durable logs | Meta app, app secret, review | High | Stage 3 |
+| Facebook Pages | Webhook foundation only | `/api/webhooks/meta`, `lib/integrations/adapters/meta.ts` | Meta app review, OAuth/page subscriptions, tenant mapping, durable logs | Meta app, app secret, page token | High | Stage 3 |
+| Email | Gmail readonly foundation | `/api/integrations/google/*`, `/integrations/gmail`, `lib/integrations/google/gmail-service.ts` | Production token store, account ownership, pagination UX, MIME parsing, non-Gmail providers | Google OAuth app, Gmail readonly scope | High | Stage 3 |
 | Website live chat | Not implemented | None | Widget/API, session IDs, webhook-like ingest | Frontend widget, persistence | Medium | Stage 3 |
 | AI auto-reply | Not implemented | Suggestions only | Automation rule engine and send guard | Reply workflow, channel adapters | High | Stage 4 |
 | Human approval | Not implemented | Escalation flags only | Approval queue, state transitions, reviewer identity | Auth, persistence | High | Stage 4 |
@@ -65,11 +65,11 @@ Stage 4 is not implemented beyond safe reply suggestions and escalation flags. T
 - Browser `localStorage` reports cannot support audit trails, approvals, trend reports, or shared team workflows.
 - Current message source is a small enum, not a normalized message abstraction.
 - API routes have no authentication, tenant scoping, idempotency keys, rate limits, or request provenance.
-- No webhook signature verification exists.
+- Webhook signature verification exists for Meta when `META_APP_SECRET` is configured and Telegram validates the webhook secret when configured, but there is no production-grade rate limiting, tenant attribution or durable webhook/audit storage yet.
 - File ingestion is absent, and uploaded documents will need strict size/type validation.
 - AI prompts and outputs are not versioned in an audit log.
 - No background job or retry abstraction exists for large batches, webhooks, or outbound sends.
-- The public landing page mentions multiple channels, but live integrations are not connected.
+- The public landing page mentions multiple channels. Gmail, Meta, Telegram and Discord now have analyze-only foundations, but they are not autonomous customer-operation integrations and require configuration before real provider events can be processed.
 
 ## Important Non-Gaps
 

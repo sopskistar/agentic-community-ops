@@ -12,13 +12,15 @@ On 2026-07-18, a scoped UI/UX polish pass tightened the existing platform experi
 
 On 2026-07-19, the Business Intelligence Dashboard MVP was added at `/business` as the second working communication context after Web3 Community Security. It supports pasted business text, TXT upload, business profile selection, purpose selection, local demonstration analysis and explainable structured results. PDF, DOCX, CSV, Excel, CRM, email, Slack, Teams, Google Workspace, Salesforce, HubSpot, ticket creation, durable persistence and external sending remain explicitly marked as not implemented.
 
+On 2026-07-20, a secure communication integrations foundation was added for Google/Gmail, Meta, Telegram and Discord. The implementation is analyze-only: provider payloads are normalized into a shared integration message model and passed through the existing Agentic Ops analysis pipeline, but no external replies, moderation, email mutation, post publishing, ad management or autonomous actions are performed. Production use still requires deployed callback/webhook URLs, provider-console setup, durable encrypted token storage, authentication/tenant ownership and human approval workflows.
+
 # Current Blockers
 
-Repository blockers for Stages 1-4: no durable multi-tenant persistence, no authentication or tenant boundary, no message normalization mappers wired to existing requests, no channel adapter contracts, no file ingestion, no approval workflow, no audit-log persistence, and no outbound-send authorization layer. Existing external blockers remain: deployment URL, production environment variables, and ASP registration submission.
+Repository blockers for Stages 1-4: no durable multi-tenant persistence, no authentication or tenant boundary, existing Web3 API routes are not yet internally mapped to the `lib/messages` model, no file ingestion, no approval workflow, no production audit-log persistence, no outbound-send authorization layer, and no tenant ownership for connected provider accounts. Existing external blockers remain: deployment URL, production environment variables, provider callback/webhook configuration, provider app review where required, and ASP registration submission.
 
 # Next Actions
 
-- Recommended next Codex prompt: "Prompt 4: harden the Business Intelligence Dashboard MVP by adding schema validation and a normalized-message mapper for `/business` inputs. Preserve existing UI behavior and keep PDF/DOCX/CSV/Excel plus integrations as Coming Soon. Add tests for mapping pasted text and TXT-upload content into `NormalizedMessage` without changing Web3 API contracts."
+- Recommended next Codex prompt: "Prompt 4: add durable integration storage contracts and tenant-safe ownership boundaries without changing the UI or connecting outbound automation. Replace the development-only OAuth token store and in-memory event log behind interfaces with documented production-ready repository contracts, add tests for account ownership and token metadata access, and keep all integrations in analyze-only mode."
 - Use `/demo` as the primary 90-second judge recording flow.
 - Use `/security-engine` when judges ask for the published deterministic rule list.
 - Deploy the application and replace placeholder deployment URLs in ASP materials.
@@ -66,6 +68,22 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - `lib/business/analyse-business-communication.ts`: local demonstration analyzer for normal business communications.
 - `lib/business/analyse-business-communication.test.ts`: analyzer unit tests.
 - `app/components/app-nav.tsx`: adds `Business` to navigation between Dashboard and ASP Docs.
+
+# Communication Integrations Foundation Added
+
+- `lib/integrations/normalized.ts`: provider-neutral lowercase normalized communication model and Zod validation for external integration events.
+- `lib/integrations/processor.ts`: server-side analyze-only service that validates normalized messages and runs the existing deterministic-first Agentic Ops analysis pipeline.
+- `lib/integrations/adapters/`: Gmail, Meta, Telegram and Discord adapters that keep provider-specific parsing outside the core analysis engine.
+- `lib/integrations/oauth/`: Google OAuth URL generation, callback token exchange, access-token refresh and a development-only encrypted token-store abstraction.
+- `lib/integrations/google/gmail-service.ts`: Gmail readonly listing and manual analyze-only normalization.
+- `lib/integrations/dedupe.ts` and `lib/integrations/event-log.ts`: development-safe webhook deduplication and redacted in-memory event logging.
+- `/api/integrations/google/auth` and `/api/integrations/google/callback`: Google OAuth start/callback using Gmail readonly scope and HTTP-only state cookies.
+- `/api/integrations/gmail/messages`: server-only recent Gmail listing and manual analyze-only endpoint.
+- `/api/webhooks/meta`: Meta GET verification and POST receiver with signature validation when `META_APP_SECRET` is configured.
+- `/api/webhooks/telegram`: Telegram POST receiver with webhook-secret validation when `TELEGRAM_WEBHOOK_SECRET` is configured.
+- `/api/integrations/messages`: internal protected processing endpoint for worker-based integrations.
+- `workers/discord-bot.mjs`: Discord Gateway worker for persistent runtimes; not suitable for Vercel request lifecycles.
+- `/integrations`, `/integrations/gmail`, `/privacy` and `/data-deletion`: integration status, Gmail analyze-only UI and public compliance pages.
 
 # Messaging Foundation Decisions
 
@@ -183,11 +201,20 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - No document parsing exists yet for PDF, DOCX, CSV or Excel uploads.
 - `/business` supports TXT upload only; PDF, DOCX, CSV and Excel are visible Coming Soon placeholders.
 - No real Discord, Telegram, email, website live chat, Facebook Pages or Instagram Business integration is connected.
+- Google/Gmail, Meta, Telegram and Discord now have integration foundations, but they require real environment configuration and provider setup before processing live events. They remain analyze-only and development-limited until durable storage, tenant ownership and approval workflows are added.
 - No human approval queue, automation rules, outbound channel send layer or immutable audit log exists yet.
 - `/business` implements a local paste/TXT Business Intelligence Dashboard MVP; broader homepage roadmap items such as Email, PDF, Word, CSV, Excel, customer support tickets, live chat, Facebook messages and Instagram messages are not implemented yet.
 - Communication Contexts and platform architecture sections are explanatory roadmap illustrations, not connected capabilities.
 
 # Latest Verification
+
+- Date: 2026-07-20
+- Secure communication integrations foundation completed.
+- `npm test`: passed with 84 tests across 17 files.
+- `npm run lint`: passed.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed and generated 30 static/dynamic routes, including Google/Gmail integration routes, Meta and Telegram webhook routes, `/integrations`, `/integrations/gmail`, `/privacy` and `/data-deletion`.
+- Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured. No deployment URL or provider credentials were invented for this task.
 
 - Date: 2026-07-19
 - Business Intelligence Dashboard MVP completed.

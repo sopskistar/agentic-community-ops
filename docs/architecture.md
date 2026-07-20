@@ -26,6 +26,10 @@ Current pages:
 - `/`: product landing page.
 - `/demo`: no-login guided NovaBridge demo using the real hybrid analysis flow with a local mock AI provider.
 - `/business`: local Business Intelligence Dashboard MVP using demonstration logic for normal business communications.
+- `/integrations`: integration status, callback URLs, development event log and safe next actions.
+- `/integrations/gmail`: Gmail readonly inbox listing and manual analyze-only message review.
+- `/privacy`: public privacy policy.
+- `/data-deletion`: public data deletion instructions.
 - `/security-engine`: public deterministic rule catalog.
 - `/docs/asp`: human-readable ASP registration documentation.
 - `/dashboard`: local project knowledge-base list.
@@ -41,6 +45,12 @@ Current API routes:
 - `GET /api/v1/rules`: returns the public deterministic rules.
 - `POST /api/v1/analyse`: validates a project/message request, loads a project from local JSON, runs deterministic-first hybrid analysis, and returns structured results.
 - `POST /api/v1/analyse/batch`: validates up to 25 messages, isolates invalid messages, runs analysis with concurrency 3, and returns successful results, failed results, and measured summary metrics.
+- `GET /api/integrations/google/auth`: starts Google OAuth with Gmail readonly scope and CSRF state cookie.
+- `GET /api/integrations/google/callback`: validates OAuth state, exchanges code for tokens and stores encrypted token metadata server-side.
+- `GET/POST /api/integrations/gmail/messages`: lists a small recent Gmail inbox window and analyzes selected messages without modifying email.
+- `POST /api/integrations/messages`: internal worker endpoint for normalized analyze-only messages.
+- `GET/POST /api/webhooks/meta`: verifies Meta webhook setup and receives signed Facebook/Instagram messaging events.
+- `POST /api/webhooks/telegram`: receives Telegram updates with optional secret-token validation.
 
 Current domain modules:
 
@@ -49,6 +59,7 @@ Current domain modules:
 - `lib/ai/`: provider interface, OpenAI-compatible provider, and default provider fallback.
 - `lib/messages/`: normalized message foundation, channel/source enums, reusable message/conversation/reply/audit types, Zod schemas, and channel profile metadata for future adapters.
 - `lib/business/`: local demonstration business communication analysis types, profiles, heuristic analyzer and tests.
+- `lib/integrations/`: provider-neutral normalized integration messages, adapters, OAuth helpers, token storage, Gmail service, webhook security, dedupe, event log and analyze-only processing.
 - `lib/projects/`: project knowledge-base types, Zod validation, repository interface, local JSON repository, and tests.
 - `lib/api/`: structured API error responses.
 
@@ -58,6 +69,33 @@ Current persistence:
 - Batch and report UI state is stored in browser `localStorage`.
 - There is no tenant, user, organization, webhook, message, analysis, approval, or audit-log persistence.
 - `/business` keeps analysis state in the browser only and does not persist business messages or profile changes.
+- Integration OAuth token storage is development-only encrypted local file storage under `.agenticops/`. Production requires durable encrypted storage.
+- Integration event logs are in-memory and redacted; production requires durable audit logging.
+
+## Communication Integrations Foundation
+
+Implemented:
+
+- Google OAuth uses only `https://www.googleapis.com/auth/gmail.readonly`.
+- Gmail inbox reading lists a conservative recent message window and supports manual analysis only.
+- Meta webhook verification uses `META_VERIFY_TOKEN`; signed POST payloads are validated with `META_APP_SECRET` when configured.
+- Telegram webhook validates `TELEGRAM_WEBHOOK_SECRET` when configured.
+- Discord Gateway support is a separate worker entry point, not a serverless request handler.
+- All provider payloads are normalized before processing and then sent through the analyze-only Agentic Ops processing service.
+
+Development Only:
+
+- Local encrypted OAuth token storage.
+- In-memory event log and dedupe cache.
+- Discord worker process when run outside the Next.js serverless deployment.
+
+Planned/Future:
+
+- Production database-backed encrypted token storage.
+- Tenant-aware integration ownership and auth.
+- Durable audit logs.
+- Human approval queues.
+- Outbound replies and moderation actions only after explicit authorization.
 
 ## Business Intelligence Dashboard MVP
 

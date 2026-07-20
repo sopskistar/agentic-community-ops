@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-20 - Session: secure communication integrations foundation
+
+- What was built: Added analyze-only integration foundations for Google/Gmail, Meta, Telegram and Discord. Added a provider-neutral integration message model, adapters, shared processing service, Google OAuth start/callback, Gmail readonly listing/analyze UI, Meta webhook verification and signed receiver, Telegram webhook receiver, Discord persistent-worker entry point, integration status/event-log pages, Privacy Policy and Data Deletion Instructions.
+- Problems found: The current Vercel-style web app cannot safely host a long-running Discord Gateway connection inside request handlers, so Discord is implemented as a separate worker suitable for Render, Railway, Fly.io, a VM or another persistent runtime. Durable encrypted token storage, tenant ownership, production audit logs and approval workflows are still blockers.
+- Bugs fixed: Added request-size guards to webhook handlers and kept webhook/event logs redacted so private message contents and secrets are not logged by default.
+- Important technical decisions: Google requests only `gmail.readonly`; all external channels run in analyze-only mode; OAuth tokens are server-only and stored in a clearly labeled development encrypted local adapter; Meta signatures are validated when `META_APP_SECRET` is configured; Telegram webhook secrets are validated when configured; no external replies, moderation, email changes, ads actions, databases, OAuth secrets or provider credentials were committed.
+- Tests performed: `npm test` passed with 84 tests across 17 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 30 static/dynamic routes, including integration, webhook, privacy and data-deletion routes. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: Integration work must separate provider adapters from the analysis engine and must not add autonomous outbound behavior before durable storage, tenant boundaries, approval workflows and explicit channel authorization exist.
+
 ## 2026-07-19 - Session: business intelligence dashboard MVP
 
 - What was built: Added `/business` as the second working communication context after Web3 Community Security. Added local business communication analysis under `lib/business/`, a professional Business Intelligence Dashboard page, paste input, TXT upload, business profile selector, analysis purpose selector, structured results, explainability, shared pipeline illustration and planned integrations panel. Added `Business` to the navbar between Dashboard and ASP Docs.

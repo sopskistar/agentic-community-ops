@@ -23,6 +23,11 @@
 # misc
 .DS_Store
 *.pem
+.agenticops/
+*.token
+*.tokens
+oauth-tokens*.json
+development-oauth-tokens.json.enc
 
 # debug
 npm-debug.log*
