@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { z } from "zod";
 
 import {
@@ -24,19 +25,28 @@ export function normalizeDiscordMessage(input: unknown) {
   if (message.author.bot || !message.guildId || !message.content.trim()) {
     return null;
   }
+  const externalId = hashDiscordIdentifier(message.id);
+  const channelId = hashDiscordIdentifier(message.channelId);
 
   return {
-    id: createIntegrationMessageId("discord", message.id),
-    externalId: message.id,
+    id: createIntegrationMessageId("discord", externalId),
+    externalId,
     source: "discord",
-    channelId: message.channelId,
-    conversationId: message.channelId,
-    senderId: message.author.id,
+    channelId,
+    conversationId: channelId,
+    senderId: hashDiscordIdentifier(message.author.id),
     senderName: message.author.username,
     text: message.content,
     timestamp: new Date(message.createdTimestamp ?? Date.now()).toISOString(),
     metadata: {
-      guildId: message.guildId,
+      guildId: hashDiscordIdentifier(message.guildId),
     },
   } satisfies NormalizedCommunicationMessage;
+}
+
+function hashDiscordIdentifier(value: string) {
+  return createHash("sha256")
+    .update(`discord:${value}`)
+    .digest("hex")
+    .slice(0, 32);
 }

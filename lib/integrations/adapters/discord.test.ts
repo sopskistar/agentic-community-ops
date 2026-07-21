@@ -15,10 +15,13 @@ describe("normalizeDiscordMessage", () => {
 
     expect(normalized).toMatchObject({
       source: "discord",
-      externalId: "msg-1",
-      channelId: "channel-1",
-      senderId: "user-1",
     });
+    expect(normalized?.externalId).toMatch(/^[a-f0-9]{32}$/);
+    expect(normalized?.channelId).toMatch(/^[a-f0-9]{32}$/);
+    expect(normalized?.senderId).toMatch(/^[a-f0-9]{32}$/);
+    expect(normalized?.externalId).not.toBe("msg-1");
+    expect(normalized?.channelId).not.toBe("channel-1");
+    expect(normalized?.senderId).not.toBe("user-1");
   });
 
   it("ignores bot messages and direct messages", () => {

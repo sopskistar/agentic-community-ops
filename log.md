@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-21 - Session: Discord Render worker preparation
+
+- What was built: Prepared the Discord Gateway worker for Render Background Worker deployment. Added the `npm run discord:worker` production script, validate-only mode, required Gateway intents only, hashed Discord identifiers, local duplicate filtering, heartbeat delivery to the Vercel internal endpoint, sanitized worker diagnostics and graceful SIGTERM/SIGINT shutdown.
+- Problems found: The worker already used the correct persistent-runtime architecture, but `/integrations` could only infer Discord configuration from environment variables and the protected endpoint emitted generic worker events instead of Discord-specific lifecycle diagnostics.
+- Bugs fixed: The internal processing endpoint now enforces a bounded request body, strict normalized-message validation, Discord-specific durable lifecycle events, durable workflow-record dedupe and heartbeat persistence.
+- Important technical decisions: Render runs only the Gateway worker and posts normalized messages to Vercel; it does not need OpenRouter, KV, Google, Meta or Telegram credentials. Vercel remains the web/API host and Upstash/Vercel KV remains durable storage.
+- Tests performed: `npm test` passed with 144 tests across 27 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and kept `/api/integrations/messages` and `/integrations` dynamic. `npm run discord:worker -- --validate` passed without connecting to Discord. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: Discord worker online status must be inferred from durable heartbeat and message diagnostics, not from environment variables alone.
+
 ## 2026-07-21 - Session: Meta comment ingestion
 
 - What was built: Extended Meta ingestion around actual Facebook Page and Instagram webhook change envelopes. Facebook Page `feed` comment add/edit events and Instagram `comments`/`mentions` events now normalize into comment channels, run through the shared analysis pipeline, persist durable lifecycle events and create approval-required suggestions. Facebook comment removals are recorded safely without analysis.

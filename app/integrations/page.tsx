@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { GmailSyncButton } from "./gmail-sync-button";
 import { getGmailConnectionStatus } from "../../lib/integrations/google/gmail-service";
+import { getDiscordWorkerStatus } from "../../lib/integrations/discord/status";
 import {
   listIntegrationEventLogEntries,
   listIntegrationWorkflowRecords,
@@ -26,6 +27,7 @@ export default async function IntegrationsPage() {
   const gmailStatus = await getGmailConnectionStatus();
   const facebookStatus = await getMetaProviderStatus("facebook");
   const instagramStatus = await getMetaProviderStatus("instagram");
+  const discordStatus = await getDiscordWorkerStatus();
   const eventLog = await safeListIntegrationEventLogEntries();
   const workflows = await safeListIntegrationWorkflowRecords();
   const gmailStats = getGmailEventStats(eventLog);
@@ -74,8 +76,8 @@ export default async function IntegrationsPage() {
           />
           <IntegrationCard
             name="Discord"
-            status={process.env.DISCORD_BOT_TOKEN ? "Configuration detected" : "Not configured"}
-            detail="Discord Gateway requires the separate persistent worker, not the Vercel request runtime."
+            status={formatDiscordStatus(discordStatus.status)}
+            detail={formatDiscordDetail(discordStatus)}
           />
         </section>
 
@@ -316,6 +318,62 @@ function formatMetaDetail(
   }
 
   return `${providerName} is not configured. Add the required Meta environment variables and dashboard subscriptions.`;
+}
+
+function formatDiscordStatus(status: string) {
+  if (status === "worker_recently_active") {
+    return "Worker online";
+  }
+
+  if (status === "worker_stale") {
+    return "Worker stale";
+  }
+
+  if (status === "worker_never_seen") {
+    return "Worker never seen";
+  }
+
+  if (status === "configuration_detected") {
+    return "Configuration detected";
+  }
+
+  if (status === "error") {
+    return "Error";
+  }
+
+  return "Not configured";
+}
+
+function formatDiscordDetail(
+  status: Awaited<ReturnType<typeof getDiscordWorkerStatus>>,
+) {
+  const activity = `Last heartbeat: ${status.latestHeartbeat ?? "none"}. Last message: ${status.latestMessageReceived ?? "none"}. Last processing success: ${status.latestProcessingSuccess ?? "none"}. Messages: ${status.messageCount}.`;
+
+  if (!status.repositoryAvailable) {
+    return "Discord diagnostics could not read durable storage. Check KV/Upstash configuration.";
+  }
+
+  if (status.status === "worker_recently_active") {
+    return `Discord Gateway worker is recently active on a persistent runtime. ${activity}`;
+  }
+
+  if (status.status === "worker_stale") {
+    return `Discord worker heartbeat is stale. Check the Render background worker logs. ${activity}`;
+  }
+
+  if (status.status === "worker_never_seen") {
+    return `Discord configuration is detected, but no worker heartbeat has been recorded. Start the Render background worker. ${activity}`;
+  }
+
+  if (status.status === "configuration_detected") {
+    return `Discord configuration is partially detected. Render must run the persistent worker; Vercel remains the web/API host. ${activity}`;
+  }
+
+  if (status.status === "error") {
+    return `Discord has a recent diagnostic error. Review the redacted event log and Render logs. ${activity}`;
+  }
+
+  return "Discord is not configured. Add worker environment variables in Render before starting the Gateway worker.";
 }
 
 function getGmailEventStats(

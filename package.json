@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "worker:discord": "node workers/discord-bot.mjs",
+    "discord:worker": "node workers/discord-bot.mjs",
     "test": "vitest run"
   },
   "dependencies": {

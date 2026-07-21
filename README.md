@@ -174,10 +174,30 @@ curl "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
 Discord worker setup:
 
 ```bash
-npm run worker:discord
+npm run discord:worker
 ```
 
-The worker requires `DISCORD_BOT_TOKEN`, `APP_BASE_URL` and `INTERNAL_INTEGRATION_SECRET`. The bot needs Guilds, Guild Messages and Message Content intent access where permitted.
+The worker requires `DISCORD_BOT_TOKEN`, `APP_BASE_URL` and `INTERNAL_INTEGRATION_SECRET`. `APP_BASE_URL` must point at the Vercel web/API deployment, for example `https://agenticopsai.xyz`. The bot uses only the Guilds, Guild Messages and Message Content Gateway intents. Enable the Message Content privileged intent in the Discord Developer Portal for the bot application. Do not enable Presence intent; Guild Members is not required by the current worker.
+
+Render Discord worker deployment:
+
+- Service type: Background Worker.
+- Repository: this GitHub repository.
+- Branch: `main`.
+- Runtime: Node.
+- Build command: `npm ci`.
+- Start command: `npm run discord:worker`.
+- Required Render environment variables:
+  - `DISCORD_BOT_TOKEN`
+  - `DISCORD_APPLICATION_ID`
+  - `INTERNAL_INTEGRATION_SECRET`
+  - `APP_BASE_URL=https://agenticopsai.xyz`
+- No Google, Meta, Telegram, OpenRouter, KV or Upstash credentials are required in Render when the worker only posts authenticated normalized messages and heartbeats to Vercel.
+- Vercel remains the website and API host. Upstash/Vercel KV remains the durable event and workflow store.
+- No persistent Render disk is required.
+- View runtime logs in the Render service Logs tab. Expected sanitized events include `discord_worker_starting`, `discord_gateway_ready`, `discord_message_received`, `discord_internal_api_success`, `discord_gateway_reconnecting` and `discord_worker_shutdown`.
+- Test locally without connecting to Discord by running `npm run discord:worker -- --validate` with the required environment variables present.
+- Test production flow by starting the Render worker, sending a normal text message in the installed Discord test server, then checking `/integrations` for a recent Discord worker heartbeat, message count, processing success and approval-required workflow record.
 
 Gmail readonly sync:
 
