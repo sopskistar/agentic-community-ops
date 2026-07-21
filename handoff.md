@@ -14,9 +14,11 @@ On 2026-07-19, the Business Intelligence Dashboard MVP was added at `/business` 
 
 On 2026-07-20, a secure communication integrations foundation was added for Google/Gmail, Meta, Telegram and Discord. The implementation is analyze-only: provider payloads are normalized into a shared integration message model and passed through the existing Agentic Ops analysis pipeline, but no external replies, moderation, email mutation, post publishing, ad management or autonomous actions are performed. Integration event/workflow records now use a provider-independent repository with Vercel KV/Upstash REST durability when configured, memory for tests, and local-file fallback for development. Production use still requires deployed callback/webhook URLs, provider-console setup, durable encrypted OAuth token storage, authentication/tenant ownership and human approval workflows.
 
+On 2026-07-21, Gmail OAuth token persistence was hardened so production uses encrypted KV/Upstash storage and refuses filesystem fallback. Meta webhook diagnostics were expanded to distinguish verification, signature failure, unsupported payloads, Facebook messages, Instagram messages, normalization failure, analysis failure and persistence failure. Meta delivery still depends on external dashboard subscription, Page subscription, Instagram/Page linkage, app mode and permissions.
+
 # Current Blockers
 
-Repository blockers for Stages 1-4: no durable multi-tenant persistence for projects/users/OAuth tokens, no authentication or tenant boundary, existing Web3 API routes are not yet internally mapped to the `lib/messages` model, no file ingestion, no approval workflow UI, no production audit-log search/retention policy, no outbound-send authorization layer, and no tenant ownership for connected provider accounts. Existing external blockers remain: deployment URL, production environment variables, provider callback/webhook configuration, provider app review where required, and ASP registration submission.
+Repository blockers for Stages 1-4: no durable multi-tenant persistence for projects/users, no authentication or tenant boundary, existing Web3 API routes are not yet internally mapped to the `lib/messages` model, no file ingestion, no approval workflow UI, no production audit-log search/retention policy, no outbound-send authorization layer, and no tenant ownership for connected provider accounts. Existing external blockers remain: provider callback/webhook configuration, Meta Page and Instagram subscriptions/linkage, provider app review where required, and ASP registration submission.
 
 # Next Actions
 
@@ -207,6 +209,14 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 - Communication Contexts and platform architecture sections are explanatory roadmap illustrations, not connected capabilities.
 
 # Latest Verification
+
+- Date: 2026-07-21
+- Gmail OAuth persistence and Meta diagnostics completed.
+- `npm test`: passed with 102 tests across 22 files.
+- `npm run lint`: passed with no warnings.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed and generated the existing 30 static/dynamic routes.
+- Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured. No deployment URL or provider credentials were invented for this task.
 
 - Date: 2026-07-20
 - Durable integration event repository completed.

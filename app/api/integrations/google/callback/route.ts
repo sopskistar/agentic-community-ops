@@ -34,6 +34,7 @@ export async function GET(request: Request) {
       expiresAt: tokens.expiresAt,
       scope: tokens.scope,
       tokenType: tokens.tokenType,
+      createdAt: now,
       connectedAt: now,
       updatedAt: now,
     };

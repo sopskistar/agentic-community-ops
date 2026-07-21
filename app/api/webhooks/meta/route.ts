@@ -1,10 +1,11 @@
 import { ZodError } from "zod";
 
 import { apiErrorResponse, zodIssuesToApiIssues } from "../../../../lib/api/responses";
-import { normalizeMetaWebhookPayload } from "../../../../lib/integrations/adapters/meta";
+import { inspectMetaWebhookPayload } from "../../../../lib/integrations/adapters/meta";
 import { hasSeenIntegrationEvent } from "../../../../lib/integrations/dedupe";
 import {
   addIntegrationEventLogEntry,
+  type CreateIntegrationEventLogEntry,
   recordIntegrationAnalysis,
 } from "../../../../lib/integrations/event-log";
 import { processNormalizedMessage } from "../../../../lib/integrations/processor";
@@ -22,9 +23,22 @@ export async function GET(request: Request) {
     token === process.env.META_VERIFY_TOKEN &&
     challenge
   ) {
+    await recordMetaDiagnostic({
+      provider: "meta",
+      eventType: "meta_verification_success",
+      processingStatus: "processed",
+      analysisStatus: "not_started",
+    });
     return new Response(challenge, { status: 200 });
   }
 
+  await recordMetaDiagnostic({
+    provider: "meta",
+    eventType: "meta_verification_failed",
+    processingStatus: "error",
+    analysisStatus: "not_started",
+    errorSummary: "Meta webhook verification failed.",
+  });
   return apiErrorResponse({
     code: "META_VERIFICATION_FAILED",
     message: "Meta webhook verification failed.",
@@ -49,9 +63,9 @@ export async function POST(request: Request) {
   });
 
   if (!signature.valid) {
-    await addIntegrationEventLogEntry({
+    await recordMetaDiagnostic({
       provider: "meta",
-      eventType: "webhook_signature",
+      eventType: "meta_signature_failed",
       processingStatus: "error",
       analysisStatus: "not_started",
       errorSummary: "Invalid Meta webhook signature.",
@@ -64,12 +78,26 @@ export async function POST(request: Request) {
   }
 
   try {
-    const messages = normalizeMetaWebhookPayload(JSON.parse(rawBody));
+    const { messages, diagnostics } = inspectMetaWebhookPayload(JSON.parse(rawBody));
     const processed = [];
+
+    for (const diagnostic of diagnostics) {
+      await recordMetaDiagnostic({
+        provider: diagnostic.provider,
+        eventType: diagnostic.eventType,
+        processingStatus:
+          diagnostic.eventType === "meta_payload_unsupported"
+            ? "ignored"
+            : "received",
+        analysisStatus: "not_started",
+        externalId: diagnostic.externalId,
+        errorSummary: diagnostic.reason,
+      });
+    }
 
     for (const message of messages) {
       if (hasSeenIntegrationEvent(message.id)) {
-        await addIntegrationEventLogEntry({
+        await recordMetaDiagnostic({
           provider: message.source,
           eventType: "message",
           processingStatus: "ignored",
@@ -79,30 +107,52 @@ export async function POST(request: Request) {
         continue;
       }
 
-      await addIntegrationEventLogEntry({
+      await recordMetaDiagnostic({
         provider: message.source,
         eventType: "message",
         processingStatus: "received",
         analysisStatus: "not_started",
         externalId: message.externalId,
       });
-      const result = await processNormalizedMessage(message);
-      await recordIntegrationAnalysis(result);
-      await addIntegrationEventLogEntry({
+      await recordMetaDiagnostic({
         provider: message.source,
-        eventType: "message",
-        processingStatus: "processed",
-        analysisStatus: "completed",
+        eventType: "meta_analysis_started",
+        processingStatus: "received",
+        analysisStatus: "not_started",
         externalId: message.externalId,
       });
-      processed.push({ id: message.id, riskLevel: result.riskLevel });
+
+      try {
+        const result = await processNormalizedMessage(message);
+        await recordMetaWorkflow(result);
+        await recordMetaDiagnostic({
+          provider: message.source,
+          eventType: "message",
+          processingStatus: "processed",
+          analysisStatus: "completed",
+          externalId: message.externalId,
+        });
+        processed.push({ id: message.id, riskLevel: result.riskLevel });
+      } catch {
+        await recordMetaDiagnostic({
+          provider: message.source,
+          eventType: "meta_analysis_failed",
+          processingStatus: "error",
+          analysisStatus: "failed",
+          externalId: message.externalId,
+          errorSummary: "Meta message analysis failed.",
+        });
+      }
     }
 
     return Response.json({ received: true, processed });
   } catch (error) {
-    await addIntegrationEventLogEntry({
+    await recordMetaDiagnostic({
       provider: "meta",
-      eventType: "webhook",
+      eventType:
+        error instanceof ZodError
+          ? "meta_normalization_failed"
+          : "meta_payload_unsupported",
       processingStatus: "error",
       analysisStatus: "failed",
       errorSummary: "Meta webhook processing failed.",
@@ -121,6 +171,31 @@ export async function POST(request: Request) {
       code: "META_WEBHOOK_FAILED",
       message: "Meta webhook processing failed.",
       status: 400,
+    });
+  }
+}
+
+async function recordMetaDiagnostic(entry: CreateIntegrationEventLogEntry) {
+  try {
+    await addIntegrationEventLogEntry(entry);
+  } catch {
+    console.error("meta_event_persistence_failed");
+  }
+}
+
+async function recordMetaWorkflow(
+  result: Awaited<ReturnType<typeof processNormalizedMessage>>,
+) {
+  try {
+    await recordIntegrationAnalysis(result);
+  } catch {
+    await recordMetaDiagnostic({
+      provider: result.message.source,
+      eventType: "meta_event_persistence_failed",
+      processingStatus: "error",
+      analysisStatus: "failed",
+      externalId: result.message.externalId,
+      errorSummary: "Meta workflow persistence failed.",
     });
   }
 }

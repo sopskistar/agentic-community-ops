@@ -5,6 +5,7 @@ import {
   listIntegrationEventLogEntries,
   listIntegrationWorkflowRecords,
 } from "../../lib/integrations/event-log";
+import { getMetaProviderStatus } from "../../lib/integrations/meta/status";
 
 const appBaseUrl =
   process.env.NEXT_PUBLIC_APP_URL?.trim() ||
@@ -24,8 +25,10 @@ export default async function IntegrationsPage({
 }) {
   const params = await searchParams;
   const gmailStatus = await getGmailConnectionStatus();
-  const eventLog = await listIntegrationEventLogEntries();
-  const workflows = await listIntegrationWorkflowRecords(10);
+  const facebookStatus = await getMetaProviderStatus("facebook");
+  const instagramStatus = await getMetaProviderStatus("instagram");
+  const eventLog = await safeListIntegrationEventLogEntries();
+  const workflows = await safeListIntegrationWorkflowRecords();
 
   return (
     <main className="app-bg min-h-screen text-slate-950">
@@ -58,13 +61,13 @@ export default async function IntegrationsPage({
           />
           <IntegrationCard
             name="Facebook Messenger"
-            status={process.env.META_VERIFY_TOKEN ? "Configuration detected" : "Not configured"}
-            detail="Webhook verification and signed event reception are implemented for analyze-only processing."
+            status={formatMetaStatus(facebookStatus.status)}
+            detail={formatMetaDetail(facebookStatus, "Facebook Page")}
           />
           <IntegrationCard
             name="Instagram"
-            status={process.env.META_VERIFY_TOKEN ? "Configuration detected" : "Not configured"}
-            detail="Instagram messaging webhook events are normalized when Meta sends supported payloads."
+            status={formatMetaStatus(instagramStatus.status)}
+            detail={formatMetaDetail(instagramStatus, "Instagram Business")}
           />
           <IntegrationCard
             name="Telegram"
@@ -235,8 +238,79 @@ function formatGmailStatus(status: string) {
   }
 
   if (status === "not_configured") {
-    return "Not configured";
+    return "Configuration required";
   }
 
   return "Configuration required";
+}
+
+async function safeListIntegrationEventLogEntries() {
+  try {
+    return await listIntegrationEventLogEntries();
+  } catch {
+    return [];
+  }
+}
+
+async function safeListIntegrationWorkflowRecords() {
+  try {
+    return await listIntegrationWorkflowRecords(10);
+  } catch {
+    return [];
+  }
+}
+
+function formatMetaStatus(status: string) {
+  if (status === "receiving_events") {
+    return "Receiving events";
+  }
+
+  if (status === "webhook_verified") {
+    return "Webhook verified";
+  }
+
+  if (status === "no_event_received_yet") {
+    return "No event received yet";
+  }
+
+  if (status === "configuration_detected") {
+    return "Configuration detected";
+  }
+
+  if (status === "error") {
+    return "Error";
+  }
+
+  return "Not configured";
+}
+
+function formatMetaDetail(
+  status: Awaited<ReturnType<typeof getMetaProviderStatus>>,
+  providerName: string,
+) {
+  if (!status.repositoryAvailable) {
+    return `${providerName} diagnostics could not read durable storage. Check KV/Upstash configuration.`;
+  }
+
+  if (status.status === "receiving_events") {
+    return `${providerName} webhook events have been received and are analyzed in approval-required mode.`;
+  }
+
+  if (status.status === "webhook_verified") {
+    return `${providerName} webhook verification has succeeded, but no provider message event has been received yet.`;
+  }
+
+  if (status.status === "no_event_received_yet") {
+    return `${providerName} environment variables are detected. Confirm Meta dashboard subscriptions and account/Page linkage.`;
+  }
+
+  if (status.status === "configuration_detected") {
+    return `${providerName} configuration is partially detected. Add verify token, app secret and required Meta dashboard subscriptions.`;
+  }
+
+  if (status.status === "error") {
+    return `${providerName} has a recent diagnostic error. Review the redacted integration event log.`;
+  }
+
+  return `${providerName} is not configured. Add the required Meta environment variables and dashboard subscriptions.`;
 }

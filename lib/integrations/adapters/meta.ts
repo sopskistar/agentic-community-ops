@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
   createIntegrationMessageId,
+  type CommunicationSource,
   type NormalizedCommunicationMessage,
 } from "../normalized";
 
@@ -22,7 +23,10 @@ const metaWebhookSchema = z.object({
                 mid: z.string().optional(),
                 text: z.string().optional(),
                 is_echo: z.boolean().optional(),
+                is_deleted: z.boolean().optional(),
+                is_unsupported: z.boolean().optional(),
               })
+              .passthrough()
               .optional(),
           }),
         )
@@ -33,13 +37,54 @@ const metaWebhookSchema = z.object({
 });
 
 export function normalizeMetaWebhookPayload(input: unknown) {
+  return inspectMetaWebhookPayload(input).messages;
+}
+
+export type MetaWebhookDiagnostic = {
+  provider: "meta" | "facebook" | "instagram";
+  eventType:
+    | "meta_payload_unsupported"
+    | "facebook_message_received"
+    | "instagram_message_received";
+  externalId?: string;
+  reason?: string;
+};
+
+export function inspectMetaWebhookPayload(input: unknown) {
   const payload = metaWebhookSchema.parse(input);
-  const source = payload.object === "instagram" ? "instagram" : "facebook";
+  const source = detectMetaSource(payload.object);
   const messages: NormalizedCommunicationMessage[] = [];
+  const diagnostics: MetaWebhookDiagnostic[] = [];
 
   for (const entry of payload.entry) {
+    if (!entry.messaging?.length) {
+      diagnostics.push({
+        provider: source,
+        eventType: "meta_payload_unsupported",
+        reason: entry.changes?.length ? "changes_event" : "missing_messaging",
+      });
+    }
+
     for (const event of entry.messaging ?? []) {
-      if (!event.message?.text || event.message.is_echo) {
+      if (event.message?.is_echo) {
+        diagnostics.push({
+          provider: source,
+          eventType: "meta_payload_unsupported",
+          externalId: event.message.mid,
+          reason: "message_echo",
+        });
+        continue;
+      }
+
+      if (!event.message?.text) {
+        diagnostics.push({
+          provider: source,
+          eventType: "meta_payload_unsupported",
+          externalId: event.message?.mid,
+          reason: event.message?.is_unsupported
+            ? "unsupported_message"
+            : "missing_text",
+        });
         continue;
       }
 
@@ -62,8 +107,23 @@ export function normalizeMetaWebhookPayload(input: unknown) {
           entryId: entry.id,
         },
       });
+      diagnostics.push({
+        provider: source,
+        eventType:
+          source === "instagram"
+            ? "instagram_message_received"
+            : "facebook_message_received",
+        externalId,
+      });
     }
   }
 
-  return messages;
+  return { messages, diagnostics };
+}
+
+function detectMetaSource(object: string): Extract<
+  CommunicationSource,
+  "facebook" | "instagram"
+> {
+  return object.toLowerCase() === "instagram" ? "instagram" : "facebook";
 }

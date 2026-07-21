@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-21 - Session: Gmail OAuth persistence and Meta diagnostics
+
+- What was built: Hardened Google OAuth token persistence so production selects encrypted KV/Upstash storage and refuses filesystem fallback. Added refresh-token preservation, hashed Redis keys, token-store tests, Google callback tests, Meta provider-specific normalization tests, Meta status helper tests and expanded Meta webhook diagnostics for verification, signature, unsupported payload, Facebook delivery, Instagram delivery, normalization, analysis and persistence failures.
+- Problems found: `createOAuthTokenStore()` previously always returned `DevelopmentEncryptedOAuthTokenStore`, which caused production Gmail OAuth callbacks to attempt `.agenticops/development-oauth-tokens.json.enc` writes and redirect to `google_token_error`. Meta code was ready to process supported payloads if delivered, but it lacked enough durable diagnostics to separate code defects from Meta dashboard subscription, Page linkage, Instagram linkage, app-mode and permission issues.
+- Bugs fixed: Gmail OAuth now uses encrypted durable KV/Upstash token persistence in production and preserves existing refresh tokens when Google omits a new refresh token. Meta diagnostics now persist provider-specific received/unsupported/error events without storing secrets or full private payloads.
+- Important technical decisions: Gmail remains `gmail.readonly`; no Gmail send/modify/archive/label/delete actions were added. Facebook and Instagram suggestions remain approval-required and outbound unavailable; no autonomous replies, moderation, deletes, bans, publishing, ads actions or spending actions were added.
+- Tests performed: `npm test` passed with 102 tests across 22 files; `npm run lint` passed with no warnings; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated the existing 30 static/dynamic routes. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: Meta environment-variable detection is not proof of webhook verification, Page subscription, Instagram linkage or live event receipt.
+
 ## 2026-07-20 - Session: durable integration event repository
 
 - What was built: Replaced production use of the temporary in-memory integration event log with a provider-independent event/workflow repository. Added Vercel KV/Upstash REST durability when configured, memory repository support for tests, local file fallback for development, workflow records that separate received message, analysis, suggested response/action, pending approval and execution status, and repository tests.

@@ -69,7 +69,7 @@ Current persistence:
 - Batch and report UI state is stored in browser `localStorage`.
 - There is no tenant, user, organization, webhook, message, analysis, approval, or audit-log persistence.
 - `/business` keeps analysis state in the browser only and does not persist business messages or profile changes.
-- Integration OAuth token storage is development-only encrypted local file storage under `.agenticops/`. Production requires durable encrypted storage.
+- Google OAuth token storage uses encrypted Vercel KV/Upstash REST storage in production when KV/Upstash REST variables are configured. Local filesystem token storage under `.agenticops/` is development-only and is refused in production.
 - Integration event/workflow records use a provider-independent repository. Vercel KV/Upstash REST is used for durable storage when configured; tests use memory; local development without KV falls back to `.agenticops/integration-event-store.json`.
 
 ## Communication Integrations Foundation
@@ -85,7 +85,7 @@ Implemented:
 
 Development Only:
 
-- Local encrypted OAuth token storage.
+- Encrypted OAuth token storage with KV/Upstash in production and local filesystem fallback only outside production.
 - In-memory event repository for tests and explicit local fallback.
 - Local file event repository for development without KV.
 - Webhook dedupe cache remains process-local and is not a production idempotency store.
@@ -93,11 +93,13 @@ Development Only:
 
 Planned/Future:
 
-- Production database-backed encrypted token storage.
+- Tenant-aware production token ownership and account mapping.
 - Tenant-aware integration ownership and auth.
 - Production audit repository with retention policies, search and tenant isolation.
 - Human approval queues.
 - Outbound replies and moderation actions only after explicit authorization.
+
+Meta webhook delivery still depends on external Meta dashboard setup: the callback URL must be configured as `https://agenticopsai.xyz/api/webhooks/meta`, the verify token must match `META_VERIFY_TOKEN`, Facebook Page webhook fields must be subscribed, the Page must be subscribed to the app, the Instagram professional account must be linked to the correct Page, Instagram messaging fields must be subscribed, and development-mode apps only deliver events for permitted roles/test assets until review/permissions allow broader traffic.
 
 ## Business Intelligence Dashboard MVP
 

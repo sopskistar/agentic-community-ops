@@ -9,6 +9,7 @@ export type GoogleTokenRecord = {
   expiresAt: number;
   scope: string;
   tokenType: string;
+  createdAt: string;
   connectedAt: string;
   updatedAt: string;
 };
@@ -32,7 +33,13 @@ const developmentTokenPath = path.join(
 export class DevelopmentEncryptedOAuthTokenStore implements OAuthTokenStore {
   async saveGoogleTokens(tokens: GoogleTokenRecord) {
     const records = await this.readRecords();
-    records[tokens.accountId] = tokens;
+    const existing = records[tokens.accountId];
+    records[tokens.accountId] = {
+      ...tokens,
+      refreshToken: tokens.refreshToken ?? existing?.refreshToken,
+      createdAt: existing?.createdAt ?? tokens.createdAt,
+      connectedAt: existing?.connectedAt ?? tokens.connectedAt,
+    };
     await this.writeRecords(records);
   }
 
@@ -84,6 +91,21 @@ export class DevelopmentEncryptedOAuthTokenStore implements OAuthTokenStore {
 }
 
 export function createOAuthTokenStore(): OAuthTokenStore {
+  const kvUrl =
+    process.env.KV_REST_API_URL?.trim() ||
+    process.env.UPSTASH_REDIS_REST_URL?.trim();
+  const kvToken =
+    process.env.KV_REST_API_TOKEN?.trim() ||
+    process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
+
+  if (kvUrl && kvToken) {
+    return new UpstashOAuthTokenStore({ baseUrl: kvUrl, token: kvToken });
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Durable OAuth token storage is not configured.");
+  }
+
   return new DevelopmentEncryptedOAuthTokenStore();
 }
 
@@ -125,4 +147,91 @@ function decrypt(value: string) {
     decipher.update(ciphertext),
     decipher.final(),
   ]).toString("utf8");
+}
+
+export class UpstashOAuthTokenStore implements OAuthTokenStore {
+  private readonly baseUrl: string;
+  private readonly token: string;
+
+  constructor({ baseUrl, token }: { baseUrl: string; token: string }) {
+    this.baseUrl = baseUrl.replace(/\/$/, "");
+    this.token = token;
+  }
+
+  async saveGoogleTokens(tokens: GoogleTokenRecord) {
+    const existing = await this.getGoogleTokens(tokens.accountId);
+    const now = new Date().toISOString();
+    const record: GoogleTokenRecord = {
+      ...tokens,
+      refreshToken: tokens.refreshToken ?? existing?.refreshToken,
+      createdAt: existing?.createdAt ?? tokens.createdAt ?? now,
+      connectedAt: existing?.connectedAt ?? tokens.connectedAt ?? now,
+      updatedAt: tokens.updatedAt ?? now,
+    };
+
+    await this.command([
+      "SET",
+      this.googleTokenKey(tokens.accountId),
+      encrypt(JSON.stringify(record)),
+    ]);
+  }
+
+  async getGoogleTokens(accountId: string) {
+    const result = await this.command(["GET", this.googleTokenKey(accountId)]);
+    return typeof result === "string"
+      ? (JSON.parse(decrypt(result)) as GoogleTokenRecord)
+      : null;
+  }
+
+  async updateGoogleTokens(
+    accountId: string,
+    tokens: Partial<GoogleTokenRecord>,
+  ) {
+    const existing = await this.getGoogleTokens(accountId);
+
+    if (!existing) {
+      throw new Error("Google token record was not found.");
+    }
+
+    await this.saveGoogleTokens({
+      ...existing,
+      ...tokens,
+      refreshToken: tokens.refreshToken ?? existing.refreshToken,
+      updatedAt: new Date().toISOString(),
+    });
+  }
+
+  async deleteGoogleTokens(accountId: string) {
+    await this.command(["DEL", this.googleTokenKey(accountId)]);
+  }
+
+  private googleTokenKey(accountId: string) {
+    const hashedConnectionId = createHash("sha256")
+      .update(`google:${accountId}`)
+      .digest("hex")
+      .slice(0, 32);
+    return `agenticops:oauth:google:${hashedConnectionId}`;
+  }
+
+  private async command(args: string[]) {
+    const response = await fetch(this.baseUrl, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${this.token}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(args),
+    });
+
+    if (!response.ok) {
+      throw new Error(`OAuth token store returned ${response.status}`);
+    }
+
+    const payload = (await response.json()) as { result?: unknown; error?: string };
+    if (payload.error) {
+      throw new Error("OAuth token store command failed.");
+    }
+
+    return payload.result;
+  }
 }

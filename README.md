@@ -122,7 +122,7 @@ Set these in the deployment platform environment. Do not commit `.env.local`.
 - `NEXT_PUBLIC_APP_URL`: public deployed app URL used for callback display, for example `https://YOUR_DEPLOYMENT_URL`.
 - `APP_BASE_URL`: server-side base URL used by workers, for example `https://YOUR_DEPLOYMENT_URL`.
 - `INTERNAL_INTEGRATION_SECRET`: shared secret for the Discord worker to call server-side processing.
-- `OAUTH_TOKEN_ENCRYPTION_KEY`: required for development encrypted OAuth token storage.
+- `OAUTH_TOKEN_ENCRYPTION_KEY`: required for encrypted Google OAuth token storage in both production KV and local development fallback.
 - `INTEGRATION_EVENT_REPOSITORY`: optional; set to `memory` only for tests or explicit local fallback.
 - `KV_REST_API_URL`, `KV_REST_API_TOKEN`: recommended durable Vercel KV/Upstash REST storage for integration events and workflow records.
 - `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`: supported aliases for the same durable integration event repository.
@@ -148,7 +148,7 @@ Implemented foundation:
 
 Development-only limitations:
 
-- OAuth tokens are stored with encrypted local file storage under `.agenticops/`; production must replace this with durable encrypted database or secret storage.
+- Google OAuth tokens are encrypted before storage. Production uses Vercel KV/Upstash REST when `KV_REST_API_URL` plus `KV_REST_API_TOKEN` or the equivalent Upstash variables are configured. Filesystem OAuth token storage under `.agenticops/` is local-development only and is refused in production.
 - Integration events and workflow records use Vercel KV/Upstash REST when configured. Tests use an in-memory repository, and local development without KV falls back to `.agenticops/integration-event-store.json`. The local file fallback is not suitable for Vercel production durability.
 - Discord requires a persistent worker runtime such as Render, Railway, Fly.io or a VM. Do not run the Gateway worker inside a Vercel request lifecycle.
 - All external channels are analyze-only. No automatic replies, moderation, email mutation, post publishing, ad management or user actions are implemented.
@@ -176,6 +176,19 @@ npm run worker:discord
 ```
 
 The worker requires `DISCORD_BOT_TOKEN`, `APP_BASE_URL` and `INTERNAL_INTEGRATION_SECRET`. The bot needs Guilds, Guild Messages and Message Content intent access where permitted.
+
+Meta dashboard setup that code cannot perform automatically:
+
+- Configure callback URL: `https://agenticopsai.xyz/api/webhooks/meta`.
+- Enter the exact deployed `META_VERIFY_TOKEN`.
+- Subscribe the app to the required Facebook Page Messenger webhook fields.
+- Ensure the Facebook Page is subscribed to the app.
+- Ensure the Instagram professional account is linked to the correct Facebook Page.
+- Subscribe the necessary Instagram messaging webhook fields.
+- In development mode, only app roles, test users and connected test assets may generate events.
+- Public users usually require the correct Meta permissions and App Review before events are delivered.
+
+`Configuration detected` means environment variables exist. It does not prove webhook verification, Page subscription, Instagram linkage or live event delivery.
 
 ## Storage Limitations
 

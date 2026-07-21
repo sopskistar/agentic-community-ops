@@ -51,7 +51,13 @@ export async function getGmailConnectionStatus(): Promise<GmailConnectionStatus>
     return { status: "not_configured" };
   }
 
-  const tokens = await createOAuthTokenStore().getGoogleTokens(googleAccountId);
+  let tokens;
+  try {
+    tokens = await createOAuthTokenStore().getGoogleTokens(googleAccountId);
+  } catch {
+    return { status: "not_configured" };
+  }
+
   if (!tokens) {
     return { status: "not_connected" };
   }
