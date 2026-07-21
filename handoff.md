@@ -16,6 +16,8 @@ On 2026-07-20, a secure communication integrations foundation was added for Goog
 
 On 2026-07-21, Gmail OAuth token persistence was hardened so production uses encrypted KV/Upstash storage and refuses filesystem fallback. Meta webhook diagnostics were expanded to distinguish verification, signature failure, unsupported payloads, Facebook messages, Instagram messages, normalization failure, analysis failure and persistence failure. Meta delivery still depends on external dashboard subscription, Page subscription, Instagram/Page linkage, app mode and permissions.
 
+On 2026-07-21, Gmail readonly message sync was added. Connected Gmail users can manually sync a bounded recent inbox window through `/api/integrations/gmail/sync` or the `/integrations` Gmail card. Sync defaults to `newer_than:7d`, caps imports at 10 messages, hashes Gmail message/thread IDs, sanitizes subject/sender/recipient/preview fields, persists redacted received/analysis/completed diagnostics, stores approval-required suggestions, and leaves Gmail outbound execution unavailable.
+
 # Current Blockers
 
 Repository blockers for Stages 1-4: no durable multi-tenant persistence for projects/users, no authentication or tenant boundary, existing Web3 API routes are not yet internally mapped to the `lib/messages` model, no file ingestion, no approval workflow UI, no production audit-log search/retention policy, no outbound-send authorization layer, and no tenant ownership for connected provider accounts. Existing external blockers remain: provider callback/webhook configuration, Meta Page and Instagram subscriptions/linkage, provider app review where required, and ASP registration submission.
@@ -78,6 +80,7 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 - `lib/integrations/adapters/`: Gmail, Meta, Telegram and Discord adapters that keep provider-specific parsing outside the core analysis engine.
 - `lib/integrations/oauth/`: Google OAuth URL generation, callback token exchange, access-token refresh and a development-only encrypted token-store abstraction.
 - `lib/integrations/google/gmail-service.ts`: Gmail readonly listing and manual analyze-only normalization.
+- `/api/integrations/gmail/sync`: manual bounded Gmail readonly sync endpoint that persists redacted integration events and approval-required workflows.
 - `lib/integrations/dedupe.ts` and `lib/integrations/event-log.ts`: webhook deduplication plus redacted provider-independent event/workflow storage with KV durability when configured, memory tests and local development fallback.
 - `/api/integrations/google/auth` and `/api/integrations/google/callback`: Google OAuth start/callback using Gmail readonly scope and HTTP-only state cookies.
 - `/api/integrations/gmail/messages`: server-only recent Gmail listing and manual analyze-only endpoint.
@@ -204,11 +207,20 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 - `/business` supports TXT upload only; PDF, DOCX, CSV and Excel are visible Coming Soon placeholders.
 - No real Discord, Telegram, email, website live chat, Facebook Pages or Instagram Business integration is connected.
 - Google/Gmail, Meta, Telegram and Discord now have integration foundations, but they require real environment configuration and provider setup before processing live events. They remain analyze-only and development-limited until durable storage, tenant ownership and approval workflows are added.
+- Gmail sync uses `gmail.readonly` only. It does not download attachments, store full email bodies, create drafts, send email, archive, label, delete or modify mailbox state.
 - No human approval queue, automation rules, outbound channel send layer or immutable audit log exists yet.
 - `/business` implements a local paste/TXT Business Intelligence Dashboard MVP; broader homepage roadmap items such as Email, PDF, Word, CSV, Excel, customer support tickets, live chat, Facebook messages and Instagram messages are not implemented yet.
 - Communication Contexts and platform architecture sections are explanatory roadmap illustrations, not connected capabilities.
 
 # Latest Verification
+
+- Date: 2026-07-21
+- Gmail readonly sync completed.
+- `npm test`: passed with 111 tests across 24 files.
+- `npm run lint`: passed.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed and generated 31 static/dynamic routes, including `/api/integrations/gmail/sync`.
+- Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured.
 
 - Date: 2026-07-21
 - Gmail OAuth persistence and Meta diagnostics completed.

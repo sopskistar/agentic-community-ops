@@ -1,5 +1,7 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
+import { GmailSyncButton } from "./gmail-sync-button";
 import { getGmailConnectionStatus } from "../../lib/integrations/google/gmail-service";
 import {
   listIntegrationEventLogEntries,
@@ -29,6 +31,7 @@ export default async function IntegrationsPage({
   const instagramStatus = await getMetaProviderStatus("instagram");
   const eventLog = await safeListIntegrationEventLogEntries();
   const workflows = await safeListIntegrationWorkflowRecords();
+  const gmailStats = getGmailEventStats(eventLog);
 
   return (
     <main className="app-bg min-h-screen text-slate-950">
@@ -55,9 +58,12 @@ export default async function IntegrationsPage({
           <IntegrationCard
             name="Gmail"
             status={formatGmailStatus(gmailStatus.status)}
-            detail="Uses gmail.readonly only. No email send, archive, label or delete actions are implemented."
+            detail={`Readonly sync and analysis only. Last successful sync: ${gmailStats.lastSync ?? "never"}. Last event: ${gmailStats.lastReceived ?? "none"}. Latest imported: ${gmailStats.latestImported}.`}
             actionHref="/api/integrations/google/auth"
             actionLabel="Connect Gmail"
+            actionElement={
+              gmailStatus.status === "connected" ? <GmailSyncButton /> : undefined
+            }
           />
           <IntegrationCard
             name="Facebook Messenger"
@@ -186,12 +192,14 @@ function IntegrationCard({
   detail,
   actionHref,
   actionLabel,
+  actionElement,
 }: {
   name: string;
   status: string;
   detail: string;
   actionHref?: string;
   actionLabel?: string;
+  actionElement?: ReactNode;
 }) {
   return (
     <article className="interactive-card flex min-h-56 flex-col p-5">
@@ -207,6 +215,7 @@ function IntegrationCard({
           {actionLabel}
         </Link>
       ) : null}
+      {actionElement}
     </article>
   );
 }
@@ -313,4 +322,37 @@ function formatMetaDetail(
   }
 
   return `${providerName} is not configured. Add the required Meta environment variables and dashboard subscriptions.`;
+}
+
+function getGmailEventStats(
+  eventLog: Awaited<ReturnType<typeof listIntegrationEventLogEntries>>,
+) {
+  const latestSync = eventLog.find(
+    (event) =>
+      event.provider === "gmail" &&
+      event.eventType === "gmail_sync_completed" &&
+      event.analysisStatus === "completed",
+  );
+  const latestStart = eventLog.find(
+    (event) => event.provider === "gmail" && event.eventType === "gmail_sync_started",
+  );
+  const latestReceived = eventLog.find(
+    (event) => event.provider === "gmail" && event.eventType === "gmail_message_received",
+  );
+  const latestImported =
+    latestStart && latestSync
+      ? eventLog.filter(
+          (event) =>
+            event.provider === "gmail" &&
+            event.eventType === "gmail_analysis_completed" &&
+            event.timestamp >= latestStart.timestamp &&
+            event.timestamp <= latestSync.timestamp,
+        ).length
+      : 0;
+
+  return {
+    lastSync: latestSync?.timestamp,
+    lastReceived: latestReceived?.timestamp,
+    latestImported,
+  };
 }

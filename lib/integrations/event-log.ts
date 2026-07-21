@@ -121,6 +121,10 @@ export async function listIntegrationWorkflowRecords(limit = 25) {
   return getIntegrationEventRepository().listWorkflows(limit);
 }
 
+export async function getIntegrationWorkflowRecord(id: string) {
+  return getIntegrationEventRepository().getWorkflow(id);
+}
+
 export function getIntegrationEventRepository() {
   if (repositoryOverride) {
     return repositoryOverride;

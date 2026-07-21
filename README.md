@@ -139,6 +139,7 @@ Implemented foundation:
 
 - Google OAuth start and callback routes at `/api/integrations/google/auth` and `/api/integrations/google/callback`.
 - Gmail readonly inbox listing and manual analyze-only processing at `/integrations/gmail`.
+- Gmail manual sync at `/api/integrations/gmail/sync` imports a bounded recent inbox window for analysis.
 - Meta webhook verification and signed webhook receiver at `/api/webhooks/meta`.
 - Telegram webhook receiver at `/api/webhooks/telegram`.
 - Discord Gateway worker entry point at `workers/discord-bot.mjs`.
@@ -176,6 +177,18 @@ npm run worker:discord
 ```
 
 The worker requires `DISCORD_BOT_TOKEN`, `APP_BASE_URL` and `INTERNAL_INTEGRATION_SECRET`. The bot needs Guilds, Guild Messages and Message Content intent access where permitted.
+
+Gmail readonly sync:
+
+- The Google OAuth flow requests only `https://www.googleapis.com/auth/gmail.readonly`.
+- OAuth tokens are encrypted before KV/Upstash persistence and are never returned to the browser.
+- Manual sync defaults to `newer_than:7d` and caps `maxResults` at 10 messages.
+- Sync retrieves Gmail metadata plus the safe Gmail snippet only; it does not store raw MIME, full HTML bodies, attachments or authorization headers.
+- Gmail message IDs and thread IDs are hashed before persistence.
+- Sender, recipient, subject and preview values are sanitized and previews are length-limited.
+- Persisted Gmail workflows keep suggested responses approval-required and mark outbound execution unavailable.
+- Duplicate syncs skip messages that already have a persisted workflow record.
+- Future `gmail.send`, `gmail.modify`, drafts, labels, archive and delete capabilities remain planned only and are not requested or implemented.
 
 Meta dashboard setup that code cannot perform automatically:
 

@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-21 - Session: Gmail readonly message sync
+
+- What was built: Added secure manual Gmail readonly sync through `/api/integrations/gmail/sync` and the `/integrations` Gmail card. Sync reads encrypted durable Google OAuth tokens, refreshes expired access tokens, imports a bounded recent inbox window, hashes Gmail message/thread IDs, sanitizes sender/recipient/subject/previews, deduplicates against persisted workflow IDs, persists received/analysis/completed diagnostics, and stores approval-required suggestions with Gmail outbound execution unavailable.
+- Problems found: Gmail could list/analyze selected messages but lacked a controlled sync endpoint and durable dedupe lifecycle for mailbox imports.
+- Bugs fixed: None in Telegram or Meta behavior. Telegram ingestion and durable event persistence were not changed.
+- Important technical decisions: Gmail remains `gmail.readonly`; sync defaults to `newer_than:7d` and caps imports at 10. No raw MIME, attachments, full HTML bodies, drafts, sends, archive, labels, deletes or mailbox modification were added.
+- Tests performed: `npm test` passed with 111 tests across 24 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 31 static/dynamic routes, including `/api/integrations/gmail/sync`. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: Gmail ingestion should persist only sanitized previews and hashed provider identifiers by default; full bodies and attachments require separate approval and controls.
+
 ## 2026-07-21 - Session: Gmail OAuth persistence and Meta diagnostics
 
 - What was built: Hardened Google OAuth token persistence so production selects encrypted KV/Upstash storage and refuses filesystem fallback. Added refresh-token preservation, hashed Redis keys, token-store tests, Google callback tests, Meta provider-specific normalization tests, Meta status helper tests and expanded Meta webhook diagnostics for verification, signature, unsupported payload, Facebook delivery, Instagram delivery, normalization, analysis and persistence failures.
