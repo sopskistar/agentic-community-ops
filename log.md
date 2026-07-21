@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-21 - Session: Discord Railway worker preparation
+
+- What was built: Updated Discord Gateway deployment guidance for Railway while preserving the existing persistent worker architecture. Railway runs only `npm run discord:worker`, posts normalized Discord events and heartbeats to the Vercel internal endpoint, and does not host the website or require Google, Meta, Telegram, OpenRouter, KV or Upstash credentials.
+- Problems found: The implementation was already suitable for a persistent worker, but operator-facing documentation and `/integrations` copy still referenced Render.
+- Bugs fixed: Discord integration status copy now points operators to Railway worker logs and Railway environment variables.
+- Important technical decisions: `APP_BASE_URL` remains `https://agenticopsai.xyz`; Railway and Vercel must share the same `INTERNAL_INTEGRATION_SECRET`; Railway requires no public domain, database or persistent volume for this worker.
+- Tests performed: `npm test` passed with 144 tests across 27 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and kept `/api/integrations/messages` and `/integrations` dynamic. Railway-style `npm run discord:worker -- --validate` passed without connecting to Discord. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: The worker platform is Railway for production Discord Gateway hosting; Vercel remains the web/API/webhook host.
+
 ## 2026-07-21 - Session: Discord Render worker preparation
 
 - What was built: Prepared the Discord Gateway worker for Render Background Worker deployment. Added the `npm run discord:worker` production script, validate-only mode, required Gateway intents only, hashed Discord identifiers, local duplicate filtering, heartbeat delivery to the Vercel internal endpoint, sanitized worker diagnostics and graceful SIGTERM/SIGINT shutdown.

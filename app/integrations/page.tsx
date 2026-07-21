@@ -358,22 +358,22 @@ function formatDiscordDetail(
   }
 
   if (status.status === "worker_stale") {
-    return `Discord worker heartbeat is stale. Check the Render background worker logs. ${activity}`;
+    return `Discord worker heartbeat is stale. Check the Railway worker logs. ${activity}`;
   }
 
   if (status.status === "worker_never_seen") {
-    return `Discord configuration is detected, but no worker heartbeat has been recorded. Start the Render background worker. ${activity}`;
+    return `Discord configuration is detected, but no worker heartbeat has been recorded. Start the Railway worker. ${activity}`;
   }
 
   if (status.status === "configuration_detected") {
-    return `Discord configuration is partially detected. Render must run the persistent worker; Vercel remains the web/API host. ${activity}`;
+    return `Discord configuration is partially detected. Railway must run the persistent worker; Vercel remains the web/API host. ${activity}`;
   }
 
   if (status.status === "error") {
-    return `Discord has a recent diagnostic error. Review the redacted event log and Render logs. ${activity}`;
+    return `Discord has a recent diagnostic error. Review the redacted event log and Railway logs. ${activity}`;
   }
 
-  return "Discord is not configured. Add worker environment variables in Render before starting the Gateway worker.";
+  return "Discord is not configured. Add worker environment variables in Railway before starting the Gateway worker.";
 }
 
 function getGmailEventStats(

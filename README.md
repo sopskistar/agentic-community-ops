@@ -152,7 +152,7 @@ Development-only limitations:
 
 - Google OAuth tokens are encrypted before storage. Production uses Vercel KV/Upstash REST when `KV_REST_API_URL` plus `KV_REST_API_TOKEN` or the equivalent Upstash variables are configured. Filesystem OAuth token storage under `.agenticops/` is local-development only and is refused in production.
 - Integration events and workflow records use Vercel KV/Upstash REST when configured. Tests use an in-memory repository, and local development without KV falls back to `.agenticops/integration-event-store.json`. The local file fallback is not suitable for Vercel production durability.
-- Discord requires a persistent worker runtime such as Render, Railway, Fly.io or a VM. Do not run the Gateway worker inside a Vercel request lifecycle.
+- Discord requires a persistent worker runtime such as Railway, Render, Fly.io or a VM. Do not run the Gateway worker inside a Vercel request lifecycle.
 - All external channels are analyze-only. No automatic replies, moderation, email mutation, post publishing, ad management or user actions are implemented.
 - Suggested replies and actions are stored as pending human-approval workflow records. Execution remains unavailable until provider permissions, tenant ownership and explicit approval workflows are implemented.
 
@@ -179,25 +179,27 @@ npm run discord:worker
 
 The worker requires `DISCORD_BOT_TOKEN`, `APP_BASE_URL` and `INTERNAL_INTEGRATION_SECRET`. `APP_BASE_URL` must point at the Vercel web/API deployment, for example `https://agenticopsai.xyz`. The bot uses only the Guilds, Guild Messages and Message Content Gateway intents. Enable the Message Content privileged intent in the Discord Developer Portal for the bot application. Do not enable Presence intent; Guild Members is not required by the current worker.
 
-Render Discord worker deployment:
+Railway Discord worker deployment:
 
-- Service type: Background Worker.
+- Platform: Railway.
+- Source: this GitHub repository.
 - Repository: this GitHub repository.
 - Branch: `main`.
-- Runtime: Node.
 - Build command: `npm ci`.
 - Start command: `npm run discord:worker`.
-- Required Render environment variables:
+- Required Railway environment variables:
   - `DISCORD_BOT_TOKEN`
   - `DISCORD_APPLICATION_ID`
   - `INTERNAL_INTEGRATION_SECRET`
   - `APP_BASE_URL=https://agenticopsai.xyz`
-- No Google, Meta, Telegram, OpenRouter, KV or Upstash credentials are required in Render when the worker only posts authenticated normalized messages and heartbeats to Vercel.
+  - `NODE_ENV=production`
+- No Google, Meta, Telegram, OpenRouter, KV or Upstash credentials are required in Railway when the worker only posts authenticated normalized messages and heartbeats to Vercel.
 - Vercel remains the website and API host. Upstash/Vercel KV remains the durable event and workflow store.
-- No persistent Render disk is required.
-- View runtime logs in the Render service Logs tab. Expected sanitized events include `discord_worker_starting`, `discord_gateway_ready`, `discord_message_received`, `discord_internal_api_success`, `discord_gateway_reconnecting` and `discord_worker_shutdown`.
+- No Railway public domain, database or persistent volume is required.
+- Automatic GitHub deployments may be enabled for the Railway service after the start command and environment variables are set.
+- View runtime logs in the Railway service Logs tab. Expected sanitized events include `discord_worker_starting`, `discord_gateway_ready`, `discord_message_received`, `discord_internal_api_success`, `discord_gateway_reconnecting` and `discord_worker_shutdown`.
 - Test locally without connecting to Discord by running `npm run discord:worker -- --validate` with the required environment variables present.
-- Test production flow by starting the Render worker, sending a normal text message in the installed Discord test server, then checking `/integrations` for a recent Discord worker heartbeat, message count, processing success and approval-required workflow record.
+- Test production flow by starting the Railway worker, sending a normal text message in the installed Discord test server, then checking `/integrations` for a recent Discord worker heartbeat, message count, processing success and approval-required workflow record.
 
 Gmail readonly sync:
 

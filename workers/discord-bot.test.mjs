@@ -11,7 +11,7 @@ import {
   submitNormalizedMessage,
 } from "./discord-bot.mjs";
 
-describe("Discord Render worker helpers", () => {
+describe("Discord Railway worker helpers", () => {
   const originalConsoleLog = console.log;
 
   afterEach(() => {
