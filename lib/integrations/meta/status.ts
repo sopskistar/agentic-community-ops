@@ -1,4 +1,7 @@
-import { listIntegrationEventLogEntries } from "../event-log";
+import {
+  listIntegrationEventLogEntries,
+  type IntegrationEventLogEntry,
+} from "../event-log";
 
 export type MetaProviderStatus = {
   status:
@@ -15,6 +18,8 @@ export type MetaProviderStatus = {
   latestVerificationTime?: string;
   latestMetaEventReceived?: string;
   latestProviderEventReceived?: string;
+  messageCount: number;
+  commentCount: number;
   repositoryAvailable: boolean;
   outboundExecutionAvailable: false;
 };
@@ -30,7 +35,7 @@ export async function getMetaProviderStatus(
     process.env.META_PAGE_ACCESS_TOKEN?.trim(),
   );
 
-  let events;
+  let events: IntegrationEventLogEntry[];
   try {
     events = await listIntegrationEventLogEntries(100);
   } catch {
@@ -40,6 +45,8 @@ export async function getMetaProviderStatus(
       verifyTokenDetected,
       pageAccessTokenDetected,
       webhookRouteReachable: true,
+      messageCount: 0,
+      commentCount: 0,
       repositoryAvailable: false,
       outboundExecutionAvailable: false,
     };
@@ -54,8 +61,8 @@ export async function getMetaProviderStatus(
   const latestProviderEvent = events.find(
     (event) =>
       event.provider === provider &&
-      (event.eventType === `${provider}_message_received` ||
-        event.eventType === "message"),
+      (event.eventType === "meta_message_received" ||
+        event.eventType === "meta_comment_received"),
   );
   const latestRelevantProviderEvent = events.find(
     (event) =>
@@ -98,6 +105,16 @@ export async function getMetaProviderStatus(
       latestVerificationTime: latestVerification?.timestamp,
       latestMetaEventReceived: latestMetaEvent?.timestamp,
       latestProviderEventReceived: latestProviderEvent?.timestamp,
+      messageCount: events.filter(
+        (event) =>
+          event.provider === provider &&
+          event.eventType === "meta_message_received",
+      ).length,
+      commentCount: events.filter(
+        (event) =>
+          event.provider === provider &&
+          event.eventType === "meta_comment_received",
+      ).length,
       repositoryAvailable: true,
       outboundExecutionAvailable: false,
     };

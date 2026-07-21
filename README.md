@@ -141,6 +141,7 @@ Implemented foundation:
 - Gmail readonly inbox listing and manual analyze-only processing at `/integrations/gmail`.
 - Gmail manual sync at `/api/integrations/gmail/sync` imports a bounded recent inbox window for analysis.
 - Meta webhook verification and signed webhook receiver at `/api/webhooks/meta`.
+- Meta event ingestion supports Facebook Messenger DMs, Instagram Direct Messages, Facebook Page comments, Instagram comments, message reactions, postbacks and mention-style webhook changes when Meta delivers supported payloads.
 - Telegram webhook receiver at `/api/webhooks/telegram`.
 - Discord Gateway worker entry point at `workers/discord-bot.mjs`.
 - Integration status page at `/integrations`.
@@ -202,6 +203,13 @@ Meta dashboard setup that code cannot perform automatically:
 - Public users usually require the correct Meta permissions and App Review before events are delivered.
 
 `Configuration detected` means environment variables exist. It does not prove webhook verification, Page subscription, Instagram linkage or live event delivery.
+
+Meta ingestion privacy and diagnostics:
+
+- Meta sender, recipient, message, comment, post and media identifiers are hashed before persistence.
+- Supported Meta events are normalized into provider `facebook` or `instagram` with channel metadata such as `messenger`, `instagram`, `facebook_comment` or `instagram_comment`.
+- Durable diagnostics use redacted categories such as `meta_message_received`, `meta_comment_received`, `meta_analysis_started`, `meta_analysis_completed`, `meta_suggested`, `meta_failed` and `meta_payload_unsupported`.
+- Facebook and Instagram suggested replies remain approval-required. Agentic Ops does not send replies, hide comments, delete comments, moderate users, publish content, manage ads or spend money.
 
 ## Storage Limitations
 

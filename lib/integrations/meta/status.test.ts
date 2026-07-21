@@ -38,13 +38,21 @@ describe("Meta provider status", () => {
 
     await addIntegrationEventLogEntry({
       provider: "facebook",
-      eventType: "facebook_message_received",
+      eventType: "meta_message_received",
       processingStatus: "received",
       analysisStatus: "not_started",
       externalId: "message-id",
     });
-    expect((await getMetaProviderStatus("facebook")).status).toBe(
-      "receiving_events",
-    );
+    await addIntegrationEventLogEntry({
+      provider: "facebook",
+      eventType: "meta_comment_received",
+      processingStatus: "received",
+      analysisStatus: "not_started",
+      externalId: "comment-id",
+    });
+    const status = await getMetaProviderStatus("facebook");
+    expect(status.status).toBe("receiving_events");
+    expect(status.messageCount).toBe(1);
+    expect(status.commentCount).toBe(1);
   });
 });

@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-21 - Session: complete Meta event ingestion
+
+- What was built: Expanded Meta webhook normalization to support Facebook Messenger DMs, Instagram Direct Messages, Facebook Page comments, Instagram comments, message reactions, postbacks and mention-style webhook changes. Added hashed Meta identifiers, channel metadata, production lifecycle diagnostics, richer Facebook/Instagram status details and removal of visible temporary OAuth query status banners from `/integrations`.
+- Problems found: Meta was only normalizing Messenger-style `messaging[].message.text` payloads, so Page comments and Instagram comment/change events were reported as unsupported without enough useful diagnostics.
+- Bugs fixed: Facebook and Instagram status cards now derive message/comment counts and last-event timing from durable diagnostics instead of showing only `Webhook verified`.
+- Important technical decisions: Unsupported Meta payloads are logged safely without raw payloads. Facebook and Instagram suggestions remain approval-required; no automatic replies, comment hiding/deletion, moderation, publishing, ad management or spending actions were added.
+- Tests performed: `npm test` passed with 117 tests across 24 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and kept `/integrations` dynamic so provider status reads durable events at request time. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: Meta webhook verification is separate from actual delivery; dashboard status should distinguish verified webhook configuration from provider events received.
+
 ## 2026-07-21 - Session: Gmail readonly message sync
 
 - What was built: Added secure manual Gmail readonly sync through `/api/integrations/gmail/sync` and the `/integrations` Gmail card. Sync reads encrypted durable Google OAuth tokens, refreshes expired access tokens, imports a bounded recent inbox window, hashes Gmail message/thread IDs, sanitizes sender/recipient/subject/previews, deduplicates against persisted workflow IDs, persists received/analysis/completed diagnostics, and stores approval-required suggestions with Gmail outbound execution unavailable.

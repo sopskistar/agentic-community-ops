@@ -99,17 +99,21 @@ export async function POST(request: Request) {
       if (hasSeenIntegrationEvent(message.id)) {
         await recordMetaDiagnostic({
           provider: message.source,
-          eventType: "message",
+          eventType: "meta_payload_unsupported",
           processingStatus: "ignored",
           analysisStatus: "not_started",
           externalId: message.externalId,
+          errorSummary: "duplicate_event",
         });
         continue;
       }
 
       await recordMetaDiagnostic({
         provider: message.source,
-        eventType: "message",
+        eventType:
+          message.metadata?.kind === "comment"
+            ? "meta_comment_received"
+            : "meta_message_received",
         processingStatus: "received",
         analysisStatus: "not_started",
         externalId: message.externalId,
@@ -127,7 +131,14 @@ export async function POST(request: Request) {
         await recordMetaWorkflow(result);
         await recordMetaDiagnostic({
           provider: message.source,
-          eventType: "message",
+          eventType: "meta_analysis_completed",
+          processingStatus: "processed",
+          analysisStatus: "completed",
+          externalId: message.externalId,
+        });
+        await recordMetaDiagnostic({
+          provider: message.source,
+          eventType: "meta_suggested",
           processingStatus: "processed",
           analysisStatus: "completed",
           externalId: message.externalId,
@@ -136,7 +147,7 @@ export async function POST(request: Request) {
       } catch {
         await recordMetaDiagnostic({
           provider: message.source,
-          eventType: "meta_analysis_failed",
+          eventType: "meta_failed",
           processingStatus: "error",
           analysisStatus: "failed",
           externalId: message.externalId,
@@ -191,7 +202,7 @@ async function recordMetaWorkflow(
   } catch {
     await recordMetaDiagnostic({
       provider: result.message.source,
-      eventType: "meta_event_persistence_failed",
+      eventType: "meta_failed",
       processingStatus: "error",
       analysisStatus: "failed",
       externalId: result.message.externalId,

@@ -89,9 +89,10 @@ describe("Meta webhook route", () => {
     const events = await listIntegrationEventLogEntries();
     expect(events.map((event) => event.eventType)).toEqual(
       expect.arrayContaining([
-        "facebook_message_received",
+        "meta_message_received",
         "meta_analysis_started",
-        "message",
+        "meta_analysis_completed",
+        "meta_suggested",
       ]),
     );
     const workflows = await listIntegrationWorkflowRecords();
@@ -116,8 +117,80 @@ describe("Meta webhook route", () => {
     const events = await listIntegrationEventLogEntries();
     expect(events.some((event) => event.provider === "instagram")).toBe(true);
     expect(events.map((event) => event.eventType)).toContain(
-      "instagram_message_received",
+      "meta_message_received",
     );
+  });
+
+  it("persists Facebook comment lifecycle and workflow", async () => {
+    process.env.META_APP_SECRET = "app-secret";
+    setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
+    const body = JSON.stringify(createFacebookCommentPayload("comment-1"));
+    const response = await POST(
+      new Request("http://localhost/api/webhooks/meta", {
+        method: "POST",
+        headers: { "x-hub-signature-256": sign(body) },
+        body,
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const events = await listIntegrationEventLogEntries();
+    expect(events.map((event) => event.eventType)).toEqual(
+      expect.arrayContaining([
+        "meta_comment_received",
+        "meta_analysis_started",
+        "meta_analysis_completed",
+        "meta_suggested",
+      ]),
+    );
+    const workflows = await listIntegrationWorkflowRecords();
+    expect(workflows[0].provider).toBe("facebook");
+    expect(workflows[0].receivedMessage.channelId).toBe("facebook_comment");
+    expect(workflows[0].suggestion?.requiresHumanApproval).toBe(true);
+  });
+
+  it("persists Instagram comment lifecycle", async () => {
+    process.env.META_APP_SECRET = "app-secret";
+    setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
+    const body = JSON.stringify(createInstagramCommentPayload("ig-comment-1"));
+    const response = await POST(
+      new Request("http://localhost/api/webhooks/meta", {
+        method: "POST",
+        headers: { "x-hub-signature-256": sign(body) },
+        body,
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const workflows = await listIntegrationWorkflowRecords();
+    expect(workflows[0].provider).toBe("instagram");
+    expect(workflows[0].receivedMessage.channelId).toBe("instagram_comment");
+  });
+
+  it("deduplicates Meta events without creating duplicate workflows", async () => {
+    process.env.META_APP_SECRET = "app-secret";
+    setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
+    const body = JSON.stringify(createMetaPayload("page", "duplicate-mid"));
+    const request = () =>
+      new Request("http://localhost/api/webhooks/meta", {
+        method: "POST",
+        headers: { "x-hub-signature-256": sign(body) },
+        body,
+      });
+
+    expect((await POST(request())).status).toBe(200);
+    expect((await POST(request())).status).toBe(200);
+
+    const workflows = await listIntegrationWorkflowRecords();
+    expect(workflows).toHaveLength(1);
+    const events = await listIntegrationEventLogEntries();
+    expect(
+      events.some(
+        (event) =>
+          event.eventType === "meta_payload_unsupported" &&
+          event.processingStatus === "ignored",
+      ),
+    ).toBe(true);
   });
 
   it("records unsupported payloads without storing private message text", async () => {
@@ -183,6 +256,51 @@ function createMetaPayload(object: "page" | "instagram", messageId: string) {
             recipient: { id: object === "instagram" ? "ig-1" : "page-1" },
             timestamp: 1,
             message: { mid: messageId, text: "Hello Meta" },
+          },
+        ],
+      },
+    ],
+  };
+}
+
+function createFacebookCommentPayload(commentId: string) {
+  return {
+    object: "page",
+    entry: [
+      {
+        id: "page-1",
+        changes: [
+          {
+            field: "feed",
+            value: {
+              item: "comment",
+              comment_id: commentId,
+              post_id: "post-1",
+              sender_id: "sender-1",
+              message: "A Facebook page comment",
+            },
+          },
+        ],
+      },
+    ],
+  };
+}
+
+function createInstagramCommentPayload(commentId: string) {
+  return {
+    object: "instagram",
+    entry: [
+      {
+        id: "ig-1",
+        changes: [
+          {
+            field: "comments",
+            value: {
+              id: commentId,
+              media_id: "media-1",
+              from: { id: "ig-user-1" },
+              text: "An Instagram comment",
+            },
           },
         ],
       },

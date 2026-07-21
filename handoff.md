@@ -18,6 +18,8 @@ On 2026-07-21, Gmail OAuth token persistence was hardened so production uses enc
 
 On 2026-07-21, Gmail readonly message sync was added. Connected Gmail users can manually sync a bounded recent inbox window through `/api/integrations/gmail/sync` or the `/integrations` Gmail card. Sync defaults to `newer_than:7d`, caps imports at 10 messages, hashes Gmail message/thread IDs, sanitizes subject/sender/recipient/preview fields, persists redacted received/analysis/completed diagnostics, stores approval-required suggestions, and leaves Gmail outbound execution unavailable.
 
+On 2026-07-21, Meta event ingestion was completed for supported Facebook Messenger DMs, Instagram Direct Messages, Facebook Page comments, Instagram comments, message reactions, postbacks and mention-style webhook changes. Meta provider identifiers are hashed before persistence, status cards show durable event activity instead of temporary OAuth query strings, and unsupported payloads are logged safely as diagnostics.
+
 # Current Blockers
 
 Repository blockers for Stages 1-4: no durable multi-tenant persistence for projects/users, no authentication or tenant boundary, existing Web3 API routes are not yet internally mapped to the `lib/messages` model, no file ingestion, no approval workflow UI, no production audit-log search/retention policy, no outbound-send authorization layer, and no tenant ownership for connected provider accounts. Existing external blockers remain: provider callback/webhook configuration, Meta Page and Instagram subscriptions/linkage, provider app review where required, and ASP registration submission.
@@ -85,6 +87,7 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 - `/api/integrations/google/auth` and `/api/integrations/google/callback`: Google OAuth start/callback using Gmail readonly scope and HTTP-only state cookies.
 - `/api/integrations/gmail/messages`: server-only recent Gmail listing and manual analyze-only endpoint.
 - `/api/webhooks/meta`: Meta GET verification and POST receiver with signature validation when `META_APP_SECRET` is configured.
+- Meta normalized events include provider `facebook` or `instagram` plus channel metadata for `messenger`, `instagram`, `facebook_comment` and `instagram_comment`.
 - `/api/webhooks/telegram`: Telegram POST receiver with webhook-secret validation when `TELEGRAM_WEBHOOK_SECRET` is configured.
 - `/api/integrations/messages`: internal protected processing endpoint for worker-based integrations.
 - `workers/discord-bot.mjs`: Discord Gateway worker for persistent runtimes; not suitable for Vercel request lifecycles.
@@ -208,11 +211,20 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 - No real Discord, Telegram, email, website live chat, Facebook Pages or Instagram Business integration is connected.
 - Google/Gmail, Meta, Telegram and Discord now have integration foundations, but they require real environment configuration and provider setup before processing live events. They remain analyze-only and development-limited until durable storage, tenant ownership and approval workflows are added.
 - Gmail sync uses `gmail.readonly` only. It does not download attachments, store full email bodies, create drafts, send email, archive, label, delete or modify mailbox state.
+- Meta integrations do not send replies, hide/delete comments, moderate users, publish content, manage ads or spend money. Suggested responses remain approval-required.
 - No human approval queue, automation rules, outbound channel send layer or immutable audit log exists yet.
 - `/business` implements a local paste/TXT Business Intelligence Dashboard MVP; broader homepage roadmap items such as Email, PDF, Word, CSV, Excel, customer support tickets, live chat, Facebook messages and Instagram messages are not implemented yet.
 - Communication Contexts and platform architecture sections are explanatory roadmap illustrations, not connected capabilities.
 
 # Latest Verification
+
+- Date: 2026-07-21
+- Complete Meta event ingestion implemented.
+- `npm test`: passed with 117 tests across 24 files.
+- `npm run lint`: passed.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed and kept `/integrations` dynamic.
+- Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured.
 
 - Date: 2026-07-21
 - Gmail readonly sync completed.

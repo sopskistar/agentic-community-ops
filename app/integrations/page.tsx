@@ -20,12 +20,9 @@ export const metadata = {
     "Integration status and setup notes for Agentic Ops communication channels.",
 };
 
-export default async function IntegrationsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ status?: string }>;
-}) {
-  const params = await searchParams;
+export const dynamic = "force-dynamic";
+
+export default async function IntegrationsPage() {
   const gmailStatus = await getGmailConnectionStatus();
   const facebookStatus = await getMetaProviderStatus("facebook");
   const instagramStatus = await getMetaProviderStatus("instagram");
@@ -47,11 +44,6 @@ export default async function IntegrationsPage({
             send replies, moderate users, modify email, manage ads or publish
             content in this phase.
           </p>
-          {params.status ? (
-            <p className="mt-5 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
-              Integration status: {params.status}
-            </p>
-          ) : null}
         </section>
 
         <section className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -271,7 +263,7 @@ async function safeListIntegrationWorkflowRecords() {
 
 function formatMetaStatus(status: string) {
   if (status === "receiving_events") {
-    return "Receiving events";
+    return "Connected";
   }
 
   if (status === "webhook_verified") {
@@ -297,20 +289,22 @@ function formatMetaDetail(
   status: Awaited<ReturnType<typeof getMetaProviderStatus>>,
   providerName: string,
 ) {
+  const activity = `Last event: ${status.latestProviderEventReceived ?? status.latestVerificationTime ?? "none"}. Messages: ${status.messageCount}. Comments: ${status.commentCount}.`;
+
   if (!status.repositoryAvailable) {
     return `${providerName} diagnostics could not read durable storage. Check KV/Upstash configuration.`;
   }
 
   if (status.status === "receiving_events") {
-    return `${providerName} webhook events have been received and are analyzed in approval-required mode.`;
+    return `${providerName} is receiving webhook events and analyzing them in approval-required mode. ${activity}`;
   }
 
   if (status.status === "webhook_verified") {
-    return `${providerName} webhook verification has succeeded, but no provider message event has been received yet.`;
+    return `${providerName} webhook verification has succeeded. ${activity}`;
   }
 
   if (status.status === "no_event_received_yet") {
-    return `${providerName} environment variables are detected. Confirm Meta dashboard subscriptions and account/Page linkage.`;
+    return `${providerName} environment variables are detected. Confirm Meta dashboard subscriptions and account/Page linkage. ${activity}`;
   }
 
   if (status.status === "configuration_detected") {

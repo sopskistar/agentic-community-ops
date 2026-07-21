@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { z } from "zod";
 
 import {
@@ -6,35 +7,43 @@ import {
   type NormalizedCommunicationMessage,
 } from "../normalized";
 
-const metaWebhookSchema = z.object({
-  object: z.string(),
-  entry: z.array(
-    z.object({
-      id: z.string().optional(),
-      time: z.number().optional(),
-      messaging: z
-        .array(
-          z.object({
-            sender: z.object({ id: z.string() }).optional(),
-            recipient: z.object({ id: z.string() }).optional(),
-            timestamp: z.number().optional(),
-            message: z
-              .object({
-                mid: z.string().optional(),
-                text: z.string().optional(),
-                is_echo: z.boolean().optional(),
-                is_deleted: z.boolean().optional(),
-                is_unsupported: z.boolean().optional(),
-              })
-              .passthrough()
-              .optional(),
-          }),
-        )
-        .optional(),
-      changes: z.array(z.unknown()).optional(),
-    }),
-  ),
-});
+type MetaChannel =
+  | "messenger"
+  | "instagram"
+  | "facebook_comment"
+  | "instagram_comment";
+
+type MetaNormalizedEventKind =
+  | "message"
+  | "comment"
+  | "reaction"
+  | "postback"
+  | "mention";
+
+const metaWebhookSchema = z
+  .object({
+    object: z.string(),
+    entry: z.array(
+      z
+        .object({
+          id: z.string().optional(),
+          time: z.number().optional(),
+          messaging: z.array(z.record(z.string(), z.unknown())).optional(),
+          changes: z
+            .array(
+              z
+                .object({
+                  field: z.string().optional(),
+                  value: z.record(z.string(), z.unknown()).optional(),
+                })
+                .passthrough(),
+            )
+            .optional(),
+        })
+        .passthrough(),
+    ),
+  })
+  .passthrough();
 
 export function normalizeMetaWebhookPayload(input: unknown) {
   return inspectMetaWebhookPayload(input).messages;
@@ -44,8 +53,8 @@ export type MetaWebhookDiagnostic = {
   provider: "meta" | "facebook" | "instagram";
   eventType:
     | "meta_payload_unsupported"
-    | "facebook_message_received"
-    | "instagram_message_received";
+    | "meta_message_received"
+    | "meta_comment_received";
   externalId?: string;
   reason?: string;
 };
@@ -57,68 +66,377 @@ export function inspectMetaWebhookPayload(input: unknown) {
   const diagnostics: MetaWebhookDiagnostic[] = [];
 
   for (const entry of payload.entry) {
-    if (!entry.messaging?.length) {
+    const entryMessages = entry.messaging ?? [];
+    const entryChanges = entry.changes ?? [];
+
+    if (!entryMessages.length && !entryChanges.length) {
       diagnostics.push({
         provider: source,
         eventType: "meta_payload_unsupported",
-        reason: entry.changes?.length ? "changes_event" : "missing_messaging",
+        reason: "missing_messaging_and_changes",
       });
     }
 
-    for (const event of entry.messaging ?? []) {
-      if (event.message?.is_echo) {
-        diagnostics.push({
-          provider: source,
-          eventType: "meta_payload_unsupported",
-          externalId: event.message.mid,
-          reason: "message_echo",
-        });
-        continue;
-      }
-
-      if (!event.message?.text) {
-        diagnostics.push({
-          provider: source,
-          eventType: "meta_payload_unsupported",
-          externalId: event.message?.mid,
-          reason: event.message?.is_unsupported
-            ? "unsupported_message"
-            : "missing_text",
-        });
-        continue;
-      }
-
-      const externalId =
-        event.message.mid ??
-        `${entry.id ?? "entry"}:${event.sender?.id ?? "sender"}:${event.timestamp ?? Date.now()}`;
-
-      messages.push({
-        id: createIntegrationMessageId(source, externalId),
-        externalId,
+    for (const event of entryMessages) {
+      const normalized = normalizeMessagingEvent({
+        event,
+        entryId: entry.id,
+        entryTime: entry.time,
         source,
-        channelId: entry.id,
-        conversationId: event.sender?.id,
-        senderId: event.sender?.id,
-        text: event.message.text,
-        timestamp: new Date(event.timestamp ?? entry.time ?? Date.now()).toISOString(),
-        metadata: {
-          object: payload.object,
-          recipientId: event.recipient?.id,
-          entryId: entry.id,
-        },
+        object: payload.object,
       });
+
+      if (!normalized.message) {
+        diagnostics.push({
+          provider: source,
+          eventType: "meta_payload_unsupported",
+          externalId: normalized.externalId,
+          reason: normalized.reason,
+        });
+        continue;
+      }
+
+      messages.push(normalized.message);
+      diagnostics.push({
+        provider: source,
+        eventType: "meta_message_received",
+        externalId: normalized.message.externalId,
+      });
+    }
+
+    for (const change of entryChanges) {
+      const normalized = normalizeChangeEvent({
+        change,
+        entryId: entry.id,
+        entryTime: entry.time,
+        source,
+        object: payload.object,
+      });
+
+      if (!normalized.message) {
+        diagnostics.push({
+          provider: source,
+          eventType: "meta_payload_unsupported",
+          externalId: normalized.externalId,
+          reason: normalized.reason,
+        });
+        continue;
+      }
+
+      messages.push(normalized.message);
       diagnostics.push({
         provider: source,
         eventType:
-          source === "instagram"
-            ? "instagram_message_received"
-            : "facebook_message_received",
-        externalId,
+          normalized.kind === "comment"
+            ? "meta_comment_received"
+            : "meta_message_received",
+        externalId: normalized.message.externalId,
       });
     }
   }
 
   return { messages, diagnostics };
+}
+
+function normalizeMessagingEvent({
+  event,
+  entryId,
+  entryTime,
+  source,
+  object,
+}: {
+  event: Record<string, unknown>;
+  entryId?: string;
+  entryTime?: number;
+  source: Extract<CommunicationSource, "facebook" | "instagram">;
+  object: string;
+}): NormalizedMetaEvent {
+  const sender = asRecord(event.sender);
+  const recipient = asRecord(event.recipient);
+  const timestamp = typeof event.timestamp === "number" ? event.timestamp : entryTime;
+  const message = asRecord(event.message);
+  const postback = asRecord(event.postback);
+  const reaction = asRecord(event.reaction);
+
+  if (message && message.is_echo === true) {
+    return { reason: "message_echo", externalId: hashOptional(message.mid) };
+  }
+
+  if (message) {
+    const text = sanitizeMetaText(asString(message.text));
+    if (!text) {
+      return {
+        reason: message.is_unsupported ? "unsupported_message" : "missing_text",
+        externalId: hashOptional(message.mid),
+      };
+    }
+
+    return {
+      kind: "message",
+      message: createMetaMessage({
+        source,
+        channel: source === "instagram" ? "instagram" : "messenger",
+        kind: "message",
+        rawExternalId:
+          asString(message.mid) ??
+          `${entryId ?? "entry"}:${asString(sender?.id) ?? "sender"}:${timestamp ?? Date.now()}`,
+        rawConversationId: asString(sender?.id) ?? asString(recipient?.id) ?? entryId,
+        rawSenderId: asString(sender?.id),
+        rawRecipientId: asString(recipient?.id),
+        text,
+        timestamp,
+        entryId,
+        object,
+      }),
+    };
+  }
+
+  if (postback) {
+    const payload = sanitizeMetaText(asString(postback.payload), 240);
+    const title = sanitizeMetaText(asString(postback.title), 240);
+    const text = [title, payload].filter(Boolean).join(": ");
+    if (!text) {
+      return { reason: "missing_postback_payload" };
+    }
+
+    return {
+      kind: "postback",
+      message: createMetaMessage({
+        source,
+        channel: source === "instagram" ? "instagram" : "messenger",
+        kind: "postback",
+        rawExternalId:
+          asString(postback.mid) ??
+          `${entryId ?? "entry"}:${asString(sender?.id) ?? "sender"}:postback:${timestamp ?? Date.now()}`,
+        rawConversationId: asString(sender?.id) ?? asString(recipient?.id) ?? entryId,
+        rawSenderId: asString(sender?.id),
+        rawRecipientId: asString(recipient?.id),
+        text,
+        timestamp,
+        entryId,
+        object,
+      }),
+    };
+  }
+
+  if (reaction) {
+    const action = sanitizeMetaText(asString(reaction.action), 80);
+    const emoji = sanitizeMetaText(asString(reaction.emoji), 20);
+    const text = `Message reaction${action ? ` ${action}` : ""}${emoji ? ` ${emoji}` : ""}`.trim();
+    return {
+      kind: "reaction",
+      message: createMetaMessage({
+        source,
+        channel: source === "instagram" ? "instagram" : "messenger",
+        kind: "reaction",
+        rawExternalId:
+          asString(reaction.mid) ??
+          `${entryId ?? "entry"}:${asString(sender?.id) ?? "sender"}:reaction:${timestamp ?? Date.now()}`,
+        rawConversationId: asString(sender?.id) ?? asString(recipient?.id) ?? entryId,
+        rawSenderId: asString(sender?.id),
+        rawRecipientId: asString(recipient?.id),
+        text,
+        timestamp,
+        entryId,
+        object,
+      }),
+    };
+  }
+
+  return { reason: "unsupported_messaging_event" };
+}
+
+function normalizeChangeEvent({
+  change,
+  entryId,
+  entryTime,
+  source,
+  object,
+}: {
+  change: { field?: string; value?: Record<string, unknown> };
+  entryId?: string;
+  entryTime?: number;
+  source: Extract<CommunicationSource, "facebook" | "instagram">;
+  object: string;
+}): NormalizedMetaEvent {
+  const field = change.field ?? "unknown";
+  const value = change.value ?? {};
+  const item = asString(value.item);
+  const verb = asString(value.verb);
+  const kind = detectChangeKind(field, item);
+
+  if (!kind) {
+    return {
+      reason: `unsupported_change:${field}${item ? `:${item}` : ""}`,
+      externalId: hashOptional(asString(value.id) ?? asString(value.comment_id)),
+    };
+  }
+
+  const rawExternalId =
+    asString(value.comment_id) ??
+    asString(value.id) ??
+    asString(value.message_id) ??
+    `${entryId ?? "entry"}:${field}:${asString(value.created_time) ?? entryTime ?? Date.now()}`;
+  const rawConversationId =
+    asString(value.post_id) ??
+    asString(value.media_id) ??
+    asString(value.parent_id) ??
+    entryId;
+  const rawSenderId =
+    asString(value.sender_id) ??
+    asString(asRecord(value.from)?.id) ??
+    asString(value.user_id);
+  const text = sanitizeMetaText(
+    asString(value.message) ??
+      asString(value.text) ??
+      asString(value.caption) ??
+      `${kind === "reaction" ? "Reaction" : "Mention"}${verb ? `: ${verb}` : ""}`,
+  );
+
+  if (!text) {
+    return { reason: "missing_change_text", externalId: hashOptional(rawExternalId) };
+  }
+
+  return {
+    kind,
+    message: createMetaMessage({
+      source,
+      channel: source === "instagram" ? "instagram_comment" : "facebook_comment",
+      kind,
+      rawExternalId,
+      rawConversationId,
+      rawSenderId,
+      rawRecipientId: entryId,
+      text,
+      timestamp: normalizeChangeTimestamp(value, entryTime),
+      entryId,
+      object,
+      field,
+    }),
+  };
+}
+
+function createMetaMessage({
+  source,
+  channel,
+  kind,
+  rawExternalId,
+  rawConversationId,
+  rawSenderId,
+  rawRecipientId,
+  text,
+  timestamp,
+  entryId,
+  object,
+  field,
+}: {
+  source: Extract<CommunicationSource, "facebook" | "instagram">;
+  channel: MetaChannel;
+  kind: MetaNormalizedEventKind;
+  rawExternalId: string;
+  rawConversationId?: string;
+  rawSenderId?: string;
+  rawRecipientId?: string;
+  text: string;
+  timestamp?: number | string;
+  entryId?: string;
+  object: string;
+  field?: string;
+}): NormalizedCommunicationMessage {
+  const externalId = hashMetaIdentifier(rawExternalId);
+  const conversationId = rawConversationId
+    ? hashMetaIdentifier(rawConversationId)
+    : undefined;
+  const senderId = rawSenderId ? hashMetaIdentifier(rawSenderId) : undefined;
+  const recipientId = rawRecipientId ? hashMetaIdentifier(rawRecipientId) : undefined;
+
+  return {
+    id: createIntegrationMessageId(source, externalId),
+    externalId,
+    source,
+    channelId: channel,
+    conversationId,
+    senderId,
+    text,
+    timestamp: normalizeTimestamp(timestamp),
+    metadata: {
+      provider: source,
+      channel,
+      kind,
+      object,
+      field,
+      recipientId,
+      entryId: entryId ? hashMetaIdentifier(entryId) : undefined,
+    },
+  };
+}
+
+function detectChangeKind(
+  field: string,
+  item: string | undefined,
+): MetaNormalizedEventKind | null {
+  const normalizedField = field.toLowerCase();
+  const normalizedItem = item?.toLowerCase();
+
+  if (
+    normalizedField.includes("comments") ||
+    normalizedField === "feed" && normalizedItem === "comment"
+  ) {
+    return "comment";
+  }
+
+  if (normalizedField.includes("mention")) {
+    return "mention";
+  }
+
+  if (normalizedField.includes("reaction") || normalizedItem === "reaction") {
+    return "reaction";
+  }
+
+  return null;
+}
+
+function normalizeChangeTimestamp(
+  value: Record<string, unknown>,
+  fallback?: number,
+) {
+  return (
+    asString(value.created_time) ??
+    asString(value.timestamp) ??
+    (typeof fallback === "number" ? fallback : undefined)
+  );
+}
+
+function hashMetaIdentifier(value: string) {
+  return createHash("sha256").update(`meta:${value}`).digest("hex").slice(0, 32);
+}
+
+function hashOptional(value: unknown) {
+  return typeof value === "string" ? hashMetaIdentifier(value) : undefined;
+}
+
+function sanitizeMetaText(value: string | undefined, maxLength = 1_000) {
+  return (value ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function normalizeTimestamp(value: number | string | undefined) {
+  if (typeof value === "number") {
+    return new Date(value).toISOString();
+  }
+
+  if (typeof value === "string") {
+    const parsed = Date.parse(value);
+    if (Number.isFinite(parsed)) {
+      return new Date(parsed).toISOString();
+    }
+  }
+
+  return new Date().toISOString();
 }
 
 function detectMetaSource(object: string): Extract<
@@ -127,3 +445,27 @@ function detectMetaSource(object: string): Extract<
 > {
   return object.toLowerCase() === "instagram" ? "instagram" : "facebook";
 }
+
+function asRecord(value: unknown): Record<string, unknown> | undefined {
+  return typeof value === "object" && value !== null
+    ? (value as Record<string, unknown>)
+    : undefined;
+}
+
+function asString(value: unknown) {
+  return typeof value === "string" && value.trim() ? value : undefined;
+}
+
+type NormalizedMetaEvent =
+  | {
+      kind: MetaNormalizedEventKind;
+      message: NormalizedCommunicationMessage;
+      reason?: never;
+      externalId?: never;
+    }
+  | {
+      kind?: never;
+      message?: never;
+      reason: string;
+      externalId?: string;
+    };
