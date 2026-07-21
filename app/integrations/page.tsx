@@ -1,7 +1,10 @@
 import Link from "next/link";
 
 import { getGmailConnectionStatus } from "../../lib/integrations/google/gmail-service";
-import { listIntegrationEventLogEntries } from "../../lib/integrations/event-log";
+import {
+  listIntegrationEventLogEntries,
+  listIntegrationWorkflowRecords,
+} from "../../lib/integrations/event-log";
 
 const appBaseUrl =
   process.env.NEXT_PUBLIC_APP_URL?.trim() ||
@@ -21,7 +24,8 @@ export default async function IntegrationsPage({
 }) {
   const params = await searchParams;
   const gmailStatus = await getGmailConnectionStatus();
-  const eventLog = listIntegrationEventLogEntries();
+  const eventLog = await listIntegrationEventLogEntries();
+  const workflows = await listIntegrationWorkflowRecords(10);
 
   return (
     <main className="app-bg min-h-screen text-slate-950">
@@ -88,9 +92,11 @@ export default async function IntegrationsPage({
           </div>
 
           <div className="section-card p-5 md:p-6">
-            <p className="kicker">Development Event Log</p>
+            <p className="kicker">Integration Event Log</p>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              This in-memory log is redacted and not production persistence.
+              Events are redacted. Use Vercel KV/Upstash environment variables
+              for durable production storage; otherwise local development uses a
+              file fallback.
             </p>
             <div className="mt-5 space-y-3">
               {eventLog.length === 0 ? (
@@ -113,6 +119,51 @@ export default async function IntegrationsPage({
                 ))
               )}
             </div>
+          </div>
+        </section>
+
+        <section className="section-card mt-6 p-5 md:p-6">
+          <p className="kicker">Human Approval Workflow</p>
+          <h2 className="mt-3 text-2xl font-semibold">
+            Analysis, suggestions and actions stay separated
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+            Agentic Ops stores received messages, analysis results and suggested
+            replies as separate workflow records. External execution remains
+            unavailable until provider permissions, tenant ownership and explicit
+            human approval workflows are configured.
+          </p>
+          <div className="mt-5 grid gap-3">
+            {workflows.length === 0 ? (
+              <p className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
+                No analyzed integration workflow records are available yet.
+              </p>
+            ) : (
+              workflows.map((workflow) => (
+                <article
+                  key={workflow.id}
+                  className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold text-slate-900">
+                        {workflow.provider} · {workflow.status}
+                      </p>
+                      <p className="mt-1 text-slate-600">
+                        Risk {workflow.analysis?.riskLevel ?? "pending"} ·{" "}
+                        {workflow.analysis?.intent ?? "No intent yet"}
+                      </p>
+                    </div>
+                    <span className="badge border-amber-200 bg-amber-50 text-amber-900">
+                      Approval required
+                    </span>
+                  </div>
+                  <p className="mt-3 text-slate-600">
+                    {workflow.receivedMessage.textPreview}
+                  </p>
+                </article>
+              ))
+            )}
           </div>
         </section>
 

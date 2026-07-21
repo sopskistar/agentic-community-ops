@@ -3,7 +3,10 @@ import { ZodError } from "zod";
 import { apiErrorResponse, zodIssuesToApiIssues } from "../../../../lib/api/responses";
 import { normalizeTelegramUpdate } from "../../../../lib/integrations/adapters/telegram";
 import { hasSeenIntegrationEvent } from "../../../../lib/integrations/dedupe";
-import { addIntegrationEventLogEntry } from "../../../../lib/integrations/event-log";
+import {
+  addIntegrationEventLogEntry,
+  recordIntegrationAnalysis,
+} from "../../../../lib/integrations/event-log";
 import { processNormalizedMessage } from "../../../../lib/integrations/processor";
 import { verifyTelegramSecret } from "../../../../lib/integrations/security";
 
@@ -34,7 +37,7 @@ export async function POST(request: Request) {
     const normalized = normalizeTelegramUpdate(JSON.parse(rawBody));
 
     if (!normalized) {
-      addIntegrationEventLogEntry({
+      await addIntegrationEventLogEntry({
         provider: "telegram",
         eventType: "unsupported_update",
         processingStatus: "ignored",
@@ -44,11 +47,26 @@ export async function POST(request: Request) {
     }
 
     if (hasSeenIntegrationEvent(normalized.id)) {
+      await addIntegrationEventLogEntry({
+        provider: normalized.source,
+        eventType: "message",
+        processingStatus: "ignored",
+        analysisStatus: "not_started",
+        externalId: normalized.externalId,
+      });
       return Response.json({ received: true, processed: false, duplicate: true });
     }
 
+    await addIntegrationEventLogEntry({
+      provider: normalized.source,
+      eventType: "message",
+      processingStatus: "received",
+      analysisStatus: "not_started",
+      externalId: normalized.externalId,
+    });
     const result = await processNormalizedMessage(normalized);
-    addIntegrationEventLogEntry({
+    await recordIntegrationAnalysis(result);
+    await addIntegrationEventLogEntry({
       provider: "telegram",
       eventType: "message",
       processingStatus: "processed",

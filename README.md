@@ -123,6 +123,9 @@ Set these in the deployment platform environment. Do not commit `.env.local`.
 - `APP_BASE_URL`: server-side base URL used by workers, for example `https://YOUR_DEPLOYMENT_URL`.
 - `INTERNAL_INTEGRATION_SECRET`: shared secret for the Discord worker to call server-side processing.
 - `OAUTH_TOKEN_ENCRYPTION_KEY`: required for development encrypted OAuth token storage.
+- `INTEGRATION_EVENT_REPOSITORY`: optional; set to `memory` only for tests or explicit local fallback.
+- `KV_REST_API_URL`, `KV_REST_API_TOKEN`: recommended durable Vercel KV/Upstash REST storage for integration events and workflow records.
+- `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`: supported aliases for the same durable integration event repository.
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`: Google OAuth configuration.
 - `META_APP_ID`, `META_APP_SECRET`, `META_VERIFY_TOKEN`, `META_PAGE_ACCESS_TOKEN`: Meta app/webhook configuration. Page access is reserved for future approved outbound features and is not used for auto-replies.
 - `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`: Telegram bot and webhook validation configuration.
@@ -141,13 +144,15 @@ Implemented foundation:
 - Discord Gateway worker entry point at `workers/discord-bot.mjs`.
 - Integration status page at `/integrations`.
 - Privacy Policy at `/privacy` and Data Deletion Instructions at `/data-deletion`.
+- Provider-independent integration event/workflow repository for received messages, analysis records, suggested responses, pending approval state and execution status.
 
 Development-only limitations:
 
 - OAuth tokens are stored with encrypted local file storage under `.agenticops/`; production must replace this with durable encrypted database or secret storage.
-- Integration event logs are in memory and redacted; they are not production audit logs.
+- Integration events and workflow records use Vercel KV/Upstash REST when configured. Tests use an in-memory repository, and local development without KV falls back to `.agenticops/integration-event-store.json`. The local file fallback is not suitable for Vercel production durability.
 - Discord requires a persistent worker runtime such as Render, Railway, Fly.io or a VM. Do not run the Gateway worker inside a Vercel request lifecycle.
 - All external channels are analyze-only. No automatic replies, moderation, email mutation, post publishing, ad management or user actions are implemented.
+- Suggested replies and actions are stored as pending human-approval workflow records. Execution remains unavailable until provider permissions, tenant ownership and explicit approval workflows are implemented.
 
 Callback and webhook URLs:
 
@@ -180,6 +185,7 @@ The current project repository uses local JSON storage at `data/projects.json`. 
 - concurrent writes are not safe;
 - project edits may disappear across deployments or function instances;
 - batch results and reports are stored in browser `localStorage`, not server-side persistence.
+- integration event/workflow records require `KV_REST_API_URL` and `KV_REST_API_TOKEN` or equivalent Upstash variables for durable serverless persistence.
 
 For production, replace the local JSON repository with a managed database or durable storage service before relying on project creation/editing, persistent reports or multi-user workflows.
 

@@ -3,7 +3,10 @@ import { ZodError } from "zod";
 import { apiErrorResponse, zodIssuesToApiIssues } from "../../../../lib/api/responses";
 import { normalizeMetaWebhookPayload } from "../../../../lib/integrations/adapters/meta";
 import { hasSeenIntegrationEvent } from "../../../../lib/integrations/dedupe";
-import { addIntegrationEventLogEntry } from "../../../../lib/integrations/event-log";
+import {
+  addIntegrationEventLogEntry,
+  recordIntegrationAnalysis,
+} from "../../../../lib/integrations/event-log";
 import { processNormalizedMessage } from "../../../../lib/integrations/processor";
 import { verifyMetaSignature } from "../../../../lib/integrations/security";
 
@@ -46,7 +49,7 @@ export async function POST(request: Request) {
   });
 
   if (!signature.valid) {
-    addIntegrationEventLogEntry({
+    await addIntegrationEventLogEntry({
       provider: "meta",
       eventType: "webhook_signature",
       processingStatus: "error",
@@ -66,7 +69,7 @@ export async function POST(request: Request) {
 
     for (const message of messages) {
       if (hasSeenIntegrationEvent(message.id)) {
-        addIntegrationEventLogEntry({
+        await addIntegrationEventLogEntry({
           provider: message.source,
           eventType: "message",
           processingStatus: "ignored",
@@ -76,8 +79,16 @@ export async function POST(request: Request) {
         continue;
       }
 
+      await addIntegrationEventLogEntry({
+        provider: message.source,
+        eventType: "message",
+        processingStatus: "received",
+        analysisStatus: "not_started",
+        externalId: message.externalId,
+      });
       const result = await processNormalizedMessage(message);
-      addIntegrationEventLogEntry({
+      await recordIntegrationAnalysis(result);
+      await addIntegrationEventLogEntry({
         provider: message.source,
         eventType: "message",
         processingStatus: "processed",
@@ -89,7 +100,7 @@ export async function POST(request: Request) {
 
     return Response.json({ received: true, processed });
   } catch (error) {
-    addIntegrationEventLogEntry({
+    await addIntegrationEventLogEntry({
       provider: "meta",
       eventType: "webhook",
       processingStatus: "error",

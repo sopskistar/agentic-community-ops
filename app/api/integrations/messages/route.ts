@@ -7,6 +7,10 @@ import {
 import {
   normalizedCommunicationMessageSchema,
 } from "../../../../lib/integrations/normalized";
+import {
+  addIntegrationEventLogEntry,
+  recordIntegrationAnalysis,
+} from "../../../../lib/integrations/event-log";
 import { processNormalizedMessage } from "../../../../lib/integrations/processor";
 import { verifyTelegramSecret } from "../../../../lib/integrations/security";
 
@@ -36,7 +40,22 @@ export async function POST(request: Request) {
     const normalized = normalizedCommunicationMessageSchema.parse(
       await request.json(),
     );
+    await addIntegrationEventLogEntry({
+      provider: normalized.source,
+      eventType: "worker_message",
+      processingStatus: "received",
+      analysisStatus: "not_started",
+      externalId: normalized.externalId,
+    });
     const result = await processNormalizedMessage(normalized);
+    await recordIntegrationAnalysis(result);
+    await addIntegrationEventLogEntry({
+      provider: normalized.source,
+      eventType: "worker_message",
+      processingStatus: "processed",
+      analysisStatus: "completed",
+      externalId: normalized.externalId,
+    });
     return Response.json({ result });
   } catch (error) {
     if (error instanceof ZodError) {

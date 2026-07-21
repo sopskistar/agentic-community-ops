@@ -12,15 +12,15 @@ On 2026-07-18, a scoped UI/UX polish pass tightened the existing platform experi
 
 On 2026-07-19, the Business Intelligence Dashboard MVP was added at `/business` as the second working communication context after Web3 Community Security. It supports pasted business text, TXT upload, business profile selection, purpose selection, local demonstration analysis and explainable structured results. PDF, DOCX, CSV, Excel, CRM, email, Slack, Teams, Google Workspace, Salesforce, HubSpot, ticket creation, durable persistence and external sending remain explicitly marked as not implemented.
 
-On 2026-07-20, a secure communication integrations foundation was added for Google/Gmail, Meta, Telegram and Discord. The implementation is analyze-only: provider payloads are normalized into a shared integration message model and passed through the existing Agentic Ops analysis pipeline, but no external replies, moderation, email mutation, post publishing, ad management or autonomous actions are performed. Production use still requires deployed callback/webhook URLs, provider-console setup, durable encrypted token storage, authentication/tenant ownership and human approval workflows.
+On 2026-07-20, a secure communication integrations foundation was added for Google/Gmail, Meta, Telegram and Discord. The implementation is analyze-only: provider payloads are normalized into a shared integration message model and passed through the existing Agentic Ops analysis pipeline, but no external replies, moderation, email mutation, post publishing, ad management or autonomous actions are performed. Integration event/workflow records now use a provider-independent repository with Vercel KV/Upstash REST durability when configured, memory for tests, and local-file fallback for development. Production use still requires deployed callback/webhook URLs, provider-console setup, durable encrypted OAuth token storage, authentication/tenant ownership and human approval workflows.
 
 # Current Blockers
 
-Repository blockers for Stages 1-4: no durable multi-tenant persistence, no authentication or tenant boundary, existing Web3 API routes are not yet internally mapped to the `lib/messages` model, no file ingestion, no approval workflow, no production audit-log persistence, no outbound-send authorization layer, and no tenant ownership for connected provider accounts. Existing external blockers remain: deployment URL, production environment variables, provider callback/webhook configuration, provider app review where required, and ASP registration submission.
+Repository blockers for Stages 1-4: no durable multi-tenant persistence for projects/users/OAuth tokens, no authentication or tenant boundary, existing Web3 API routes are not yet internally mapped to the `lib/messages` model, no file ingestion, no approval workflow UI, no production audit-log search/retention policy, no outbound-send authorization layer, and no tenant ownership for connected provider accounts. Existing external blockers remain: deployment URL, production environment variables, provider callback/webhook configuration, provider app review where required, and ASP registration submission.
 
 # Next Actions
 
-- Recommended next Codex prompt: "Prompt 4: add durable integration storage contracts and tenant-safe ownership boundaries without changing the UI or connecting outbound automation. Replace the development-only OAuth token store and in-memory event log behind interfaces with documented production-ready repository contracts, add tests for account ownership and token metadata access, and keep all integrations in analyze-only mode."
+- Recommended next Codex prompt: "Prompt 4: add tenant-safe integration ownership and a human approval queue for stored integration workflow records. Keep outbound execution disabled by default, keep Gmail readonly, and add tests proving replies/actions cannot execute without explicit approval, provider permissions and tenant ownership."
 - Use `/demo` as the primary 90-second judge recording flow.
 - Use `/security-engine` when judges ask for the published deterministic rule list.
 - Deploy the application and replace placeholder deployment URLs in ASP materials.
@@ -76,7 +76,7 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - `lib/integrations/adapters/`: Gmail, Meta, Telegram and Discord adapters that keep provider-specific parsing outside the core analysis engine.
 - `lib/integrations/oauth/`: Google OAuth URL generation, callback token exchange, access-token refresh and a development-only encrypted token-store abstraction.
 - `lib/integrations/google/gmail-service.ts`: Gmail readonly listing and manual analyze-only normalization.
-- `lib/integrations/dedupe.ts` and `lib/integrations/event-log.ts`: development-safe webhook deduplication and redacted in-memory event logging.
+- `lib/integrations/dedupe.ts` and `lib/integrations/event-log.ts`: webhook deduplication plus redacted provider-independent event/workflow storage with KV durability when configured, memory tests and local development fallback.
 - `/api/integrations/google/auth` and `/api/integrations/google/callback`: Google OAuth start/callback using Gmail readonly scope and HTTP-only state cookies.
 - `/api/integrations/gmail/messages`: server-only recent Gmail listing and manual analyze-only endpoint.
 - `/api/webhooks/meta`: Meta GET verification and POST receiver with signature validation when `META_APP_SECRET` is configured.
@@ -207,6 +207,14 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence, no auth
 - Communication Contexts and platform architecture sections are explanatory roadmap illustrations, not connected capabilities.
 
 # Latest Verification
+
+- Date: 2026-07-20
+- Durable integration event repository completed.
+- `npm test`: passed with 87 tests across 18 files.
+- `npm run lint`: passed.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed and generated the existing 30 static/dynamic routes.
+- Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured. No deployment URL or provider credentials were invented for this task.
 
 - Date: 2026-07-20
 - Secure communication integrations foundation completed.

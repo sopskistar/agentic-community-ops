@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-20 - Session: durable integration event repository
+
+- What was built: Replaced production use of the temporary in-memory integration event log with a provider-independent event/workflow repository. Added Vercel KV/Upstash REST durability when configured, memory repository support for tests, local file fallback for development, workflow records that separate received message, analysis, suggested response/action, pending approval and execution status, and repository tests.
+- Problems found: The previous `/integrations` event log could disappear across Vercel serverless invocations because it lived only in process memory. Discord worker, Meta, Telegram and Gmail processing now write through the same repository abstraction.
+- Bugs fixed: Gmail manual analysis and the internal Discord-worker processing endpoint now record received/processed events and workflow records, matching Telegram and Meta behavior.
+- Important technical decisions: Suggested replies/actions are stored with `requiresHumanApproval: true` and `outboundAvailable: false`; no autonomous replies, moderation, email mutation, ad actions or provider-side changes were added. Gmail remains `gmail.readonly`.
+- Tests performed: `npm test` passed with 87 tests across 18 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated the existing 30 static/dynamic routes. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: Integration persistence must preserve separate records for receipt, analysis, suggestion, approval, execution result and audit state before any outbound provider action is allowed.
+
 ## 2026-07-20 - Session: secure communication integrations foundation
 
 - What was built: Added analyze-only integration foundations for Google/Gmail, Meta, Telegram and Discord. Added a provider-neutral integration message model, adapters, shared processing service, Google OAuth start/callback, Gmail readonly listing/analyze UI, Meta webhook verification and signed receiver, Telegram webhook receiver, Discord persistent-worker entry point, integration status/event-log pages, Privacy Policy and Data Deletion Instructions.

@@ -76,10 +76,10 @@ Status: MVP started 2026-07-19. The `/business` route now provides the second wo
 
 ## Stage 3: Communication Integrations
 
-Status: foundation started 2026-07-20. Google/Gmail, Meta, Telegram and Discord now have analyze-only integration infrastructure. Production use still requires deployment URL configuration, provider console setup, durable encrypted storage, authentication/tenant ownership and human-approval workflows.
+Status: foundation started 2026-07-20. Google/Gmail, Meta, Telegram and Discord now have analyze-only integration infrastructure. Integration event/workflow records are provider-independent and durable through Vercel KV/Upstash REST when configured. Production use still requires deployment URL configuration, provider console setup, durable encrypted OAuth token storage, authentication/tenant ownership and human-approval workflows.
 
 1. Add integration registry and channel adapter test harness. Completed 2026-07-20 as foundation.
-   - Scope: provider-neutral normalized message model, adapters, webhook validation, dedupe, event log and analyze-only processing.
+   - Scope: provider-neutral normalized message model, adapters, webhook validation, dedupe, durable event/workflow repository and analyze-only processing.
    - Delivered: `lib/integrations/`, Google OAuth routes, Gmail readonly routes, Meta webhook route, Telegram webhook route, internal worker endpoint and Discord worker entry point.
    - Tests: OAuth helper, token refresh, Meta verification/signature rejection, Telegram normalization, Discord normalization, dedupe, secret redaction and normalized-message validation.
 

@@ -5,6 +5,10 @@ import {
   listRecentGmailMessages,
   normalizeGmailSummaryForProcessing,
 } from "../../../../../lib/integrations/google/gmail-service";
+import {
+  addIntegrationEventLogEntry,
+  recordIntegrationAnalysis,
+} from "../../../../../lib/integrations/event-log";
 import { processNormalizedMessage } from "../../../../../lib/integrations/processor";
 
 const requestSchema = z.object({
@@ -42,7 +46,22 @@ export async function POST(request: Request) {
     }
 
     const normalized = normalizeGmailSummaryForProcessing(selected);
+    await addIntegrationEventLogEntry({
+      provider: normalized.source,
+      eventType: "gmail_manual_analyze",
+      processingStatus: "received",
+      analysisStatus: "not_started",
+      externalId: normalized.externalId,
+    });
     const result = await processNormalizedMessage(normalized);
+    await recordIntegrationAnalysis(result);
+    await addIntegrationEventLogEntry({
+      provider: normalized.source,
+      eventType: "gmail_manual_analyze",
+      processingStatus: "processed",
+      analysisStatus: "completed",
+      externalId: normalized.externalId,
+    });
     return Response.json({ normalized, result });
   } catch (error) {
     if (error instanceof ZodError) {

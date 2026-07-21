@@ -28,6 +28,7 @@
 *.tokens
 oauth-tokens*.json
 development-oauth-tokens.json.enc
+integration-event-store.json
 
 # debug
 npm-debug.log*
