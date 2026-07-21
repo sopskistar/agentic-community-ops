@@ -289,7 +289,7 @@ function formatMetaDetail(
   status: Awaited<ReturnType<typeof getMetaProviderStatus>>,
   providerName: string,
 ) {
-  const activity = `Last event: ${status.latestProviderEventReceived ?? status.latestVerificationTime ?? "none"}. Messages: ${status.messageCount}. Comments: ${status.commentCount}.`;
+  const activity = `Last DM event: ${status.latestDirectMessageEventReceived ?? "none"}. Last comment event: ${status.latestCommentEventReceived ?? "none"}. Last provider event: ${status.latestProviderEventReceived ?? status.latestVerificationTime ?? "none"}. Messages: ${status.messageCount}. Comments: ${status.commentCount}.`;
 
   if (!status.repositoryAvailable) {
     return `${providerName} diagnostics could not read durable storage. Check KV/Upstash configuration.`;

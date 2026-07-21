@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import { apiErrorResponse, zodIssuesToApiIssues } from "../../../../lib/api/responses";
 import { inspectMetaWebhookPayload } from "../../../../lib/integrations/adapters/meta";
 import { hasSeenIntegrationEvent } from "../../../../lib/integrations/dedupe";
+import type { NormalizedCommunicationMessage } from "../../../../lib/integrations/normalized";
 import {
   addIntegrationEventLogEntry,
   type CreateIntegrationEventLogEntry,
@@ -86,7 +87,9 @@ export async function POST(request: Request) {
         provider: diagnostic.provider,
         eventType: diagnostic.eventType,
         processingStatus:
-          diagnostic.eventType === "meta_payload_unsupported"
+          diagnostic.eventType === "meta_payload_unsupported" ||
+          diagnostic.eventType === "meta_comment_unsupported" ||
+          diagnostic.eventType === "facebook_comment_removed"
             ? "ignored"
             : "received",
         analysisStatus: "not_started",
@@ -99,7 +102,9 @@ export async function POST(request: Request) {
       if (hasSeenIntegrationEvent(message.id)) {
         await recordMetaDiagnostic({
           provider: message.source,
-          eventType: "meta_payload_unsupported",
+          eventType: isMetaComment(message)
+            ? "meta_comment_unsupported"
+            : "meta_payload_unsupported",
           processingStatus: "ignored",
           analysisStatus: "not_started",
           externalId: message.externalId,
@@ -110,10 +115,7 @@ export async function POST(request: Request) {
 
       await recordMetaDiagnostic({
         provider: message.source,
-        eventType:
-          message.metadata?.kind === "comment"
-            ? "meta_comment_received"
-            : "meta_message_received",
+        eventType: receivedEventTypeFor(message),
         processingStatus: "received",
         analysisStatus: "not_started",
         externalId: message.externalId,
@@ -147,7 +149,9 @@ export async function POST(request: Request) {
       } catch {
         await recordMetaDiagnostic({
           provider: message.source,
-          eventType: "meta_failed",
+          eventType: isMetaComment(message)
+            ? "meta_comment_analysis_failed"
+            : "meta_failed",
           processingStatus: "error",
           analysisStatus: "failed",
           externalId: message.externalId,
@@ -162,7 +166,7 @@ export async function POST(request: Request) {
       provider: "meta",
       eventType:
         error instanceof ZodError
-          ? "meta_normalization_failed"
+          ? "meta_comment_normalization_failed"
           : "meta_payload_unsupported",
       processingStatus: "error",
       analysisStatus: "failed",
@@ -190,7 +194,13 @@ async function recordMetaDiagnostic(entry: CreateIntegrationEventLogEntry) {
   try {
     await addIntegrationEventLogEntry(entry);
   } catch {
-    console.error("meta_event_persistence_failed");
+    const isCommentEvent =
+      entry.eventType.includes("comment") || entry.eventType.includes("mention");
+    console.error(
+      isCommentEvent
+        ? "meta_comment_persistence_failed"
+        : "meta_event_persistence_failed",
+    );
   }
 }
 
@@ -202,11 +212,43 @@ async function recordMetaWorkflow(
   } catch {
     await recordMetaDiagnostic({
       provider: result.message.source,
-      eventType: "meta_failed",
+      eventType: isMetaComment(result.message)
+        ? "meta_comment_persistence_failed"
+        : "meta_failed",
       processingStatus: "error",
       analysisStatus: "failed",
       externalId: result.message.externalId,
       errorSummary: "Meta workflow persistence failed.",
     });
   }
+}
+
+function isMetaComment(message: NormalizedCommunicationMessage) {
+  return (
+    message.channelId === "facebook_comment" ||
+    message.channelId === "instagram_comment" ||
+    message.metadata?.kind === "comment" ||
+    message.metadata?.kind === "mention"
+  );
+}
+
+function receivedEventTypeFor(message: NormalizedCommunicationMessage) {
+  const verb =
+    typeof message.metadata?.verb === "string"
+      ? message.metadata.verb.toLowerCase()
+      : undefined;
+
+  if (message.channelId === "facebook_comment") {
+    return verb === "edited" || verb === "edit"
+      ? "facebook_comment_edited"
+      : "facebook_comment_received";
+  }
+
+  if (message.channelId === "instagram_comment") {
+    return message.metadata?.kind === "mention"
+      ? "instagram_mention_received"
+      : "instagram_comment_received";
+  }
+
+  return "meta_message_received";
 }

@@ -18,6 +18,8 @@ export type MetaProviderStatus = {
   latestVerificationTime?: string;
   latestMetaEventReceived?: string;
   latestProviderEventReceived?: string;
+  latestDirectMessageEventReceived?: string;
+  latestCommentEventReceived?: string;
   messageCount: number;
   commentCount: number;
   repositoryAvailable: boolean;
@@ -61,8 +63,13 @@ export async function getMetaProviderStatus(
   const latestProviderEvent = events.find(
     (event) =>
       event.provider === provider &&
-      (event.eventType === "meta_message_received" ||
-        event.eventType === "meta_comment_received"),
+      (isMetaDirectMessageEvent(event) || isMetaCommentEvent(event)),
+  );
+  const latestDirectMessageEvent = events.find(
+    (event) => event.provider === provider && isMetaDirectMessageEvent(event),
+  );
+  const latestCommentEvent = events.find(
+    (event) => event.provider === provider && isMetaCommentEvent(event),
   );
   const latestRelevantProviderEvent = events.find(
     (event) =>
@@ -105,18 +112,32 @@ export async function getMetaProviderStatus(
       latestVerificationTime: latestVerification?.timestamp,
       latestMetaEventReceived: latestMetaEvent?.timestamp,
       latestProviderEventReceived: latestProviderEvent?.timestamp,
+      latestDirectMessageEventReceived: latestDirectMessageEvent?.timestamp,
+      latestCommentEventReceived: latestCommentEvent?.timestamp,
       messageCount: events.filter(
         (event) =>
-          event.provider === provider &&
-          event.eventType === "meta_message_received",
+          event.provider === provider && isMetaDirectMessageEvent(event),
       ).length,
       commentCount: events.filter(
         (event) =>
-          event.provider === provider &&
-          event.eventType === "meta_comment_received",
+          event.provider === provider && isMetaCommentEvent(event),
       ).length,
       repositoryAvailable: true,
       outboundExecutionAvailable: false,
     };
   }
+}
+
+function isMetaDirectMessageEvent(event: IntegrationEventLogEntry) {
+  return event.eventType === "meta_message_received";
+}
+
+function isMetaCommentEvent(event: IntegrationEventLogEntry) {
+  return (
+    event.eventType === "meta_comment_received" ||
+    event.eventType === "facebook_comment_received" ||
+    event.eventType === "facebook_comment_edited" ||
+    event.eventType === "instagram_comment_received" ||
+    event.eventType === "instagram_mention_received"
+  );
 }

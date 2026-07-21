@@ -141,7 +141,7 @@ Implemented foundation:
 - Gmail readonly inbox listing and manual analyze-only processing at `/integrations/gmail`.
 - Gmail manual sync at `/api/integrations/gmail/sync` imports a bounded recent inbox window for analysis.
 - Meta webhook verification and signed webhook receiver at `/api/webhooks/meta`.
-- Meta event ingestion supports Facebook Messenger DMs, Instagram Direct Messages, Facebook Page comments, Instagram comments, message reactions, postbacks and mention-style webhook changes when Meta delivers supported payloads.
+- Meta event ingestion supports Facebook Messenger DMs, Instagram Direct Messages, Facebook Page comment add/edit/remove events, Instagram comments, Instagram mentions, message reactions, postbacks and mention-style webhook changes when Meta delivers supported payloads.
 - Telegram webhook receiver at `/api/webhooks/telegram`.
 - Discord Gateway worker entry point at `workers/discord-bot.mjs`.
 - Integration status page at `/integrations`.
@@ -196,9 +196,11 @@ Meta dashboard setup that code cannot perform automatically:
 - Configure callback URL: `https://agenticopsai.xyz/api/webhooks/meta`.
 - Enter the exact deployed `META_VERIFY_TOKEN`.
 - Subscribe the app to the required Facebook Page Messenger webhook fields.
+- Subscribe the Facebook Page webhook to the `feed` field so Page comment add/edit/remove changes are delivered.
 - Ensure the Facebook Page is subscribed to the app.
 - Ensure the Instagram professional account is linked to the correct Facebook Page.
 - Subscribe the necessary Instagram messaging webhook fields.
+- Subscribe Instagram to `comments` and `mentions` fields where supported for the app/account type.
 - In development mode, only app roles, test users and connected test assets may generate events.
 - Public users usually require the correct Meta permissions and App Review before events are delivered.
 
@@ -208,7 +210,7 @@ Meta ingestion privacy and diagnostics:
 
 - Meta sender, recipient, message, comment, post and media identifiers are hashed before persistence.
 - Supported Meta events are normalized into provider `facebook` or `instagram` with channel metadata such as `messenger`, `instagram`, `facebook_comment` or `instagram_comment`.
-- Durable diagnostics use redacted categories such as `meta_message_received`, `meta_comment_received`, `meta_analysis_started`, `meta_analysis_completed`, `meta_suggested`, `meta_failed` and `meta_payload_unsupported`.
+- Durable diagnostics use redacted categories such as `meta_message_received`, `facebook_comment_received`, `facebook_comment_edited`, `facebook_comment_removed`, `instagram_comment_received`, `instagram_mention_received`, `meta_analysis_started`, `meta_analysis_completed`, `meta_suggested`, `meta_failed`, `meta_comment_unsupported` and `meta_payload_unsupported`.
 - Facebook and Instagram suggested replies remain approval-required. Agentic Ops does not send replies, hide comments, delete comments, moderate users, publish content, manage ads or spend money.
 
 ## Storage Limitations

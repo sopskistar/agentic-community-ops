@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-21 - Session: Meta comment ingestion
+
+- What was built: Extended Meta ingestion around actual Facebook Page and Instagram webhook change envelopes. Facebook Page `feed` comment add/edit events and Instagram `comments`/`mentions` events now normalize into comment channels, run through the shared analysis pipeline, persist durable lifecycle events and create approval-required suggestions. Facebook comment removals are recorded safely without analysis.
+- Problems found: Comment support existed in broad form, but diagnostics and status reporting were too generic to prove whether Page comments, Instagram comments or Instagram mentions were delivered and processed.
+- Bugs fixed: Missing-text comment changes no longer fall through to a generic fallback string and get analyzed.
+- Important technical decisions: Comment IDs, post/media IDs and sender identifiers remain hashed before persistence. No automatic replies, comment hiding/deletion, moderation, publishing, ad management or outbound execution were added.
+- Tests performed: `npm test` passed with 127 tests across 24 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and kept `/api/webhooks/meta` and `/integrations` dynamic. Build emitted the existing `metadataBase` warning because no production deployment URL is configured.
+- New rules learned: Meta comment delivery depends on Page `feed` subscription plus Instagram `comments` and `mentions` subscriptions where supported; webhook verification alone does not prove those fields are delivering events.
+
 ## 2026-07-21 - Session: complete Meta event ingestion
 
 - What was built: Expanded Meta webhook normalization to support Facebook Messenger DMs, Instagram Direct Messages, Facebook Page comments, Instagram comments, message reactions, postbacks and mention-style webhook changes. Added hashed Meta identifiers, channel metadata, production lifecycle diagnostics, richer Facebook/Instagram status details and removal of visible temporary OAuth query status banners from `/integrations`.

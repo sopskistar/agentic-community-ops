@@ -121,10 +121,10 @@ describe("Meta webhook route", () => {
     );
   });
 
-  it("persists Facebook comment lifecycle and workflow", async () => {
+  it("persists Facebook Page comment add lifecycle and workflow", async () => {
     process.env.META_APP_SECRET = "app-secret";
     setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
-    const body = JSON.stringify(createFacebookCommentPayload("comment-1"));
+    const body = JSON.stringify(createFacebookCommentPayload("comment-1", "add"));
     const response = await POST(
       new Request("http://localhost/api/webhooks/meta", {
         method: "POST",
@@ -137,7 +137,7 @@ describe("Meta webhook route", () => {
     const events = await listIntegrationEventLogEntries();
     expect(events.map((event) => event.eventType)).toEqual(
       expect.arrayContaining([
-        "meta_comment_received",
+        "facebook_comment_received",
         "meta_analysis_started",
         "meta_analysis_completed",
         "meta_suggested",
@@ -147,6 +147,55 @@ describe("Meta webhook route", () => {
     expect(workflows[0].provider).toBe("facebook");
     expect(workflows[0].receivedMessage.channelId).toBe("facebook_comment");
     expect(workflows[0].suggestion?.requiresHumanApproval).toBe(true);
+    expect(workflows[0].suggestion?.outboundAvailable).toBe(false);
+    expect(JSON.stringify(events)).not.toContain("comment-1");
+    expect(JSON.stringify(workflows)).not.toContain("sender-1");
+  });
+
+  it("persists Facebook comment edits through the analysis lifecycle", async () => {
+    process.env.META_APP_SECRET = "app-secret";
+    setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
+    const body = JSON.stringify(createFacebookCommentPayload("comment-edit-1", "edited"));
+    const response = await POST(
+      new Request("http://localhost/api/webhooks/meta", {
+        method: "POST",
+        headers: { "x-hub-signature-256": sign(body) },
+        body,
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const events = await listIntegrationEventLogEntries();
+    expect(events.map((event) => event.eventType)).toEqual(
+      expect.arrayContaining([
+        "facebook_comment_edited",
+        "meta_analysis_started",
+        "meta_analysis_completed",
+      ]),
+    );
+    const workflows = await listIntegrationWorkflowRecords();
+    expect(workflows).toHaveLength(1);
+    expect(workflows[0].receivedMessage.channelId).toBe("facebook_comment");
+  });
+
+  it("records Facebook comment removals without creating analysis workflows", async () => {
+    process.env.META_APP_SECRET = "app-secret";
+    setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
+    const body = JSON.stringify(createFacebookCommentPayload("comment-remove-1", "remove"));
+    const response = await POST(
+      new Request("http://localhost/api/webhooks/meta", {
+        method: "POST",
+        headers: { "x-hub-signature-256": sign(body) },
+        body,
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const events = await listIntegrationEventLogEntries();
+    expect(events.map((event) => event.eventType)).toContain(
+      "facebook_comment_removed",
+    );
+    expect(await listIntegrationWorkflowRecords()).toHaveLength(0);
   });
 
   it("persists Instagram comment lifecycle", async () => {
@@ -162,6 +211,41 @@ describe("Meta webhook route", () => {
     );
 
     expect(response.status).toBe(200);
+    const events = await listIntegrationEventLogEntries();
+    expect(events.map((event) => event.eventType)).toEqual(
+      expect.arrayContaining([
+        "instagram_comment_received",
+        "meta_analysis_started",
+        "meta_analysis_completed",
+        "meta_suggested",
+      ]),
+    );
+    const workflows = await listIntegrationWorkflowRecords();
+    expect(workflows[0].provider).toBe("instagram");
+    expect(workflows[0].receivedMessage.channelId).toBe("instagram_comment");
+  });
+
+  it("persists Instagram mention lifecycle", async () => {
+    process.env.META_APP_SECRET = "app-secret";
+    setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
+    const body = JSON.stringify(createInstagramMentionPayload("ig-mention-1"));
+    const response = await POST(
+      new Request("http://localhost/api/webhooks/meta", {
+        method: "POST",
+        headers: { "x-hub-signature-256": sign(body) },
+        body,
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const events = await listIntegrationEventLogEntries();
+    expect(events.map((event) => event.eventType)).toEqual(
+      expect.arrayContaining([
+        "instagram_mention_received",
+        "meta_analysis_started",
+        "meta_analysis_completed",
+      ]),
+    );
     const workflows = await listIntegrationWorkflowRecords();
     expect(workflows[0].provider).toBe("instagram");
     expect(workflows[0].receivedMessage.channelId).toBe("instagram_comment");
@@ -191,6 +275,69 @@ describe("Meta webhook route", () => {
           event.processingStatus === "ignored",
       ),
     ).toBe(true);
+  });
+
+  it("deduplicates Facebook comment deliveries by hashed comment id", async () => {
+    process.env.META_APP_SECRET = "app-secret";
+    setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
+    const body = JSON.stringify(createFacebookCommentPayload("duplicate-comment", "add"));
+    const request = () =>
+      new Request("http://localhost/api/webhooks/meta", {
+        method: "POST",
+        headers: { "x-hub-signature-256": sign(body) },
+        body,
+      });
+
+    expect((await POST(request())).status).toBe(200);
+    expect((await POST(request())).status).toBe(200);
+
+    const workflows = await listIntegrationWorkflowRecords();
+    expect(workflows).toHaveLength(1);
+    const events = await listIntegrationEventLogEntries();
+    expect(
+      events.some(
+        (event) =>
+          event.eventType === "meta_comment_unsupported" &&
+          event.processingStatus === "ignored" &&
+          event.errorSummary === "duplicate_event",
+      ),
+    ).toBe(true);
+  });
+
+  it("records malformed comment changes without analysis", async () => {
+    process.env.META_APP_SECRET = "app-secret";
+    setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
+    const body = JSON.stringify({
+      object: "page",
+      entry: [
+        {
+          id: "page-1",
+          changes: [
+            {
+              field: "feed",
+              value: { item: "comment", verb: "add", comment_id: "bad-comment" },
+            },
+          ],
+        },
+      ],
+    });
+    const response = await POST(
+      new Request("http://localhost/api/webhooks/meta", {
+        method: "POST",
+        headers: { "x-hub-signature-256": sign(body) },
+        body,
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const events = await listIntegrationEventLogEntries();
+    expect(events[0]).toMatchObject({
+      eventType: "meta_comment_unsupported",
+      processingStatus: "ignored",
+      errorSummary: "missing_change_text",
+    });
+    expect(await listIntegrationWorkflowRecords()).toHaveLength(0);
+    expect(JSON.stringify(events)).not.toContain("bad-comment");
   });
 
   it("records unsupported payloads without storing private message text", async () => {
@@ -263,7 +410,10 @@ function createMetaPayload(object: "page" | "instagram", messageId: string) {
   };
 }
 
-function createFacebookCommentPayload(commentId: string) {
+function createFacebookCommentPayload(
+  commentId: string,
+  verb: "add" | "edited" | "remove",
+) {
   return {
     object: "page",
     entry: [
@@ -274,10 +424,14 @@ function createFacebookCommentPayload(commentId: string) {
             field: "feed",
             value: {
               item: "comment",
+              verb,
               comment_id: commentId,
               post_id: "post-1",
+              parent_id: "parent-1",
               sender_id: "sender-1",
-              message: "A Facebook page comment",
+              message:
+                verb === "remove" ? undefined : "A Facebook page comment",
+              created_time: "2026-07-21T12:00:00+0000",
             },
           },
         ],
@@ -295,11 +449,34 @@ function createInstagramCommentPayload(commentId: string) {
         changes: [
           {
             field: "comments",
+              value: {
+                id: commentId,
+                media_id: "media-1",
+                from: { id: "ig-user-1" },
+                text: "An Instagram comment",
+                timestamp: "2026-07-21T12:00:00+0000",
+              },
+            },
+        ],
+      },
+    ],
+  };
+}
+
+function createInstagramMentionPayload(commentId: string) {
+  return {
+    object: "instagram",
+    entry: [
+      {
+        id: "ig-1",
+        changes: [
+          {
+            field: "mentions",
             value: {
-              id: commentId,
+              comment_id: commentId,
               media_id: "media-1",
-              from: { id: "ig-user-1" },
-              text: "An Instagram comment",
+              from: { id: "ig-user-1", username: "customer" },
+              text: "@agenticops support question",
             },
           },
         ],

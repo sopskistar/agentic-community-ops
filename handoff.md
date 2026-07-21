@@ -20,6 +20,8 @@ On 2026-07-21, Gmail readonly message sync was added. Connected Gmail users can 
 
 On 2026-07-21, Meta event ingestion was completed for supported Facebook Messenger DMs, Instagram Direct Messages, Facebook Page comments, Instagram comments, message reactions, postbacks and mention-style webhook changes. Meta provider identifiers are hashed before persistence, status cards show durable event activity instead of temporary OAuth query strings, and unsupported payloads are logged safely as diagnostics.
 
+On 2026-07-21, Meta comment ingestion was tightened around the actual Page and Instagram webhook change envelopes. Facebook Page `feed` comment add/edit changes and Instagram `comments`/`mentions` changes are normalized, analyzed and stored through the shared durable workflow path. Facebook comment removals are recorded as sanitized ignored lifecycle events without analysis. Facebook and Instagram status cards now separate last DM activity from last comment activity and keep message/comment counts.
+
 # Current Blockers
 
 Repository blockers for Stages 1-4: no durable multi-tenant persistence for projects/users, no authentication or tenant boundary, existing Web3 API routes are not yet internally mapped to the `lib/messages` model, no file ingestion, no approval workflow UI, no production audit-log search/retention policy, no outbound-send authorization layer, and no tenant ownership for connected provider accounts. Existing external blockers remain: provider callback/webhook configuration, Meta Page and Instagram subscriptions/linkage, provider app review where required, and ASP registration submission.
@@ -212,11 +214,20 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 - Google/Gmail, Meta, Telegram and Discord now have integration foundations, but they require real environment configuration and provider setup before processing live events. They remain analyze-only and development-limited until durable storage, tenant ownership and approval workflows are added.
 - Gmail sync uses `gmail.readonly` only. It does not download attachments, store full email bodies, create drafts, send email, archive, label, delete or modify mailbox state.
 - Meta integrations do not send replies, hide/delete comments, moderate users, publish content, manage ads or spend money. Suggested responses remain approval-required.
+- Meta comment delivery still requires external Meta dashboard configuration: Facebook Page `feed` subscription, Page subscribed to the app, Instagram professional account linked to the Page, Instagram `comments` and `mentions` subscriptions where supported, and App Review/permissions for live public users.
 - No human approval queue, automation rules, outbound channel send layer or immutable audit log exists yet.
 - `/business` implements a local paste/TXT Business Intelligence Dashboard MVP; broader homepage roadmap items such as Email, PDF, Word, CSV, Excel, customer support tickets, live chat, Facebook messages and Instagram messages are not implemented yet.
 - Communication Contexts and platform architecture sections are explanatory roadmap illustrations, not connected capabilities.
 
 # Latest Verification
+
+- Date: 2026-07-21
+- Meta comment ingestion expanded.
+- `npm test`: passed with 127 tests across 24 files.
+- `npm run lint`: passed.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed and kept `/api/webhooks/meta` and `/integrations` dynamic.
+- Build warning: Next used `http://localhost:3000` for relative Open Graph image resolution because no production deployment URL/`metadataBase` is configured.
 
 - Date: 2026-07-21
 - Complete Meta event ingestion implemented.

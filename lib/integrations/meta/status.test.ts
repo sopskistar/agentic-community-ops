@@ -45,7 +45,7 @@ describe("Meta provider status", () => {
     });
     await addIntegrationEventLogEntry({
       provider: "facebook",
-      eventType: "meta_comment_received",
+      eventType: "facebook_comment_received",
       processingStatus: "received",
       analysisStatus: "not_started",
       externalId: "comment-id",
@@ -54,5 +54,44 @@ describe("Meta provider status", () => {
     expect(status.status).toBe("receiving_events");
     expect(status.messageCount).toBe(1);
     expect(status.commentCount).toBe(1);
+    expect(status.latestDirectMessageEventReceived).toBeDefined();
+    expect(status.latestCommentEventReceived).toBeDefined();
+  });
+
+  it("counts Instagram direct messages, comments and mentions separately", async () => {
+    process.env.META_APP_ID = "app-id";
+    process.env.META_APP_SECRET = "app-secret";
+    process.env.META_VERIFY_TOKEN = "verify-token";
+    process.env.META_PAGE_ACCESS_TOKEN = "page-token";
+    setIntegrationEventRepositoryForTests(new MemoryIntegrationEventRepository());
+
+    await addIntegrationEventLogEntry({
+      provider: "instagram",
+      eventType: "meta_message_received",
+      processingStatus: "received",
+      analysisStatus: "not_started",
+      externalId: "message-id",
+    });
+    await addIntegrationEventLogEntry({
+      provider: "instagram",
+      eventType: "instagram_comment_received",
+      processingStatus: "received",
+      analysisStatus: "not_started",
+      externalId: "comment-id",
+    });
+    await addIntegrationEventLogEntry({
+      provider: "instagram",
+      eventType: "instagram_mention_received",
+      processingStatus: "received",
+      analysisStatus: "not_started",
+      externalId: "mention-id",
+    });
+
+    const status = await getMetaProviderStatus("instagram");
+    expect(status.status).toBe("receiving_events");
+    expect(status.messageCount).toBe(1);
+    expect(status.commentCount).toBe(2);
+    expect(status.latestDirectMessageEventReceived).toBeDefined();
+    expect(status.latestCommentEventReceived).toBeDefined();
   });
 });

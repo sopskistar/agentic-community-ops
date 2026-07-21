@@ -59,7 +59,56 @@ describe("Meta webhook normalization", () => {
     });
   });
 
-  it("normalizes Facebook Page comments", () => {
+  it("normalizes Facebook Page comment add payloads", () => {
+    const result = inspectMetaWebhookPayload({
+      object: "page",
+      entry: [
+        {
+          id: "page-1",
+          changes: [
+            {
+              field: "feed",
+              value: {
+                item: "comment",
+                verb: "add",
+                comment_id: "comment-1",
+                post_id: "post-1",
+                parent_id: "parent-comment-1",
+                from: { id: "sender-1", name: "Customer" },
+                message: "<b>Great page</b>",
+                created_time: "2026-07-21T12:00:00+0000",
+              },
+            },
+          ],
+        },
+      ],
+    });
+    const messages = result.messages;
+
+    expect(result.diagnostics).toContainEqual(
+      expect.objectContaining({
+        provider: "facebook",
+        eventType: "facebook_comment_received",
+        externalId: messages[0].externalId,
+      }),
+    );
+    expect(messages[0]).toMatchObject({
+      source: "facebook",
+      channelId: "facebook_comment",
+      text: "Great page",
+      metadata: expect.objectContaining({
+        channel: "facebook_comment",
+        kind: "comment",
+        field: "feed",
+        verb: "add",
+        item: "comment",
+      }),
+    });
+    expect(messages[0].externalId).not.toBe("comment-1");
+    expect(messages[0].senderId).not.toBe("sender-1");
+  });
+
+  it("normalizes Facebook Page comment edits", () => {
     const messages = normalizeMetaWebhookPayload({
       object: "page",
       entry: [
@@ -70,10 +119,11 @@ describe("Meta webhook normalization", () => {
               field: "feed",
               value: {
                 item: "comment",
+                verb: "edited",
                 comment_id: "comment-1",
                 post_id: "post-1",
                 sender_id: "sender-1",
-                message: "<b>Great page</b>",
+                message: "Updated Facebook page comment",
               },
             },
           ],
@@ -84,16 +134,50 @@ describe("Meta webhook normalization", () => {
     expect(messages[0]).toMatchObject({
       source: "facebook",
       channelId: "facebook_comment",
-      text: "Great page",
+      text: "Updated Facebook page comment",
       metadata: expect.objectContaining({
         channel: "facebook_comment",
         kind: "comment",
+        verb: "edited",
       }),
     });
   });
 
+  it("records Facebook Page comment removals without analysis messages", () => {
+    const result = inspectMetaWebhookPayload({
+      object: "page",
+      entry: [
+        {
+          id: "page-1",
+          changes: [
+            {
+              field: "feed",
+              value: {
+                item: "comment",
+                verb: "remove",
+                comment_id: "comment-removed",
+                post_id: "post-1",
+                sender_id: "sender-1",
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(result.messages).toHaveLength(0);
+    expect(result.diagnostics).toEqual([
+      expect.objectContaining({
+        provider: "facebook",
+        eventType: "facebook_comment_removed",
+        reason: "comment_removed",
+      }),
+    ]);
+    expect(result.diagnostics[0].externalId).not.toBe("comment-removed");
+  });
+
   it("normalizes Instagram comments", () => {
-    const messages = normalizeMetaWebhookPayload({
+    const result = inspectMetaWebhookPayload({
       object: "instagram",
       entry: [
         {
@@ -106,13 +190,22 @@ describe("Meta webhook normalization", () => {
                 media_id: "media-1",
                 from: { id: "ig-user-1" },
                 text: "Nice post",
+                timestamp: "2026-07-21T12:00:00+0000",
               },
             },
           ],
         },
       ],
     });
+    const messages = result.messages;
 
+    expect(result.diagnostics).toContainEqual(
+      expect.objectContaining({
+        provider: "instagram",
+        eventType: "instagram_comment_received",
+        externalId: messages[0].externalId,
+      }),
+    );
     expect(messages[0]).toMatchObject({
       source: "instagram",
       channelId: "instagram_comment",
@@ -122,6 +215,72 @@ describe("Meta webhook normalization", () => {
         kind: "comment",
       }),
     });
+  });
+
+  it("normalizes Instagram mention payloads", () => {
+    const result = inspectMetaWebhookPayload({
+      object: "instagram",
+      entry: [
+        {
+          id: "ig-1",
+          changes: [
+            {
+              field: "mentions",
+              value: {
+                comment_id: "ig-mention-comment-1",
+                media_id: "media-1",
+                from: { id: "ig-user-1", username: "customer" },
+                text: "@agenticops can you help?",
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(result.messages[0]).toMatchObject({
+      source: "instagram",
+      channelId: "instagram_comment",
+      text: "@agenticops can you help?",
+      metadata: expect.objectContaining({
+        channel: "instagram_comment",
+        kind: "mention",
+      }),
+    });
+    expect(result.diagnostics).toContainEqual(
+      expect.objectContaining({
+        eventType: "instagram_mention_received",
+      }),
+    );
+  });
+
+  it("reports malformed comment changes as comment-specific unsupported diagnostics", () => {
+    const result = inspectMetaWebhookPayload({
+      object: "page",
+      entry: [
+        {
+          id: "page-1",
+          changes: [
+            {
+              field: "feed",
+              value: {
+                item: "comment",
+                verb: "add",
+                comment_id: "comment-without-text",
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(result.messages).toHaveLength(0);
+    expect(result.diagnostics).toEqual([
+      expect.objectContaining({
+        eventType: "meta_comment_unsupported",
+        reason: "missing_change_text",
+      }),
+    ]);
   });
 
   it("normalizes postbacks and reactions as analyzable events", () => {

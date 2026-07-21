@@ -53,8 +53,14 @@ export type MetaWebhookDiagnostic = {
   provider: "meta" | "facebook" | "instagram";
   eventType:
     | "meta_payload_unsupported"
+    | "meta_comment_unsupported"
     | "meta_message_received"
-    | "meta_comment_received";
+    | "meta_comment_received"
+    | "facebook_comment_received"
+    | "facebook_comment_edited"
+    | "facebook_comment_removed"
+    | "instagram_comment_received"
+    | "instagram_mention_received";
   externalId?: string;
   reason?: string;
 };
@@ -116,7 +122,9 @@ export function inspectMetaWebhookPayload(input: unknown) {
       if (!normalized.message) {
         diagnostics.push({
           provider: source,
-          eventType: "meta_payload_unsupported",
+          eventType: normalized.commentRelated
+            ? normalized.eventType ?? "meta_comment_unsupported"
+            : "meta_payload_unsupported",
           externalId: normalized.externalId,
           reason: normalized.reason,
         });
@@ -126,10 +134,7 @@ export function inspectMetaWebhookPayload(input: unknown) {
       messages.push(normalized.message);
       diagnostics.push({
         provider: source,
-        eventType:
-          normalized.kind === "comment"
-            ? "meta_comment_received"
-            : "meta_message_received",
+        eventType: receivedEventTypeFor(normalized.message),
         externalId: normalized.message.externalId,
       });
     }
@@ -264,11 +269,25 @@ function normalizeChangeEvent({
   const item = asString(value.item);
   const verb = asString(value.verb);
   const kind = detectChangeKind(field, item);
+  const commentRelated = isCommentRelatedChange(source, field, item, kind);
 
   if (!kind) {
     return {
       reason: `unsupported_change:${field}${item ? `:${item}` : ""}`,
       externalId: hashOptional(asString(value.id) ?? asString(value.comment_id)),
+      commentRelated,
+    };
+  }
+
+  if (kind === "comment" && isRemovedChange(verb)) {
+    return {
+      reason: "comment_removed",
+      externalId: hashOptional(asString(value.comment_id) ?? asString(value.id)),
+      eventType:
+        source === "instagram"
+          ? "meta_comment_unsupported"
+          : "facebook_comment_removed",
+      commentRelated: true,
     };
   }
 
@@ -286,15 +305,24 @@ function normalizeChangeEvent({
     asString(value.sender_id) ??
     asString(asRecord(value.from)?.id) ??
     asString(value.user_id);
+  const fallbackText =
+    kind === "reaction" || kind === "mention"
+      ? `${kind === "reaction" ? "Reaction" : "Mention"}${verb ? `: ${verb}` : ""}`
+      : undefined;
   const text = sanitizeMetaText(
     asString(value.message) ??
       asString(value.text) ??
       asString(value.caption) ??
-      `${kind === "reaction" ? "Reaction" : "Mention"}${verb ? `: ${verb}` : ""}`,
+      fallbackText,
   );
 
   if (!text) {
-    return { reason: "missing_change_text", externalId: hashOptional(rawExternalId) };
+    return {
+      reason: "missing_change_text",
+      externalId: hashOptional(rawExternalId),
+      commentRelated,
+      eventType: commentRelated ? "meta_comment_unsupported" : undefined,
+    };
   }
 
   return {
@@ -312,6 +340,8 @@ function normalizeChangeEvent({
       entryId,
       object,
       field,
+      verb,
+      item,
     }),
   };
 }
@@ -329,6 +359,8 @@ function createMetaMessage({
   entryId,
   object,
   field,
+  verb,
+  item,
 }: {
   source: Extract<CommunicationSource, "facebook" | "instagram">;
   channel: MetaChannel;
@@ -342,6 +374,8 @@ function createMetaMessage({
   entryId?: string;
   object: string;
   field?: string;
+  verb?: string;
+  item?: string;
 }): NormalizedCommunicationMessage {
   const externalId = hashMetaIdentifier(rawExternalId);
   const conversationId = rawConversationId
@@ -365,6 +399,8 @@ function createMetaMessage({
       kind,
       object,
       field,
+      verb,
+      item,
       recipientId,
       entryId: entryId ? hashMetaIdentifier(entryId) : undefined,
     },
@@ -394,6 +430,54 @@ function detectChangeKind(
   }
 
   return null;
+}
+
+function receivedEventTypeFor(message: NormalizedCommunicationMessage) {
+  const channel = message.metadata?.channel;
+  const kind = message.metadata?.kind;
+  const verb = typeof message.metadata?.verb === "string"
+    ? message.metadata.verb.toLowerCase()
+    : undefined;
+
+  if (channel === "facebook_comment") {
+    return verb === "edited" || verb === "edit"
+      ? "facebook_comment_edited"
+      : "facebook_comment_received";
+  }
+
+  if (channel === "instagram_comment") {
+    return kind === "mention"
+      ? "instagram_mention_received"
+      : "instagram_comment_received";
+  }
+
+  return kind === "comment" || kind === "mention"
+    ? "meta_comment_received"
+    : "meta_message_received";
+}
+
+function isCommentRelatedChange(
+  source: Extract<CommunicationSource, "facebook" | "instagram">,
+  field: string,
+  item: string | undefined,
+  kind: MetaNormalizedEventKind | null,
+) {
+  const normalizedField = field.toLowerCase();
+  const normalizedItem = item?.toLowerCase();
+  return (
+    kind === "comment" ||
+    kind === "mention" ||
+    normalizedField.includes("comment") ||
+    normalizedField.includes("mention") ||
+    (source === "facebook" &&
+      normalizedField === "feed" &&
+      normalizedItem === "comment")
+  );
+}
+
+function isRemovedChange(verb: string | undefined) {
+  const normalizedVerb = verb?.toLowerCase();
+  return normalizedVerb === "remove" || normalizedVerb === "delete";
 }
 
 function normalizeChangeTimestamp(
@@ -462,10 +546,14 @@ type NormalizedMetaEvent =
       message: NormalizedCommunicationMessage;
       reason?: never;
       externalId?: never;
+      eventType?: never;
+      commentRelated?: never;
     }
   | {
       kind?: never;
       message?: never;
       reason: string;
       externalId?: string;
+      eventType?: MetaWebhookDiagnostic["eventType"];
+      commentRelated?: boolean;
     };
