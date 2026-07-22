@@ -6,11 +6,11 @@ This plan preserves the existing deployed product. Each task should be handled i
 
 ## Branding And Positioning
 
-The website now presents Agentic Ops as an AI Communication Intelligence Platform. The current live capability remains the Web3 Community Security MVP; roadmap features for business intelligence, document intelligence, channel integrations, AI customer operations, omnichannel expansion, workflow automation and enterprise administration must remain clearly labeled as future work until implemented.
+The website now presents AgenticOps AI as an AI Communication Intelligence Platform. The current live capabilities are Web3 Community Security and the `/business` Business Communication Intelligence MVP; roadmap features for email intelligence, marketing intelligence, AI audit, deeper business intelligence, channel integrations, AI business operator workflows and enterprise administration must remain clearly labeled as future work until implemented.
 
 The official logo asset is `public/logo/Agentic-Ops.jpg`. It should be reused as-is and not regenerated, recolored, cropped, distorted or substituted.
 
-The homepage now uses platform-wide positioning: one AI communication engine, multiple future communication channels, and Web3 Community Security as the first implemented context. It includes roadmap-only sections for Business Communication Intelligence, Communication Contexts, the platform-wide message pipeline and future architecture.
+The homepage now uses platform-wide positioning: one AI communication engine, multiple communication contexts, and Web3 Community Security plus Business Communication Intelligence as the implemented contexts. It includes roadmap-only sections for future contexts, the platform-wide message pipeline and future architecture.
 
 On 2026-07-18, the platform UI received a polish pass without adding features or changing contracts. Homepage status labels, roadmap cards, the communication pipeline, demo framing, rules catalog, dashboard profile cards and empty states were tightened so implemented capabilities and roadmap items are easier to distinguish.
 

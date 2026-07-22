@@ -9,7 +9,7 @@ describe("GET /api/v1/health", () => {
 
     expect(response.status).toBe(200);
     expect(body).toEqual({
-      service: "Agentic Community Ops",
+      service: "AgenticOps AI",
       status: "healthy",
       version: "1.0.0",
       deterministicEngine: true,

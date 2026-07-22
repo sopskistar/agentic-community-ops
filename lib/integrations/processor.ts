@@ -19,11 +19,11 @@ export type IntegrationProcessingResult = {
 };
 
 const integrationProject = {
-  projectName: "Agentic Ops Integration Inbox",
+  projectName: "AgenticOps AI Integration Inbox",
   projectDescription:
-    "Agentic Ops analyzes external communication channels in analyze-only mode. It must never send replies, delete messages, archive email, label email, publish posts, manage ads, ban users or moderate users automatically.",
+    "AgenticOps AI analyzes external communication channels in analyze-only mode. It must never send replies, delete messages, archive email, label email, publish posts, manage ads, ban users or moderate users automatically.",
   documentationText:
-    "External integrations are currently analyze-only. Human review is required before external action. Sensitive financial, credential, account-security, legal and uncertain cases should be escalated. Supported integrations normalize messages into one Agentic Ops communication model before analysis.",
+    "External integrations are currently analyze-only. Human review is required before external action. Sensitive financial, credential, account-security, legal and uncertain cases should be escalated. Supported integrations normalize messages into one AgenticOps AI communication model before analysis.",
   officialLinks: ["https://agenticops.local/integrations"],
   responseTone: "PROFESSIONAL" as const,
 };

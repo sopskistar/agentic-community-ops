@@ -1,7 +1,7 @@
 import { GmailClient } from "./gmail-client";
 
 export const metadata = {
-  title: "Gmail Connection | Agentic Ops",
+  title: "Gmail Connection | AgenticOps AI",
   description: "Read recent Gmail inbox messages in analyze-only mode.",
 };
 

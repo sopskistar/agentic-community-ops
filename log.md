@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-22 - Session: AgenticOps AI platform repositioning
+
+- What was built: Repositioned the product as AgenticOps AI, an AI Communication Intelligence Platform. Updated homepage hero, current MVP framing, communication contexts, platform pipeline, six-phase strategic roadmap, channel-aware analysis, future inputs, architecture illustration, enterprise roadmap labels, footer branding, metadata, policy page branding, ASP docs branding, README and architecture docs.
+- Problems found: Several public pages and docs still described Web3 Community Security as the only implemented context even though `/business` is now the second implemented communication context.
+- Bugs fixed: Added `metadataBase` using deployment environment variables with `https://agenticopsai.xyz` fallback so production builds no longer need to fall back to localhost for Open Graph image resolution.
+- Important technical decisions: No routes were changed, the homepage design system was preserved, Web3 Community Security remains implemented, `/business` remains implemented for paste/TXT analysis, and all email, marketing, AI audit, operator, enterprise and broader channel capabilities are labeled Planned, Future, Roadmap or not implemented.
+- Tests performed: `npm test` passed with 144 tests across 27 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and no longer emitted the metadataBase localhost warning.
+- New rules learned: AgenticOps AI branding should distinguish implemented communication contexts from future product categories on every public surface.
+
 ## 2026-07-21 - Session: Discord Railway worker preparation
 
 - What was built: Updated Discord Gateway deployment guidance for Railway while preserving the existing persistent worker architecture. Railway runs only `npm run discord:worker`, posts normalized Discord events and heartbeats to the Vercel internal endpoint, and does not host the website or require Google, Meta, Telegram, OpenRouter, KV or Upstash credentials.
@@ -101,12 +110,12 @@
 
 ## 2026-07-18 - Session: branding and roadmap update
 
-- What was built: Confirmed `public-logo/Agentic-Ops.jpg`, copied it unchanged to `public/logo/Agentic-Ops.jpg`, added exact unchanged copies at `app/icon.jpg` and `app/apple-icon.jpg`, updated shared navigation/footer branding, metadata icon/Open Graph branding, and repositioned the landing page around Agentic Ops as an AI Communication Intelligence Platform. Added current MVP, roadmap phases, channel-aware analysis and future enterprise feature sections. Updated `README.md`, `docs/architecture.md`, `docs/implementation-plan.md`, and `handoff.md`.
-- Problems found: Existing API health and ASP registration artifacts still use the original Agentic Community Ops service naming; those were intentionally left unchanged to avoid modifying public API contract expectations or ASP registration materials in this branding-only task.
+- What was built: Confirmed `public-logo/Agentic-Ops.jpg`, copied it unchanged to `public/logo/Agentic-Ops.jpg`, added exact unchanged copies at `app/icon.jpg` and `app/apple-icon.jpg`, updated shared navigation/footer branding, metadata icon/Open Graph branding, and repositioned the landing page around AgenticOps AI as an AI Communication Intelligence Platform. Added current MVP, roadmap phases, channel-aware analysis and future enterprise feature sections. Updated `README.md`, `docs/architecture.md`, `docs/implementation-plan.md`, and `handoff.md`.
+- Problems found: Existing API health and ASP registration artifacts still use the original AgenticOps AI service naming; those were intentionally left unchanged to avoid modifying public API contract expectations or ASP registration materials in this branding-only task.
 - Bugs fixed: None. This was scoped to branding, copy, public asset placement and documentation.
 - Important technical decisions: The JPG logo is reused without visual alteration; roadmap features are explicitly labeled as future work; no external APIs, OAuth, secrets, database, API contract changes, OKX ASP changes or messaging foundation internals were modified.
 - Tests performed: `npm test` passed with 65 tests across 9 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 19 static pages/routes plus dynamic API routes. Build emitted the expected Next metadataBase warning for relative Open Graph images because no production deployment URL is configured in this repository.
-- New rules learned: Brand positioning can expand to Agentic Ops while current MVP and ASP materials must keep live capability claims precise until implementation catches up.
+- New rules learned: Brand positioning can expand to AgenticOps AI while current MVP and ASP materials must keep live capability claims precise until implementation catches up.
 
 ## 2026-07-18 - Session: messaging foundation
 
@@ -191,7 +200,7 @@
 
 ## 2026-07-14 - Session: complete MVP verification
 
-- What was built: No new product features were added. Audited the repository against the complete Agentic Community Ops MVP, inspected route structure and git history, verified public ASP artifacts, and confirmed final build readiness.
+- What was built: No new product features were added. Audited the repository against the complete AgenticOps AI MVP, inspected route structure and git history, verified public ASP artifacts, and confirmed final build readiness.
 - Problems found: No missing or broken MVP requirements were found. Secret scan returned one benign false-positive phrase in a rule description: `risk-free`.
 - Bugs fixed: None.
 - Important technical decisions: The MVP is ready for deployment verification and ASP registration preparation; remaining work is external deployment, environment configuration, public URL replacement, and ASP submission.

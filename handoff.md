@@ -1,6 +1,6 @@
 # Current Status
 
-Agentic Ops is a Next.js App Router project positioned as an AI Communication Intelligence Platform. The current working MVP is Web3 Community Security and support for an Agent Service Provider use case. The current app has a polished product landing page, shared responsive navigation with persistent Light/Dark mode, a clean shared footer, a dedicated `/security-engine` public rule catalog, threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`. A guided no-setup judge demo now exists at `/demo` using the fictional NovaBridge project. ASP registration preparation artifacts now exist at `/docs/asp`, `ASP_REGISTRATION.md`, `FINAL_CHECKLIST.md`, `public/service-manifest.json`, and `public/schemas/*.json`.
+AgenticOps AI is a Next.js App Router project positioned as an AI Communication Intelligence Platform. The implemented communication contexts are Web3 Community Security and Business Communication Intelligence, with Web3 also supporting an Agent Service Provider use case. The current app has a polished product landing page, shared responsive navigation with persistent Light/Dark mode, a clean shared footer, a dedicated `/security-engine` public rule catalog, threat detection, safe response workflows, deterministic security rules, escalation, and reporting. A deterministic security engine now exists under `lib/security/` with 15 public Web3 community safety rules and tests. A project knowledge-base MVP now exists under `lib/projects/` and `/dashboard`, backed by local JSON storage. A hybrid message-analysis service now exists under `lib/analysis/` and `lib/ai/`, with deterministic-first analysis, OpenAI-compatible provider support, Zod-validated structured output, and safe fallback behavior. Public MVP APIs now exist at `/api/v1/analyse`, `/api/v1/analyse/batch`, `/api/v1/health`, and `/api/v1/rules`, with project analysis, batch analysis, and report UIs under `/dashboard/projects/[id]/...`. The `/business` route supports pasted and TXT business communication analysis. A guided no-setup judge demo now exists at `/demo` using the fictional NovaBridge project. ASP registration preparation artifacts now exist at `/docs/asp`, `ASP_REGISTRATION.md`, `FINAL_CHECKLIST.md`, `public/service-manifest.json`, and `public/schemas/*.json`.
 
 On 2026-07-18, a current-state audit and staged expansion plan were added under `docs/architecture.md`, `docs/feature-gap-analysis.md`, and `docs/implementation-plan.md`. The first approved implementation task then added the reusable messaging foundation under `lib/messages/`. No production UI, API behavior, environment variables, OKX/ASP identity, external integrations, or storage implementation were changed.
 
@@ -12,7 +12,7 @@ On 2026-07-18, a scoped UI/UX polish pass tightened the existing platform experi
 
 On 2026-07-19, the Business Intelligence Dashboard MVP was added at `/business` as the second working communication context after Web3 Community Security. It supports pasted business text, TXT upload, business profile selection, purpose selection, local demonstration analysis and explainable structured results. PDF, DOCX, CSV, Excel, CRM, email, Slack, Teams, Google Workspace, Salesforce, HubSpot, ticket creation, durable persistence and external sending remain explicitly marked as not implemented.
 
-On 2026-07-20, a secure communication integrations foundation was added for Google/Gmail, Meta, Telegram and Discord. The implementation is analyze-only: provider payloads are normalized into a shared integration message model and passed through the existing Agentic Ops analysis pipeline, but no external replies, moderation, email mutation, post publishing, ad management or autonomous actions are performed. Integration event/workflow records now use a provider-independent repository with Vercel KV/Upstash REST durability when configured, memory for tests, and local-file fallback for development. Production use still requires deployed callback/webhook URLs, provider-console setup, durable encrypted OAuth token storage, authentication/tenant ownership and human approval workflows.
+On 2026-07-20, a secure communication integrations foundation was added for Google/Gmail, Meta, Telegram and Discord. The implementation is analyze-only: provider payloads are normalized into a shared integration message model and passed through the existing AgenticOps AI analysis pipeline, but no external replies, moderation, email mutation, post publishing, ad management or autonomous actions are performed. Integration event/workflow records now use a provider-independent repository with Vercel KV/Upstash REST durability when configured, memory for tests, and local-file fallback for development. Production use still requires deployed callback/webhook URLs, provider-console setup, durable encrypted OAuth token storage, authentication/tenant ownership and human approval workflows.
 
 On 2026-07-21, Gmail OAuth token persistence was hardened so production uses encrypted KV/Upstash storage and refuses filesystem fallback. Meta webhook diagnostics were expanded to distinguish verification, signature failure, unsupported payloads, Facebook messages, Instagram messages, normalization failure, analysis failure and persistence failure. Meta delivery still depends on external dashboard subscription, Page subscription, Instagram/Page linkage, app mode and permissions.
 
@@ -25,6 +25,8 @@ On 2026-07-21, Meta comment ingestion was tightened around the actual Page and I
 On 2026-07-21, the Discord Gateway worker was prepared for Render background-worker deployment. The worker now has a production script (`npm run discord:worker`), validate-only mode, required Gateway intents only, hashed Discord identifiers, local duplicate filtering, heartbeat delivery to Vercel, sanitized runtime diagnostics and graceful SIGTERM/SIGINT shutdown. The protected Vercel internal processing endpoint now records Discord-specific durable lifecycle events and deduplicates against existing workflow records.
 
 On 2026-07-21, Discord deployment guidance was updated for Railway. Railway should host only the persistent Gateway worker with `npm run discord:worker`; Vercel remains the website/API/webhook host at `https://agenticopsai.xyz`, and Upstash/Vercel KV remains durable storage. Railway requires only `DISCORD_BOT_TOKEN`, `DISCORD_APPLICATION_ID`, `INTERNAL_INTEGRATION_SECRET`, `APP_BASE_URL=https://agenticopsai.xyz` and `NODE_ENV=production` for this worker path.
+
+On 2026-07-22, the platform was repositioned as AgenticOps AI. Public branding, metadata, footer, policy pages, ASP docs, README and architecture docs now describe AgenticOps AI as an AI Communication Intelligence Platform with two implemented communication contexts: Web3 Community Security and Business Communication Intelligence. The homepage now uses the requested strategic roadmap categories and clearly labels future email, marketing, audit, operator, enterprise and broader channel capabilities as planned or future.
 
 # Current Blockers
 
@@ -84,7 +86,7 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 # Communication Integrations Foundation Added
 
 - `lib/integrations/normalized.ts`: provider-neutral lowercase normalized communication model and Zod validation for external integration events.
-- `lib/integrations/processor.ts`: server-side analyze-only service that validates normalized messages and runs the existing deterministic-first Agentic Ops analysis pipeline.
+- `lib/integrations/processor.ts`: server-side analyze-only service that validates normalized messages and runs the existing deterministic-first AgenticOps AI analysis pipeline.
 - `lib/integrations/adapters/`: Gmail, Meta, Telegram and Discord adapters that keep provider-specific parsing outside the core analysis engine.
 - `lib/integrations/oauth/`: Google OAuth URL generation, callback token exchange, access-token refresh and a development-only encrypted token-store abstraction.
 - `lib/integrations/google/gmail-service.ts`: Gmail readonly listing and manual analyze-only normalization.
@@ -112,7 +114,7 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 - The official supplied logo was confirmed at `public-logo/Agentic-Ops.jpg` and copied unchanged to `public/logo/Agentic-Ops.jpg` for application serving.
 - Exact unchanged copies were also placed at `app/icon.jpg` and `app/apple-icon.jpg` for Next.js app icon conventions; existing `app/favicon.ico` remains because favicon files are `.ico` only.
 - Navigation, footer branding, page metadata, icon shortcut metadata and Open Graph image metadata reference the official logo.
-- The app title now uses Agentic Ops for brand presentation while current API health and ASP registration artifacts remain unchanged to avoid contract or registration drift.
+- The app title now uses AgenticOps AI for brand presentation while current API health and ASP registration artifacts remain unchanged to avoid contract or registration drift.
 - Landing page copy presents current MVP capabilities first and labels roadmap phases and future enterprise features as not yet implemented.
 - Channel-aware roadmap copy explains that Facebook Pages, Instagram Business, email, website live chat, Discord and Telegram should use one normalized message pipeline with source-specific analysis priorities.
 - Navigation label changed from `Security Engine` to `Engine` while preserving the `/security-engine` route and existing page functionality.
@@ -225,6 +227,13 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 - Communication Contexts and platform architecture sections are explanatory roadmap illustrations, not connected capabilities.
 
 # Latest Verification
+
+- Date: 2026-07-22
+- AgenticOps AI platform repositioning completed.
+- `npm test`: passed with 144 tests across 27 files.
+- `npm run lint`: passed.
+- `npx tsc --noEmit --incremental false`: passed.
+- `npm run build`: passed with no metadataBase localhost warning.
 
 - Date: 2026-07-21
 - Discord Railway worker deployment prepared.

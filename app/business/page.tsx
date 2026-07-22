@@ -1,7 +1,7 @@
 import { BusinessClient } from "./business-client";
 
 export const metadata = {
-  title: "Business Intelligence Dashboard | Agentic Ops",
+  title: "Business Intelligence Dashboard | AgenticOps AI",
   description:
     "Analyze normal business communications with local demonstration intelligence for summaries, intent, priority, sentiment, risk and recommended next steps.",
 };

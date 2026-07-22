@@ -1,8 +1,8 @@
-# Agentic Community Ops ASP Registration
+# AgenticOps AI ASP Registration
 
 ## Service Description
 
-Agentic Community Ops audits Web3 community messages using a deterministic security engine and AI-assisted support layer. It detects scams, phishing, fake administrators, wallet threats and transaction issues, then produces explainable risk verdicts, safe reply suggestions and escalation actions.
+AgenticOps AI provides a Web3 Community Security ASP service that audits Web3 community messages using a deterministic security engine and AI-assisted support layer. It detects scams, phishing, fake administrators, wallet threats and transaction issues, then produces explainable risk verdicts, safe reply suggestions and escalation actions.
 
 ## Service Offering
 

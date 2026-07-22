@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Data Deletion Instructions | Agentic Ops",
+  title: "Data Deletion Instructions | AgenticOps AI",
   description: "How to disconnect integrations and request deletion.",
 };
 
@@ -14,8 +14,10 @@ export default function DataDeletionPage() {
           </h1>
           <div className="mt-6 space-y-5 text-sm leading-7 text-slate-700">
             <p>
-              Agentic Ops currently provides a manual deletion request process.
-              Automatic deletion infrastructure is not yet implemented.
+              This is the current data deletion instructions page for the
+              implemented AgenticOps AI MVP and configured integrations.
+              AgenticOps AI currently provides a manual deletion request
+              process. Automatic deletion infrastructure is not yet implemented.
             </p>
             <ul className="list-disc space-y-3 pl-5">
               <li>

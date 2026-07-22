@@ -4,22 +4,22 @@ Date: 2026-07-18
 
 ## Product Positioning
 
-Agentic Ops is positioned as an AI Communication Intelligence Platform. The current working MVP is Web3 Community Security: deterministic scam/phishing/impersonation detection, AI-assisted message analysis, moderator reply suggestions, batch analysis, community security reports and A2A service capability.
+AgenticOps AI is positioned as an AI Communication Intelligence Platform. The current working product has two implemented communication contexts: Web3 Community Security and Business Communication Intelligence. Web3 Community Security provides deterministic scam/phishing/impersonation detection, AI-assisted message analysis, moderator reply suggestions, batch analysis, community security reports and A2A service capability. Business Communication Intelligence provides a local pasted/TXT analysis MVP for normal business messages.
 
-The roadmap expands into broader business communication intelligence through document ingestion, channel-aware analysis, approval workflows, safe AI customer operations and developer platform APIs. Roadmap features must stay clearly labeled until implemented; the application must not claim live Facebook, Instagram, email, live chat, OAuth, auto-send, enterprise tenancy or database-backed functionality before those features exist. The current UI uses status labels such as Implemented, Current MVP, In Progress, Planned and Future to preserve that distinction.
+The roadmap expands into AI Email Workspace, AI Marketing Intelligence, AI Business Intelligence, AI Audit & Compliance and AI Business Operator workflows through document ingestion, channel-aware analysis, approval workflows, safe automation and developer platform APIs. Roadmap features must stay clearly labeled until implemented; the application must not claim live Facebook, Instagram, email sending, live chat, auto-send, enterprise tenancy or database-backed functionality before those features exist. The current UI uses status labels such as Implemented, In Progress, Planned and Future to preserve that distinction.
 
 The official logo asset is served from `public/logo/Agentic-Ops.jpg` and used by application branding and metadata without altering the supplied JPG. Next.js app icon files also use exact copies at `app/icon.jpg` and `app/apple-icon.jpg`; the existing `app/favicon.ico` remains because the favicon convention is `.ico` only.
 
 ## Capability Status
 
-- Implemented: Web3 Community Security as the first supported communication context, deterministic security rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public analysis/rules endpoints, local project knowledge bases, polished platform UI/UX, the normalized message model foundation and the `/business` Business Intelligence Dashboard MVP for pasted/TXT business communications.
+- Implemented: Web3 Community Security as the first supported communication context, Business Communication Intelligence as the second supported context, deterministic security rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public analysis/rules endpoints, local project knowledge bases, polished platform UI/UX, the normalized message model foundation and the `/business` Business Intelligence Dashboard MVP for pasted/TXT business communications.
 - In progress: platform positioning, message foundation hardening and internal normalization work.
-- Roadmap: business communication intelligence, document intelligence, channel adapters, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation, persistent audit history and developer APIs.
+- Roadmap: customer support, sales, internal teams, HR, document intelligence, channel adapters, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation, persistent audit history, AI audit, AI marketing intelligence, AI business intelligence, AI business operator workflows and developer APIs.
 - Future: organizations, workspaces, teams, user accounts, RBAC, permissions, secure tenant data isolation, durable multi-tenant persistence, per-organization API keys, billing/subscription management and enterprise administration.
 
 ## Current Architecture
 
-Agentic Ops is a Next.js 16 App Router application with public pages, dashboard pages, route handlers, and domain logic in `lib/`. The current product is a Web3 community security and support MVP.
+AgenticOps AI is a Next.js 16 App Router application with public pages, dashboard pages, route handlers, and domain logic in `lib/`. The current product includes a Web3 community security MVP and a Business Communication Intelligence MVP.
 
 Current pages:
 
@@ -81,7 +81,7 @@ Implemented:
 - Meta webhook verification uses `META_VERIFY_TOKEN`; signed POST payloads are validated with `META_APP_SECRET` when configured.
 - Telegram webhook validates `TELEGRAM_WEBHOOK_SECRET` when configured.
 - Discord Gateway support is a separate worker entry point, not a serverless request handler.
-- All provider payloads are normalized before processing and then sent through the analyze-only Agentic Ops processing service.
+- All provider payloads are normalized before processing and then sent through the analyze-only AgenticOps AI processing service.
 
 Development Only:
 
@@ -200,29 +200,33 @@ The public homepage now illustrates the intended platform-wide flow:
 ```text
 Incoming Message
   -> Normalize
-  -> Identify Context
+  -> Identify Communication Context
   -> Deterministic Rules
   -> AI Analysis
-  -> Risk & Intent Classification
-  -> Suggested Action
-  -> Human Review / Automation
+  -> Recommendations
+  -> Human Approval (when required)
+  -> Reports
+  -> Audit Trail
 ```
 
-Implemented today: incoming manual/API messages, the normalized message model foundation, deterministic Web3 security rules, AI-assisted analysis, partial risk/intent classification, suggested replies and browser-local reporting.
+Implemented today: incoming manual/API messages, the `/business` paste/TXT input path, the normalized message model foundation, deterministic Web3 security rules, AI-assisted analysis, partial risk/intent classification, suggested replies, browser-local reporting and integration event records.
 
-Roadmap: context identification across business domains, non-Web3 deterministic rule suites, document/channel ingestion, approval queues, configurable automation and durable audit history.
+Roadmap: broader context identification, non-Web3 deterministic rule suites, document/channel ingestion, approval queues, configurable automation and durable multi-tenant audit history.
 
 ## Communication Contexts
 
 The same normalized message model should support multiple communication contexts while allowing context-specific priorities:
 
-- Web3 Communities: current MVP context for scams, phishing, impersonation and unsafe support workflows.
+- Web3 Communities: implemented context for scams, phishing, impersonation and unsafe support workflows.
+- Business Communication: implemented context for pasted/TXT business messages, summary, intent, priority, sentiment, risk and recommended next step demonstration analysis.
 - Customer Support: planned support intent, urgency, complaint and recommended-action detection.
 - Sales Conversations: planned purchase intent, objections, product questions and follow-up detection.
-- Lead Qualification: planned routing for high-intent prospects.
 - Business Email: planned formal thread, attachment, action-item and summary support.
+- Internal Teams: planned decision, blocker, request and ownership summaries.
+- HR: planned policy question, employee issue and sensitive request triage.
 - Social Media: planned campaign, DM, comment, engagement and brand-risk analysis.
-- Internal Team Communication: future decision, blocker, request and ownership summaries.
+- Compliance: planned communication review, evidence trails and reports.
+- General Communication: planned intent, sentiment, risk, urgency and recommended action classification.
 
 ## Messaging Foundation
 
@@ -312,16 +316,16 @@ Potential paid services:
 
 ## Roadmap Architecture Notes
 
-Phase 1 should continue strengthening Universal Web3 Community Security while expanding the reusable API and Discord/Telegram architecture without live external connections.
+Phase 1, Communication Intelligence, is implemented for Web3 Community Security and Business Communication Intelligence. Future work in this phase adds Customer Support, Sales, Internal Teams and HR contexts.
 
-Phase 2 should add business intelligence and document ingestion through the normalized message model, including conversations, CSV, Excel, PDF, Word and plain-text inputs.
+Phase 2, AI Email Workspace, should add read email, categorization, phishing detection, draft replies, reply suggestions, send email, archive, labels, follow-up and inbox prioritization. Send/modify permissions remain planned only.
 
-Phase 3 should add channel intelligence for Facebook Pages, Instagram Business, email and website live chat. Each adapter should map provider payloads into `NormalizedMessage` and use channel profile metadata for source-aware analysis priorities.
+Phase 3, AI Marketing Intelligence, should add Facebook, Instagram, LinkedIn, X, TikTok and YouTube analysis with campaign analysis, ad performance, creative suggestions, audience recommendations, campaign reports and human-approved ads.
 
-Phase 4 should add AI customer operations with reply suggestions, human approval, configurable automation rules, escalation controls, confidence/risk thresholds and audit history. External auto-send must stay disabled unless a tenant explicitly configures and authorizes it.
+Phase 4, AI Business Intelligence, should add BigQuery, KPIs, revenue, expenses, forecasting, customer segmentation, business dashboards and executive reports.
 
-Phase 5 should extend omnichannel coverage to Discord, Telegram, X, TikTok, WhatsApp Business, Slack and additional channels based on demand.
+Phase 5, AI Audit & Compliance, should add communication audit, business audit, compliance audit, security audit, end-of-year reports, department reports and executive summaries.
 
-Phase 6 should add developer platform and workflow automation capabilities including REST API, A2A, MCP, SDKs, webhooks, configurable if/then workflows and external application integration.
+Phase 6, AI Business Operator, should add cross-channel workflows, scheduling, automation, approvals, executive summaries, workflow builder and human approval.
 
 Future enterprise features require explicit design approval before implementation: organizations, workspaces, teams, user accounts, RBAC, permissions, secure tenant data isolation, durable multi-tenant persistence, audit logs, per-organization API keys, billing/subscription management and enterprise administration.

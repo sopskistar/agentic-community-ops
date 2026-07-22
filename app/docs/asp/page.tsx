@@ -1,5 +1,5 @@
 const serviceDescription =
-  "Agentic Community Ops audits Web3 community messages using a deterministic security engine and AI-assisted support layer. It detects scams, phishing, fake administrators, wallet threats and transaction issues, then produces explainable risk verdicts, safe reply suggestions and escalation actions.";
+  "AgenticOps AI includes a Web3 Community Security ASP service that audits Web3 community messages using a deterministic security engine and AI-assisted support layer. It detects scams, phishing, fake administrators, wallet threats and transaction issues, then produces explainable risk verdicts, safe reply suggestions and escalation actions.";
 
 const sections = [
   {
@@ -99,7 +99,7 @@ export default function AspDocsPage() {
       <div className="page-shell max-w-6xl">
         <header className="section-card p-6 md:p-8">
           <p className="kicker">
-            ASP Documentation
+            AgenticOps AI ASP Documentation
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
             Community Message Security Audit

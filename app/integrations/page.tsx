@@ -16,9 +16,9 @@ const appBaseUrl =
   "https://YOUR_DEPLOYMENT_URL";
 
 export const metadata = {
-  title: "Integrations | Agentic Ops",
+  title: "Integrations | AgenticOps AI",
   description:
-    "Integration status and setup notes for Agentic Ops communication channels.",
+    "Integration status and setup notes for AgenticOps AI communication channels.",
 };
 
 export const dynamic = "force-dynamic";
@@ -41,7 +41,7 @@ export default async function IntegrationsPage() {
             Communication integrations
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-600">
-            External channels run in analyze-only mode. Agentic Ops can inspect
+            External channels run in analyze-only mode. AgenticOps AI can inspect
             normalized messages and produce recommendations, but it does not
             send replies, moderate users, modify email, manage ads or publish
             content in this phase.
@@ -131,7 +131,7 @@ export default async function IntegrationsPage() {
             Analysis, suggestions and actions stay separated
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
-            Agentic Ops stores received messages, analysis results and suggested
+            AgenticOps AI stores received messages, analysis results and suggested
             replies as separate workflow records. External execution remains
             unavailable until provider permissions, tenant ownership and explicit
             human approval workflows are configured.

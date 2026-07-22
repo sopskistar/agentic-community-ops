@@ -1,12 +1,13 @@
-# Agentic Ops
+# AgenticOps AI
 
-Agentic Ops is an AI Communication Intelligence Platform. The current working MVP focuses on Web3 Community Security: it audits community messages with deterministic security rules first, then uses an OpenAI-compatible AI layer for classification, explanation and safe moderator reply suggestions. AI output can never reduce the deterministic risk level.
+AgenticOps AI is an AI Communication Intelligence Platform. The current working product supports two implemented communication contexts: Web3 Community Security and Business Communication Intelligence. Web3 Community Security audits community messages with deterministic security rules first, then uses an OpenAI-compatible AI layer for classification, explanation and safe reply suggestions. AI output can never reduce the deterministic risk level.
 
-The product roadmap expands the same normalized message pipeline into broader business communication intelligence, document intelligence, channel-aware analysis and AI customer operations. Roadmap features are not claimed as live until implemented and verified.
+The product roadmap expands the same normalized message pipeline into email intelligence, marketing intelligence, AI audit, business intelligence and AI business operator workflows. Roadmap features are not claimed as live until implemented and verified.
 
 ## Current MVP
 
 - Web3 Community Security
+- Business Communication Intelligence
 - AI-powered message analysis
 - Scam and phishing detection
 - Explainable deterministic decisions
@@ -17,17 +18,17 @@ The product roadmap expands the same normalized message pipeline into broader bu
 
 ## Roadmap
 
-Phase 1 strengthens Universal Web3 Community Security, expands reusable A2A capability beyond the OKX ecosystem, improves documentation, and prepares Discord and Telegram channel architecture.
+Phase 1, Communication Intelligence, is implemented for Web3 Community Security and Business Communication Intelligence. Future contexts include Customer Support, Sales, Internal Teams and HR.
 
-Phase 2 adds a Business Intelligence Dashboard for pasted messages, full conversations, CSV, Excel, PDF, Word and plain-text uploads, conversation summaries, customer intent, complaints, leads, FAQs, priority detection and recommended actions.
+Phase 2, AI Email Workspace, is planned for reading email, categorization, phishing detection, draft replies, reply suggestions, sending, archive, labels, follow-up and inbox prioritization.
 
-Phase 3 adds Channel Intelligence and Communication Integrations for Facebook Pages, Instagram Business, Email and Website Live Chat. Every channel should enter the same normalized message pipeline while applying channel-aware analysis.
+Phase 3, AI Marketing Intelligence, is planned for Facebook, Instagram, LinkedIn, X, TikTok and YouTube, with campaign analysis, ad performance, creative suggestions, audience recommendations, campaign reports and human-approved ads.
 
-Phase 4 adds AI Customer Operations: reply suggestions, human approval, configurable auto-reply rules, escalation rules, confidence/risk controls, audit history and a safe default that never sends external replies without explicit authorization.
+Phase 4, AI Business Intelligence, is planned for BigQuery, KPIs, revenue, expenses, forecasting, customer segmentation, business dashboards and executive reports.
 
-Phase 5 expands omnichannel coverage to Discord, Telegram, X, TikTok, WhatsApp Business, Slack and additional channels based on demand.
+Phase 5, AI Audit & Compliance, is planned for communication audit, business audit, compliance audit, security audit, end-of-year reports, department reports and executive summaries.
 
-Phase 6 adds workflow automation and developer platform capabilities: REST API, A2A, MCP, SDKs, webhooks, configurable if/then workflows and external application integration.
+Phase 6, AI Business Operator, is future work for cross-channel workflows, scheduling, automation, approvals, executive summaries, workflow builder and human approval.
 
 Future enterprise features include organizations, workspaces, teams, user accounts, role-based access control, permissions, secure tenant data isolation, durable multi-tenant persistence, audit logs, API keys per organization, billing/subscription management and enterprise administration. These are roadmap items and are not implemented in the current MVP.
 
@@ -47,7 +48,7 @@ Additional future capability groups are tracked as roadmap items only:
 - Roadmap: advanced business communication intelligence, PDF/DOCX/CSV/Excel ingestion, channel-aware analysis, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation and developer integrations.
 - Future: enterprise organizations, workspaces, teams, user accounts, RBAC, tenant isolation, durable multi-tenant persistence, billing and administration.
 
-## Planned Business Communication Intelligence
+## Business Communication Intelligence
 
 The `/business` route now provides a local Business Intelligence Dashboard MVP for normal business communications. It supports paste text, TXT upload, business profile selection, communication purpose selection and explainable local demonstration analysis for summary, intent, priority, sentiment, risk, requested actions, important entities, recommended next step, confidence, key topics, suggested actions and reply outline.
 
@@ -233,7 +234,7 @@ Meta ingestion privacy and diagnostics:
 - Meta sender, recipient, message, comment, post and media identifiers are hashed before persistence.
 - Supported Meta events are normalized into provider `facebook` or `instagram` with channel metadata such as `messenger`, `instagram`, `facebook_comment` or `instagram_comment`.
 - Durable diagnostics use redacted categories such as `meta_message_received`, `facebook_comment_received`, `facebook_comment_edited`, `facebook_comment_removed`, `instagram_comment_received`, `instagram_mention_received`, `meta_analysis_started`, `meta_analysis_completed`, `meta_suggested`, `meta_failed`, `meta_comment_unsupported` and `meta_payload_unsupported`.
-- Facebook and Instagram suggested replies remain approval-required. Agentic Ops does not send replies, hide comments, delete comments, moderate users, publish content, manage ads or spend money.
+- Facebook and Instagram suggested replies remain approval-required. AgenticOps AI does not send replies, hide comments, delete comments, moderate users, publish content, manage ads or spend money.
 
 ## Storage Limitations
 
@@ -269,7 +270,7 @@ Expected response:
 
 ```json
 {
-  "service": "Agentic Community Ops",
+  "service": "AgenticOps AI",
   "status": "healthy",
   "version": "1.0.0",
   "deterministicEngine": true

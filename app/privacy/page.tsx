@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Privacy Policy | Agentic Ops",
-  description: "Privacy information for Agentic Ops integration processing.",
+  title: "Privacy Policy | AgenticOps AI",
+  description: "Current privacy information for AgenticOps AI integration processing.",
 };
 
 export default function PrivacyPage() {
@@ -10,11 +10,15 @@ export default function PrivacyPage() {
         <article className="section-card p-6 md:p-8">
           <p className="kicker">Privacy Policy</p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
-            Agentic Ops Privacy Policy
+            AgenticOps AI Privacy Policy
           </h1>
           <div className="mt-6 space-y-5 text-sm leading-7 text-slate-700">
             <p>
-              Agentic Ops is an AI Communication Intelligence Platform. It can
+              This is the current policy page for the implemented AgenticOps AI
+              MVP and configured integrations.
+            </p>
+            <p>
+              AgenticOps AI is an AI Communication Intelligence Platform. It can
               process communication data from configured channels to provide
               analysis, risk signals, intent classification, suggested actions
               and human-review recommendations.
@@ -27,7 +31,7 @@ export default function PrivacyPage() {
               stored server-side for connected Google/Gmail access.
             </p>
             <p>
-              Current integrations run in analyze-only mode. Agentic Ops does
+              Current integrations run in analyze-only mode. AgenticOps AI does
               not automatically send external replies, delete messages, archive
               email, label email, ban users, publish posts, manage ads or change
               provider data in this phase.

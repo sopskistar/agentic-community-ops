@@ -1,8 +1,8 @@
 {
   "name": "Community Message Security Audit",
-  "provider": "Agentic Community Ops",
+  "provider": "AgenticOps AI",
   "version": "1.0.0",
-  "serviceDescription": "Agentic Community Ops audits Web3 community messages using a deterministic security engine and AI-assisted support layer. It detects scams, phishing, fake administrators, wallet threats and transaction issues, then produces explainable risk verdicts, safe reply suggestions and escalation actions.",
+  "serviceDescription": "AgenticOps AI provides a Web3 Community Security service that audits Web3 community messages using a deterministic security engine and AI-assisted support layer. It detects scams, phishing, fake administrators, wallet threats and transaction issues, then produces explainable risk verdicts, safe reply suggestions and escalation actions.",
   "suggestedDemonstrationPrice": {
     "amount": "1",
     "currency": "USDC",

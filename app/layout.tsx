@@ -4,25 +4,39 @@ import Link from "next/link";
 import "./globals.css";
 import { AppNav } from "./components/app-nav";
 
+const appUrl =
+  process.env.NEXT_PUBLIC_APP_URL?.trim() ||
+  process.env.APP_BASE_URL?.trim() ||
+  "https://agenticopsai.xyz";
+
 export const metadata: Metadata = {
-  title: "Agentic Ops | AI Communication Intelligence Platform",
+  metadataBase: new URL(appUrl),
+  title: "AgenticOps AI | AI Communication Intelligence Platform",
   description:
-    "Agentic Ops is an AI Communication Intelligence Platform. The current MVP focuses on Web3 community security, with a roadmap for broader business communication intelligence.",
+    "AgenticOps AI analyzes communication across implemented Web3 community security and business communication contexts, with explainable AI, deterministic rules and human approval workflows.",
+  keywords: [
+    "AgenticOps AI",
+    "AI communication intelligence",
+    "business communication analysis",
+    "Web3 community security",
+    "AI message analysis",
+    "human approval workflows",
+  ],
   icons: {
     icon: "/logo/Agentic-Ops.jpg",
     shortcut: "/logo/Agentic-Ops.jpg",
   },
   openGraph: {
-    title: "Agentic Ops | AI Communication Intelligence Platform",
+    title: "AgenticOps AI | AI Communication Intelligence Platform",
     description:
-      "Current MVP: Web3 community security. Roadmap: omnichannel business communication intelligence.",
-    siteName: "Agentic Ops",
+      "Current MVP: Web3 Community Security and Business Communication Intelligence. Roadmap: email, marketing, audit and AI business operator workflows.",
+    siteName: "AgenticOps AI",
     images: [
       {
         url: "/logo/Agentic-Ops.jpg",
         width: 440,
         height: 440,
-        alt: "Agentic Ops logo",
+        alt: "AgenticOps AI logo",
       },
     ],
   },
@@ -59,17 +73,17 @@ export default function RootLayout({
               <div className="flex items-center gap-3">
                 <Image
                   src="/logo/Agentic-Ops.jpg"
-                  alt="Agentic Ops logo"
+                  alt="AgenticOps AI logo"
                   width={36}
                   height={36}
                   className="rounded-lg border border-slate-200 object-contain"
                 />
                 <p className="font-semibold text-slate-950">
-                  Agentic Ops
+                  AgenticOps AI
                 </p>
               </div>
               <p className="mt-1 text-xs">
-                Copyright 2026 Agentic Ops. All rights reserved.
+                Copyright 2026 AgenticOps AI. All rights reserved.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2">

@@ -46,7 +46,7 @@ export function AppNav() {
           >
             <Image
               src="/logo/Agentic-Ops.jpg"
-              alt="Agentic Ops logo"
+              alt="AgenticOps AI logo"
               width={44}
               height={44}
               priority
@@ -54,7 +54,7 @@ export function AppNav() {
             />
             <span>
               <span className="block text-sm font-bold tracking-wide text-slate-950">
-                Agentic Ops
+                AgenticOps AI
               </span>
               <span className="block text-xs font-medium text-slate-500">
                 AI communication intelligence
