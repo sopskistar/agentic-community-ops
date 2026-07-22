@@ -9,8 +9,8 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "Engine", href: "/security-engine" },
   { label: "Demo", href: "/demo" },
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Business", href: "/business" },
+  { label: "Platform Dashboard", href: "/dashboard" },
+  { label: "Business Intelligence", href: "/business" },
   { label: "Integrations", href: "/integrations" },
   { label: "ASP Docs", href: "/docs/asp" },
 ];

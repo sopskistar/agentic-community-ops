@@ -4,7 +4,7 @@ Date: 2026-07-18
 
 ## Product Positioning
 
-AgenticOps AI is positioned as an AI Communication Intelligence Platform. The current working product has two implemented communication contexts: Web3 Community Security and Business Communication Intelligence. Web3 Community Security provides deterministic scam/phishing/impersonation detection, AI-assisted message analysis, moderator reply suggestions, batch analysis, community security reports and A2A service capability. Business Communication Intelligence provides pasted text plus TXT, PDF, DOCX, CSV and XLSX file analysis for normal business messages, preliminary business audit review and budget review.
+AgenticOps AI is positioned as an AI Communication Intelligence Platform. The current working product has two implemented communication contexts: Web3 Community Security and Business Communication Intelligence. Web3 Community Security provides deterministic scam/phishing/impersonation detection, AI-assisted message analysis, moderator reply suggestions, batch analysis, community security reports and A2A service capability. Business Communication Intelligence provides pasted text plus TXT, PDF, DOCX, CSV and XLSX file analysis for normal business messages, preliminary business audit review, budget review, saved reports, knowledge profiles and analysis history.
 
 The roadmap expands into AI Email Workspace, AI Marketing Intelligence, AI Business Intelligence, AI Audit & Compliance and AI Business Operator workflows through document ingestion, channel-aware analysis, approval workflows, safe automation and developer platform APIs. Roadmap features must stay clearly labeled until implemented; the application must not claim live Facebook, Instagram, email sending, live chat, auto-send, enterprise tenancy or database-backed functionality before those features exist. The current UI uses status labels such as Implemented, In Progress, Planned and Future to preserve that distinction.
 
@@ -12,7 +12,7 @@ The official logo asset is served from `public/logo/Agentic-Ops.jpg` and used by
 
 ## Capability Status
 
-- Implemented: Web3 Community Security as the first supported communication context, Business Communication Intelligence as the second supported context, deterministic security rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public analysis/rules endpoints, local project knowledge bases, polished platform UI/UX, the normalized message model foundation, `/business` analysis for pasted text/TXT/PDF/DOCX/CSV/XLSX, Gmail readonly sync and analysis, Telegram ingestion, Facebook Messenger ingestion, Discord Gateway ingestion through Railway, durable integration event/workflow storage and human-approval-required suggestions.
+- Implemented: Web3 Community Security as the first supported communication context, Business Communication Intelligence as the second supported context, deterministic security rules, AI-assisted message analysis, single-message review, batch analysis, browser-local Web3 reports, public analysis/rules endpoints, local project knowledge bases, polished platform UI/UX, the normalized message model foundation, `/business` analysis for pasted text/TXT/PDF/DOCX/CSV/XLSX, durable business analyses/reports/profiles/actions, Gmail readonly sync and analysis, Telegram ingestion, Facebook Messenger ingestion, Discord Gateway ingestion through Railway, durable integration event/workflow storage and human-approval-required suggestions.
 - Foundation Ready: Instagram webhook verification and supported payload normalization, pending broader production delivery verification and Meta configuration.
 - Roadmap: HR, compliance, marketing communication, executive operations, Website Live Chat, Outlook, WhatsApp Business, Slack, Microsoft Teams, X, YouTube, LinkedIn, TikTok, Reddit, Gmail send/modify, approval execution workflows, safe automation, persistent tenant audit views, AI audit, AI marketing intelligence, AI business intelligence, AI business operator workflows and developer APIs.
 - Future: organizations, workspaces, teams, user accounts, RBAC, permissions, secure tenant data isolation, durable multi-tenant persistence, per-organization API keys, billing/subscription management and enterprise administration.
@@ -25,7 +25,7 @@ Current pages:
 
 - `/`: product landing page.
 - `/demo`: no-login guided NovaBridge demo using the real hybrid analysis flow with a local mock AI provider.
-- `/business`: local Business Intelligence Dashboard MVP using demonstration logic for normal business communications.
+- `/business`: Business Intelligence Workspace for communication analysis, business file review, preliminary audit findings, budget review, generated reports, profile context and analysis history.
 - `/integrations`: integration status, callback URLs, redacted integration event/workflow log and safe next actions.
 - `/integrations/gmail`: Gmail readonly inbox listing and manual analyze-only message review.
 - `/privacy`: public privacy policy.
@@ -46,6 +46,12 @@ Current API routes:
 - `POST /api/v1/analyse`: validates a project/message request, loads a project from local JSON, runs deterministic-first hybrid analysis, and returns structured results.
 - `POST /api/v1/analyse/batch`: validates up to 25 messages, isolates invalid messages, runs analysis with concurrency 3, and returns successful results, failed results, and measured summary metrics.
 - `POST /api/business/ingest`: validates and parses supported business uploads without permanently storing original files, then returns sanitized extraction metadata, preview and bounded analysis content.
+- `GET/POST /api/business/analyses`: lists and saves bounded business analyses through the business repository.
+- `GET /api/business/analyses/[id]`: reads one saved business analysis by validated ID.
+- `GET/POST /api/business/reports`: lists and generates reports from saved analyses.
+- `GET /api/business/reports/[id]`: reads one generated business report by validated ID.
+- `GET /api/business/reports/[id]/export`: exports report data as JSON or CSV findings. PDF is handled through print-optimized HTML and browser Save as PDF.
+- `GET/POST /api/business/profiles`: lists seeded plus saved business profiles and persists bounded profile context.
 - `GET /api/integrations/google/auth`: starts Google OAuth with Gmail readonly scope and CSRF state cookie.
 - `GET /api/integrations/google/callback`: validates OAuth state, exchanges code for tokens and stores encrypted token metadata server-side.
 - `GET/POST /api/integrations/gmail/messages`: lists a small recent Gmail inbox window and analyzes selected messages without modifying email.
@@ -59,7 +65,7 @@ Current domain modules:
 - `lib/analysis/`: hybrid analysis types, Zod schemas, AI merge logic, risk ordering, batch metrics, and tests.
 - `lib/ai/`: provider interface, OpenAI-compatible provider, and default provider fallback.
 - `lib/messages/`: normalized message foundation, channel/source enums, reusable message/conversation/reply/audit types, Zod schemas, and channel profile metadata for future adapters.
-- `lib/business/`: local demonstration business communication analysis types, profiles, heuristic analyzer and tests.
+- `lib/business/`: business communication analysis types, profiles, heuristic analyzer, audit finding generation, deterministic budget calculations, report generation, metrics, repository abstraction, request validation and tests.
 - `lib/business-ingestion/`: server-side upload validation plus TXT, PDF, DOCX, CSV and XLSX parsers, bounded extraction summaries, preview helpers and tests.
 - `lib/integrations/`: provider-neutral normalized integration messages, adapters, OAuth helpers, token storage, Gmail service, webhook security, dedupe, durable event/workflow repository and analyze-only processing.
 - `lib/projects/`: project knowledge-base types, Zod validation, repository interface, local JSON repository, and tests.
@@ -70,7 +76,7 @@ Current persistence:
 - Project profiles are stored in `data/projects.json` through `ProjectRepository`.
 - Batch and report UI state is stored in browser `localStorage`.
 - There is no tenant, user, organization, webhook, message, analysis, approval, or audit-log persistence.
-- `/business` keeps analysis state in the browser only and does not persist business messages, uploaded files, extraction artifacts or profile changes.
+- `/business` persists bounded analysis records, reports, profile records and proposed internal action records through `BusinessRepository`. Production uses KV/Upstash when configured; tests use memory; local development can fall back to `.agenticops/business-workspace-store.json`.
 - Google OAuth token storage uses encrypted Vercel KV/Upstash REST storage in production when KV/Upstash REST variables are configured. Local filesystem token storage under `.agenticops/` is development-only and is refused in production.
 - Integration event/workflow records use a provider-independent repository. Vercel KV/Upstash REST is used for durable storage when configured; tests use memory; local development without KV falls back to `.agenticops/integration-event-store.json`.
 
@@ -103,7 +109,7 @@ Planned/Future:
 
 Meta webhook delivery still depends on external Meta dashboard setup: the callback URL must be configured as `https://agenticopsai.xyz/api/webhooks/meta`, the verify token must match `META_VERIFY_TOKEN`, Facebook Page webhook fields must be subscribed, the Page must be subscribed to the app, the Instagram professional account must be linked to the correct Page, Instagram messaging fields must be subscribed, and development-mode apps only deliver events for permitted roles/test assets until review/permissions allow broader traffic.
 
-## Business Intelligence Dashboard MVP
+## Business Intelligence Workspace
 
 The `/business` page is the second working communication context after Web3 Community Security. It does not modify the Web3 deterministic security engine or existing analysis APIs.
 
@@ -117,10 +123,14 @@ Implemented now:
 - Parse CSV headers, quoted values and bounded UTF-8 rows/columns.
 - Parse XLSX worksheets with bounded rows/columns/cells and cached/displayed formula values only.
 - Show filename, type, size, PDF page count, worksheet, row/column counts, extracted character count, truncation state and a sanitized preview before analysis.
-- Select a demonstration business profile: Default, Acme Corp, Demo SaaS or Support Center.
+- Select a business profile: Default, Acme Corp, Support Center, SaaS Company, E-commerce Business, Professional Services, Nonprofit Organization, Small Business or a saved bounded profile.
 - Select one analysis purpose: Customer Support, Business Email, Sales Conversation, Internal Team, General Communication, Business Audit or Budget Review.
-- Generate structured local demonstration analysis: summary, intent, priority, sentiment, risk level, requested actions, important entities, recommended next step, confidence, key topics, suggested actions, recommended reply outline, audit observations and budget observations where applicable.
+- Generate structured local analysis: executive summary, communication type, summary, intent, priority, sentiment, risk level, requested actions, important entities, dates, people/departments, recommended next step, confidence, key topics, suggested actions, recommended reply outline, missing context, human-review requirement, audit observations and budget observations where applicable.
 - Show explainability notes describing why recommendations were produced.
+- Persist saved analyses, audit findings, proposed internal action records and generated report metadata through the business repository.
+- Calculate Budget Review totals, variance, variance percentage, largest deviations and data-quality warnings deterministically when the input contains budget/planned and actual/spent columns.
+- Generate reports from saved analyses only: Communication Analysis Report, Business Audit Report, Budget Review Report, Executive Summary, Risk Report, Department Report, Year-End Business Review and Findings and Recommendations Report.
+- Export generated reports as JSON and CSV findings, and use the browser print flow for PDF output.
 
 Not implemented:
 
@@ -128,7 +138,9 @@ Not implemented:
 - OCR for scanned/image-only PDFs.
 - Legacy `.doc`, legacy `.xls` and macro-enabled `.xlsm` parsing.
 - CRM sync, email sending, Slack, Microsoft Teams, Google Workspace, Salesforce, HubSpot or ticket creation.
-- Durable persistence, tenant-specific business profiles or audit-log storage.
+- Certified accounting audits, statutory audit assurance, tax compliance, legal conclusions or financial advice.
+- Autonomous action execution, external sends, payment execution, bank connections, CRM writeback or accounting synchronization.
+- Tenant-specific auth boundaries, organization-level RBAC or secure tenant isolation.
 
 Current deployment assumptions:
 
@@ -218,7 +230,7 @@ Incoming Message
   -> Audit Trail
 ```
 
-Implemented today: incoming manual/API messages, the `/business` paste/TXT input path, the normalized message model foundation, deterministic Web3 security rules, AI-assisted analysis, partial risk/intent classification, suggested replies, browser-local reporting and integration event records.
+Implemented today: incoming manual/API messages, `/business` paste/TXT/PDF/DOCX/CSV/XLSX input paths, the normalized message model foundation, deterministic Web3 security rules, AI-assisted analysis, partial risk/intent classification, suggested replies, browser-local Web3 reporting, durable business reports and integration event records.
 
 Roadmap: broader context identification, non-Web3 deterministic rule suites, document/channel ingestion, approval queues, configurable automation and durable multi-tenant audit history.
 
@@ -227,15 +239,15 @@ Roadmap: broader context identification, non-Web3 deterministic rule suites, doc
 The same normalized message model should support multiple communication contexts while allowing context-specific priorities:
 
 - Web3 Communities: implemented context for scams, phishing, impersonation and unsafe support workflows.
-- Business Communication: implemented context for pasted/TXT business messages, summary, intent, priority, sentiment, risk and recommended next step demonstration analysis.
-- Customer Support: planned support intent, urgency, complaint and recommended-action detection.
-- Sales Conversations: planned purchase intent, objections, product questions and follow-up detection.
-- Business Email: planned formal thread, attachment, action-item and summary support.
-- Internal Teams: planned decision, blocker, request and ownership summaries.
+- Business Communication: implemented context for pasted text, TXT/PDF/DOCX/CSV/XLSX business inputs, summary, intent, priority, sentiment, risk, preliminary audit review, budget review, recommended next steps and generated reports.
+- Customer Support: implemented analysis purpose inside the Business Communication MVP for support intent, urgency, complaints and recommended actions.
+- Sales Conversations: implemented analysis purpose inside the Business Communication MVP for purchase intent, objections, product questions and follow-up detection.
+- Business Email: implemented analysis purpose inside the Business Communication MVP for formal communication review; full mailbox workspace actions remain planned.
+- Internal Teams: implemented analysis purpose inside the Business Communication MVP for decision, blocker, request and ownership summaries.
 - HR: planned policy question, employee issue and sensitive request triage.
 - Social Media: planned campaign, DM, comment, engagement and brand-risk analysis.
 - Compliance: planned communication review, evidence trails and reports.
-- General Communication: planned intent, sentiment, risk, urgency and recommended action classification.
+- General Communication: implemented analysis purpose inside the Business Communication MVP for intent, sentiment, risk, urgency and recommended action classification.
 
 ## Messaging Foundation
 
@@ -331,9 +343,9 @@ Phase 2, AI Email Workspace, should add read email, categorization, phishing det
 
 Phase 3, AI Marketing Intelligence, should add Facebook, Instagram, LinkedIn, X, TikTok and YouTube analysis with campaign analysis, ad performance, creative suggestions, audience recommendations, campaign reports and human-approved ads.
 
-Phase 4, AI Business Intelligence, should add BigQuery, KPIs, revenue, expenses, forecasting, customer segmentation, business dashboards and executive reports.
+Phase 4, AI Business Intelligence, now has an implemented internal workspace for saved business analyses, preliminary audit review, budget review, report generation and executive metrics. Future work should add BigQuery, accounting systems, KPIs, revenue feeds, expenses, forecasting, customer segmentation and external business dashboards.
 
-Phase 5, AI Audit & Compliance, should add communication audit, business audit, compliance audit, security audit, end-of-year reports, department reports and executive summaries.
+Phase 5, AI Audit & Compliance, now has preliminary business audit findings and year-end report templates inside `/business`. Future work should add scheduled audits, continuous controls, compliance framework mapping, evidence workflows, auditor collaboration and organization-level audit dashboards.
 
 Phase 6, AI Business Operator, should add cross-channel workflows, scheduling, automation, approvals, executive summaries, workflow builder and human approval.
 

@@ -18,10 +18,10 @@ export default async function DashboardPage() {
         <div className="section-card flex flex-col gap-5 p-6 md:flex-row md:items-end md:justify-between md:p-7">
           <div>
             <p className="kicker">
-              Dashboard
+              Platform Dashboard
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
-              Communication knowledge base
+              Knowledge Hub
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
               Manage official documentation, verified links and response tone

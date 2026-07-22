@@ -207,6 +207,15 @@
 - Tests performed: `npm test` passed with 53 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed.
 - New rules learned: OpenAI-compatible provider configuration should expose API key, model, and optional base URL separately.
 
+## 2026-07-22 - Session: business intelligence workspace expansion
+
+- What was built: Expanded `/business` into a structured Business Intelligence Workspace with Analyze, Audit, Budget, Reports, Knowledge Hub and Analysis History sections; added durable repository abstractions for business analyses, reports, profiles and proposed action records; added preliminary audit findings, deterministic budget calculations, report generation/export and executive metrics.
+- Problems found: The prior business page kept analysis state in the browser and mixed all workflows into one long page. Budget Review had narrative observations but no persisted deterministic variance model.
+- Bugs fixed: Added persisted budget intelligence for table-like Budget Review inputs and updated documentation so business persistence, report output and limitations are described accurately.
+- Important technical decisions: Original uploaded files are not stored; report generation uses saved analysis data only; PDF report output uses browser print/save-as-PDF rather than a fake binary PDF download; action records are internal and approval-required; no external actions, certified audit claims, tax/legal conclusions or financial advice were added.
+- Tests performed: `npm test` passed with 185 tests across 41 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 31 static/dynamic routes; `npm audit --omit=dev` passed with 0 vulnerabilities after adding explicit `postcss` and `sharp` transitive dependency overrides.
+- New rules learned: Business audit and budget outputs must remain preliminary decision support and should explicitly use human-review and insufficient-information language when source data is incomplete.
+
 ## 2026-07-14 - Session: complete MVP verification
 
 - What was built: No new product features were added. Audited the repository against the complete AgenticOps AI MVP, inspected route structure and git history, verified public ASP artifacts, and confirmed final build readiness.

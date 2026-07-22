@@ -31,16 +31,23 @@ export default function PrivacyPage() {
               stored server-side for connected Google/Gmail access.
             </p>
             <p>
+              The Business Intelligence Workspace may store bounded analysis
+              records, generated report metadata, audit findings, proposed
+              internal action records and business profile context. Uploaded file
+              bytes are parsed for extraction and are not permanently stored by
+              the current implementation.
+            </p>
+            <p>
               Current integrations run in analyze-only mode. AgenticOps AI does
               not automatically send external replies, delete messages, archive
               email, label email, ban users, publish posts, manage ads or change
               provider data in this phase.
             </p>
             <p>
-              Development token storage is encrypted at rest when configured but
-              is not a substitute for production database-backed secret storage.
-              Production deployments should use durable encrypted storage,
-              access controls, audit logs and retention policies appropriate to
+              Google OAuth tokens are encrypted before server-side persistence.
+              Business and integration records use the configured durable
+              repository when available. Production deployments should define
+              retention, access controls and audit-log policies appropriate to
               the organization.
             </p>
             <p>

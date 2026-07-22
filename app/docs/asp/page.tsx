@@ -56,6 +56,7 @@ const sections = [
       "No authentication is implemented yet.",
       "Project knowledge-base storage currently uses local JSON and is not durable production storage on serverless platforms.",
       "Batch/report dashboard state is browser-local until server-side persistence is added.",
+      "The Business Intelligence Workspace is separate from this Web3 ASP service and is not part of the OKX ASP registration contract.",
     ],
   },
   {

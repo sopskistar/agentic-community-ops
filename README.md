@@ -24,7 +24,7 @@ Phase 2, AI Email Workspace, is planned for reading email, categorization, phish
 
 Phase 3, AI Marketing Intelligence, is planned for Facebook, Instagram, LinkedIn, X, TikTok and YouTube, with campaign analysis, ad performance, creative suggestions, audience recommendations, campaign reports and human-approved ads.
 
-Phase 4, AI Business Intelligence, is planned for BigQuery, KPIs, revenue, expenses, forecasting, customer segmentation, business dashboards and executive reports.
+Phase 4, AI Business Intelligence, is implemented for the internal Business Intelligence Workspace and planned for external systems such as BigQuery, accounting platforms, KPI sources, forecasting feeds and customer-segmentation data.
 
 Phase 5, AI Audit & Compliance, is planned for communication audit, business audit, compliance audit, security audit, end-of-year reports, department reports and executive summaries.
 
@@ -38,23 +38,38 @@ Additional future capability groups are tracked as roadmap items only:
 - Social and Community Intelligence: X, YouTube comments, LinkedIn company pages and comments, TikTok, Reddit, social listening, sentiment analysis, brand-risk detection, lead identification and complaint identification.
 - AI Marketing Intelligence: Meta Ads, X Ads, LinkedIn Ads, TikTok Ads, Google Ads, YouTube campaign intelligence, campaign recommendations, audience suggestions, ad-copy generation, creative briefs, performance monitoring and human approval before campaign launch or budget changes.
 - AI Email Workspace: future Gmail permissions such as `gmail.modify` and `gmail.send`, labels, archive, follow-up workflows, human-approved sending, phishing detection and priority detection.
-- Business Intelligence: BigQuery, Cloud Platform integrations, KPI analysis, customer segmentation, business reporting, trend detection and anomaly detection.
+- Business Intelligence: implemented internal workspace for business communication analysis, uploaded document/spreadsheet review, preliminary audits, budget review, saved reports, knowledge profiles and analysis history. Future external integrations include BigQuery, Cloud Platform data sources, customer segmentation, trend detection and anomaly detection.
 - AI Business Operator: cross-channel workflows, task routing, approvals, audit history, executive summaries and controlled automation.
 
 ## Capability Status
 
-- Live or implemented: Web3 Community Security, Business Communication Intelligence, paste text analysis, TXT upload, PDF extraction, DOCX extraction, CSV parsing, XLSX parsing, Gmail readonly sync and analysis, Telegram message ingestion, Facebook Messenger message ingestion, Discord Gateway ingestion through the Railway worker, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public rules/analysis APIs, project knowledge bases, normalized message model foundation, durable integration event/workflow storage and human-approval-required suggested replies.
+- Live or implemented: Web3 Community Security, Business Communication Intelligence, paste text analysis, TXT upload, PDF extraction, DOCX extraction, CSV parsing, XLSX parsing, Gmail readonly sync and analysis, Telegram message ingestion, Facebook Messenger message ingestion, Discord Gateway ingestion through the Railway worker, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local Web3 reports, durable business analyses/reports/profiles/actions, public rules/analysis APIs, project knowledge bases, normalized message model foundation, durable integration event/workflow storage and human-approval-required suggested replies.
 - Foundation ready: Instagram webhook verification and supported payload normalization. Broader Instagram production event coverage depends on Meta delivery, account linkage, permissions and App Review status.
 - Planned: Outlook, WhatsApp Business, Slack, Microsoft Teams, X, YouTube, LinkedIn, TikTok, Reddit, Website Live Chat, Gmail send/modify actions, automated ads, CRM writeback, certified audit, autonomous business actions and multi-tenant enterprise administration.
 - Future: enterprise organizations, workspaces, teams, user accounts, RBAC, tenant isolation, durable multi-tenant persistence, billing and administration.
 
 ## Business Communication Intelligence
 
-The `/business` route provides a Business Intelligence Dashboard MVP for normal business communications and uploaded business files. It supports paste text, TXT upload, PDF text extraction, DOCX text extraction, CSV parsing and XLSX worksheet parsing. Supported analysis purposes are Customer Support, Business Email, Sales Conversation, Internal Team, General Communication, Business Audit and Budget Review.
+The `/business` route provides a Business Intelligence Workspace for normal business communications, uploaded business files, preliminary audit review, budget review, executive reporting, profile context and analysis history. It supports paste text, TXT upload, PDF text extraction, DOCX text extraction, CSV parsing and XLSX worksheet parsing. Supported analysis purposes are Customer Support, Business Email, Sales Conversation, Internal Team, General Communication, Business Audit and Budget Review.
 
-Business analysis returns a structured summary, intent, communication purpose, priority, sentiment, risk level, requested actions, important entities, key topics, recommended next step, recommended reply outline, confidence and explainability. Spreadsheet and business-record reviews may also include data overview, notable trends, exceptions/anomalies, budget variance indicators, revenue/expense observations, missing or inconsistent entries, preliminary audit observations and recommended follow-up checks.
+Business analysis returns an executive summary, communication type, intent, priority, sentiment, risk level, key topics, important entities, requested actions, dates, people/departments, recommended next step, suggested reply outline, escalation recommendation, confidence, missing context, human-review requirement and explainability. Spreadsheet and business-record reviews may also include data overview, notable trends, exceptions/anomalies, budget variance indicators, revenue/expense observations, missing or inconsistent entries, preliminary audit observations and recommended follow-up checks.
 
 Business Audit is an AI-assisted preliminary review only. It is not a certified external audit, legal opinion, statutory compliance certification or financial advice. Budget Review is decision-support analysis only and does not invent totals when source data is incomplete.
+
+Business workspace sections:
+
+- Analyze: select a business profile, choose a purpose, paste text or upload a supported file, review extracted metadata, analyze and save the result.
+- Audit: review generated audit findings with severity, evidence summary, source reference, recommended corrective action, responsible role and read-only status.
+- Budget: review deterministic budget calculations when budget/planned and actual/spent columns are present, plus data-quality warnings and finance review questions.
+- Reports: generate reports from saved analyses only. Supported export formats are print-optimized HTML for browser Save as PDF, JSON and CSV for structured findings.
+- Knowledge Hub: manage bounded business profile context and knowledge text. This is structured profile context, not vector search.
+- Analysis History: view saved analysis records, risk, purpose, profile, status, report availability and summaries.
+
+Business records use the existing repository pattern. Production can store business analyses, reports, profiles and proposed action records in Vercel KV/Upstash REST. Local development can fall back to `.agenticops/business-workspace-store.json`. Original uploaded file bytes are not stored.
+
+Future Financial Intelligence is planned for accounting-system integrations, QuickBooks, Xero, Stripe revenue analysis, bank-feed review, cash-flow forecasting, invoice intelligence, expense classification, financial KPI monitoring, revenue forecasting, cost optimization, tax-document preparation assistance and multi-period comparison. These integrations are not implemented.
+
+Future AI Audit capabilities are planned for scheduled audits, continuous control monitoring, multi-period comparison, cross-department audit, evidence request workflows, auditor collaboration, compliance framework mapping, audit sampling, policy-control mapping, corrective-action tracking, external audit-platform export, approved evidence collection and organization-level audit dashboards.
 
 Supported file extensions:
 
@@ -145,6 +160,8 @@ Set these in the deployment platform environment. Do not commit `.env.local`.
 - `OPENAI_MODEL`: optional; defaults to the provider configured in code when unset.
 - `OPENAI_BASE_URL`: optional; set this for OpenAI-compatible providers such as OpenRouter.
 - `BUSINESS_UPLOAD_MAX_BYTES`: optional business file upload limit in bytes. Defaults to 4 MB and is capped at 10 MB.
+- `BUSINESS_REPOSITORY`: optional; set to `memory` only for tests or explicit local fallback. Leave unset in production so KV/Upstash is selected when configured.
+- `BUSINESS_RECORD_RETENTION_DAYS`: optional TTL for business analysis, report, profile and action records when supported by the selected repository. If unset, records do not receive an automatic expiration from the app.
 - `NEXT_PUBLIC_APP_URL`: public deployed app URL used for callback display, for example `https://YOUR_DEPLOYMENT_URL`.
 - `APP_BASE_URL`: server-side base URL used by workers, for example `https://YOUR_DEPLOYMENT_URL`.
 - `INTERNAL_INTEGRATION_SECRET`: shared secret for the Discord worker to call server-side processing.

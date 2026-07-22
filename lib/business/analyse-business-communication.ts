@@ -1,6 +1,7 @@
 import type {
   BusinessAnalysisInput,
   BusinessAnalysisResult,
+  BusinessProfile,
   BusinessPriority,
   BusinessRiskLevel,
   BusinessSentiment,
@@ -29,6 +30,20 @@ export function analyseBusinessCommunication(
   const riskLevel = detectRisk(lowerContent);
   const requestedActions = detectRequestedActions(sentences);
   const importantEntities = detectEntities(content);
+  const deadlinesOrDates = detectDeadlinesOrDates(content);
+  const peopleOrDepartments = detectPeopleOrDepartments(content, input.profile);
+  const missingContext = detectMissingContext(lowerContent, input.purpose);
+  const requiresHumanReview =
+    priority === "Critical" ||
+    riskLevel === "High" ||
+    input.purpose === "Business Audit" ||
+    input.purpose === "Budget Review" ||
+    confidenceNeedsHumanReview({
+      content,
+      keyTopics,
+      requestedActions,
+      importantEntities,
+    });
   const suggestedActions = createSuggestedActions({
     intent,
     priority,
@@ -45,13 +60,22 @@ export function analyseBusinessCommunication(
 
   return {
     summary: createSummary(sentences, input.purpose),
+    executiveSummary: createExecutiveSummary(sentences, input.purpose),
+    communicationType: input.purpose,
     intent,
     priority,
     sentiment,
     riskLevel,
     requestedActions,
     importantEntities,
+    deadlinesOrDates,
+    peopleOrDepartments,
     recommendedNextStep,
+    escalationRecommendation: createEscalationRecommendation({
+      priority,
+      riskLevel,
+      requiresHumanReview,
+    }),
     confidence: calculateConfidence({
       content,
       keyTopics,
@@ -66,6 +90,8 @@ export function analyseBusinessCommunication(
       riskLevel,
       purpose: input.purpose,
     }),
+    missingContext,
+    requiresHumanReview,
     explanation: createExplanation({
       input,
       keyTopics,
@@ -232,6 +258,70 @@ function detectEntities(content: string) {
     : ["No important entities detected."];
 }
 
+function detectDeadlinesOrDates(content: string) {
+  const dates =
+    content.match(
+      /\b(?:today|tomorrow|next week|next month|monday|tuesday|wednesday|thursday|friday|saturday|sunday|q[1-4]|fy\d{2,4}|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?|\d{4}-\d{2}-\d{2})\b/gi,
+    ) ?? [];
+  const uniqueDates = [...new Set(dates.map((date) => date.trim()))];
+  return uniqueDates.length > 0
+    ? uniqueDates.slice(0, 8)
+    : ["Insufficient information: no explicit date or deadline detected."];
+}
+
+function detectPeopleOrDepartments(
+  content: string,
+  profile: BusinessProfile,
+) {
+  const departmentMatches = [
+    "Executive",
+    "Finance",
+    "Operations",
+    "Customer Support",
+    "Support",
+    "Sales",
+    "Marketing",
+    "HR",
+    "Engineering",
+    "Security",
+    "Compliance",
+  ].filter((department) =>
+    content.toLowerCase().includes(department.toLowerCase()),
+  );
+  const configuredDepartments = profile.departments ?? [];
+  const combined = [...new Set([...departmentMatches, ...configuredDepartments])];
+
+  return combined.length > 0
+    ? combined.slice(0, 8)
+    : ["Requires human confirmation: no person or department was explicit."];
+}
+
+function detectMissingContext(
+  lowerContent: string,
+  purpose: BusinessAnalysisInput["purpose"],
+) {
+  const missing: string[] = [];
+
+  if (purpose === "Budget Review") {
+    if (!containsAny(lowerContent, ["budget", "forecast", "planned"])) {
+      missing.push("Insufficient information: budget or planned amount column was not explicit.");
+    }
+    if (!containsAny(lowerContent, ["actual", "spent", "expense", "revenue"])) {
+      missing.push("Insufficient information: actual amount or realized value was not explicit.");
+    }
+  }
+
+  if (purpose === "Business Audit" && !containsAny(lowerContent, ["evidence", "approval", "policy", "control"])) {
+    missing.push("Requires human confirmation: audit evidence, controls or policy criteria were not explicit.");
+  }
+
+  if (!containsAny(lowerContent, ["owner", "team", "department", "manager", "lead"])) {
+    missing.push("Requires human confirmation: accountable owner was not explicit.");
+  }
+
+  return missing.length > 0 ? missing : ["No major missing context detected by local rules."];
+}
+
 function createSummary(sentences: string[], purpose: BusinessAnalysisInput["purpose"]) {
   if (sentences.length === 0) {
     return "No communication content was available for analysis.";
@@ -241,6 +331,19 @@ function createSummary(sentences: string[], purpose: BusinessAnalysisInput["purp
   return `${purpose} message about ${firstSentence.slice(0, 140)}${
     firstSentence.length > 140 ? "..." : ""
   }`;
+}
+
+function createExecutiveSummary(
+  sentences: string[],
+  purpose: BusinessAnalysisInput["purpose"],
+) {
+  if (sentences.length === 0) {
+    return "Insufficient information: no source content was available.";
+  }
+
+  return `${purpose} review identified ${sentences.length} supplied statement${
+    sentences.length === 1 ? "" : "s"
+  }. Findings are limited to the supplied content and require human confirmation before decisions.`;
 }
 
 function createSuggestedActions({
@@ -298,6 +401,26 @@ function createRecommendedNextStep({
   }
 
   return "Summarize the message, acknowledge receipt and ask one clarifying question if needed.";
+}
+
+function createEscalationRecommendation({
+  priority,
+  riskLevel,
+  requiresHumanReview,
+}: {
+  priority: BusinessPriority;
+  riskLevel: BusinessRiskLevel;
+  requiresHumanReview: boolean;
+}) {
+  if (!requiresHumanReview) {
+    return "No immediate escalation required by local rules; keep normal human review available.";
+  }
+
+  if (riskLevel === "High" || priority === "Critical") {
+    return "Route to a qualified human owner before acting because high risk or critical priority was detected.";
+  }
+
+  return "Route for human review before external action or management decision.";
 }
 
 function createReplyOutline({
@@ -501,6 +624,27 @@ function calculateConfidence({
   }
 
   return Math.min(Number(confidence.toFixed(2)), 0.88);
+}
+
+function confidenceNeedsHumanReview({
+  content,
+  keyTopics,
+  requestedActions,
+  importantEntities,
+}: {
+  content: string;
+  keyTopics: string[];
+  requestedActions: string[];
+  importantEntities: string[];
+}) {
+  return (
+    calculateConfidence({
+      content,
+      keyTopics,
+      requestedActions,
+      importantEntities,
+    }) < 0.7
+  );
 }
 
 function containsAny(value: string, keywords: string[]) {

@@ -36,6 +36,12 @@ export default function DataDeletionPage() {
                 Telegram: remove the bot from chats or revoke the bot token in
                 BotFather, then request deletion of stored event metadata.
               </li>
+              <li>
+                Business workspace: request deletion of saved analysis records,
+                generated reports, business profiles, proposed action records or
+                profile knowledge text. Deleting an AgenticOps AI analysis record
+                does not delete the original provider message or source file.
+              </li>
             </ul>
             <p>
               To request deletion, contact the project owner with the provider,

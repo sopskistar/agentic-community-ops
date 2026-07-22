@@ -47,7 +47,7 @@ On 2026-07-18, the platform UI received a polish pass without adding features or
 
 ## Stage 2: Business Intelligence Dashboard
 
-Status: MVP expanded 2026-07-22. The `/business` route now provides the second working communication context after Web3 Community Security. It supports pasted text, TXT/PDF/DOCX/CSV/XLSX upload, business profile selection, analysis purpose selection, local demonstration analysis, extraction previews, Business Audit, Budget Review and explainable structured results. It does not connect CRM systems, send email, persist business analyses, support OCR, parse legacy DOC/XLS safely, or execute autonomous actions.
+Status: workspace expanded 2026-07-22. The `/business` route now provides the second working communication context after Web3 Community Security. It supports pasted text, TXT/PDF/DOCX/CSV/XLSX upload, business profile selection, analysis purpose selection, local demonstration analysis, extraction previews, Business Audit, Budget Review, durable saved analyses, generated reports, bounded business profiles, internal proposed actions, analysis history and explainable structured results. It does not connect CRM systems, send email, support OCR, parse legacy DOC/XLS safely, provide certified audits, give financial/legal advice or execute autonomous actions.
 
 1. Add BI analysis types and local demonstration analyzer. Completed 2026-07-19.
    - Scope: summary, intent, sentiment, priority, risk, requested actions, entities, recommendations, reply outline and explanations.
@@ -73,9 +73,25 @@ Status: MVP expanded 2026-07-22. The `/business` route now provides the second w
    - Delivered: page-aware PDF text extraction, no-text PDF detection, DOCX text extraction and safe parse failures. Legacy DOC and OCR remain unsupported.
    - Tests: parser success, no-text PDFs, encrypted/corrupted PDFs, DOCX paragraph/table text, invalid DOCX and file size/type rejection.
 
-6. Add BI report metrics.
+6. Add BI report metrics. Completed 2026-07-22.
    - Scope: measured dashboard panels for intent, sentiment, priority, complaints, leads, FAQs, and escalations.
-   - Tests: deterministic summary calculations.
+   - Delivered: persisted business analysis history, executive metrics from saved records, audit finding severity summaries, purpose distribution, report counts and human-review counts.
+   - Tests: deterministic repository, metrics, report and route coverage.
+
+7. Add business report generation and exports. Completed 2026-07-22.
+   - Scope: report records generated from saved analyses only.
+   - Delivered: Communication Analysis, Business Audit, Budget Review, Executive Summary, Risk, Department, Year-End and Findings/Recommendations reports; JSON export; CSV findings export; print-optimized HTML for browser Save as PDF.
+   - Tests: report generation, export safety and missing-analysis failure coverage.
+
+8. Add Business Audit and Budget Review workspaces. Completed 2026-07-22.
+   - Scope: preliminary audit findings, budget variance support, human-review copy and limitations.
+   - Delivered: reusable audit finding model, proposed internal action records, deterministic budget calculations where source columns are present, and clear no-certified-audit/no-financial-advice disclaimers.
+   - Tests: audit/report model behavior, deterministic budget totals, variance, invalid numeric values and missing-column handling.
+
+9. Add durable business repository. Completed 2026-07-22.
+   - Scope: repository abstraction using the existing KV/Upstash pattern without introducing a new database.
+   - Delivered: `BusinessRepository`, memory tests, KV/Upstash production option, local `.agenticops/business-workspace-store.json` fallback and optional `BUSINESS_RECORD_RETENTION_DAYS`.
+   - Tests: save/read/list analysis, report and action records without raw upload persistence.
 
 ## Stage 3: Communication Integrations
 
@@ -116,7 +132,8 @@ These groups are roadmap only unless explicitly marked implemented above.
 - Future Social and Community Intelligence: X, YouTube comments, LinkedIn company pages and comments, TikTok, Reddit, social listening, sentiment analysis, brand-risk detection, lead identification and complaint identification.
 - Future AI Marketing Intelligence: Meta Ads, X Ads, LinkedIn Ads, TikTok Ads, Google Ads, YouTube campaign intelligence, campaign recommendations, audience suggestions, ad-copy generation, creative briefs, performance monitoring and human approval before campaign launch or budget changes.
 - Future AI Email Workspace: `gmail.modify`, `gmail.send`, labels, archive, follow-up workflows, human-approved sending, phishing detection and priority detection.
-- Future Business Intelligence: BigQuery, Cloud Platform integrations, KPI analysis, customer segmentation, business reporting, trend detection and anomaly detection.
+- Implemented Business Intelligence: internal business workspace, saved analyses, preliminary audit findings, deterministic budget review, generated reports, profile context and history.
+- Future Business Intelligence: BigQuery, Cloud Platform integrations, accounting-system integrations, KPI feeds, customer segmentation, cross-period reporting, trend detection and anomaly detection.
 - Future AI Business Operator: cross-channel workflows, task routing, approvals, audit history, executive summaries and controlled automation.
 
 The current integration foundation uses Gmail readonly only and does not request Gmail modify/send permissions, ad-management permissions, Cloud Platform scopes or production automation privileges.

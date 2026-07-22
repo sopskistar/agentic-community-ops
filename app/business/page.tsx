@@ -1,9 +1,9 @@
 import { BusinessClient } from "./business-client";
 
 export const metadata = {
-  title: "Business Intelligence Dashboard | AgenticOps AI",
+  title: "Business Intelligence Workspace | AgenticOps AI",
   description:
-    "Analyze normal business communications with local demonstration intelligence for summaries, intent, priority, sentiment, risk and recommended next steps.",
+    "Analyze communications, review business documents, identify risks, conduct preliminary audits, examine budgets and generate explainable executive reports.",
 };
 
 export default function BusinessPage() {
@@ -15,14 +15,13 @@ export default function BusinessPage() {
             <div>
               <p className="kicker">Business Communication Intelligence</p>
               <h1 className="mt-3 max-w-4xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-                Business Intelligence Dashboard
+                Business Intelligence Workspace
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-7 text-slate-600">
-                Analyze normal business communications as the second working
-                communication context after Web3 Community Security. This MVP
-                uses server-side file extraction plus local demonstration logic
-                for explainable summaries, intent, priority, sentiment, risk
-                and next-step recommendations.
+                Analyze communications, review business documents, identify
+                risks, conduct preliminary audits, examine budgets and generate
+                explainable executive reports. This is decision-support
+                software for qualified human review.
               </p>
             </div>
             <div className="section-card p-5 md:p-6">
