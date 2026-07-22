@@ -43,16 +43,40 @@ Additional future capability groups are tracked as roadmap items only:
 
 ## Capability Status
 
-- Implemented: Web3 Community Security, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public rules/analysis APIs, project knowledge bases, polished platform positioning UI, normalized message model foundation and the `/business` Business Intelligence Dashboard MVP.
-- In progress: Typed foundations for a broader communication intelligence platform.
-- Roadmap: advanced business communication intelligence, PDF/DOCX/CSV/Excel ingestion, channel-aware analysis, Facebook Pages, Instagram Business, Email, Website Live Chat, approval workflows, safe automation and developer integrations.
+- Live or implemented: Web3 Community Security, Business Communication Intelligence, paste text analysis, TXT upload, PDF extraction, DOCX extraction, CSV parsing, XLSX parsing, Gmail readonly sync and analysis, Telegram message ingestion, Facebook Messenger message ingestion, Discord Gateway ingestion through the Railway worker, deterministic rules, AI-assisted message analysis, single-message review, batch analysis, browser-local reports, public rules/analysis APIs, project knowledge bases, normalized message model foundation, durable integration event/workflow storage and human-approval-required suggested replies.
+- Foundation ready: Instagram webhook verification and supported payload normalization. Broader Instagram production event coverage depends on Meta delivery, account linkage, permissions and App Review status.
+- Planned: Outlook, WhatsApp Business, Slack, Microsoft Teams, X, YouTube, LinkedIn, TikTok, Reddit, Website Live Chat, Gmail send/modify actions, automated ads, CRM writeback, certified audit, autonomous business actions and multi-tenant enterprise administration.
 - Future: enterprise organizations, workspaces, teams, user accounts, RBAC, tenant isolation, durable multi-tenant persistence, billing and administration.
 
 ## Business Communication Intelligence
 
-The `/business` route now provides a local Business Intelligence Dashboard MVP for normal business communications. It supports paste text, TXT upload, business profile selection, communication purpose selection and explainable local demonstration analysis for summary, intent, priority, sentiment, risk, requested actions, important entities, recommended next step, confidence, key topics, suggested actions and reply outline.
+The `/business` route provides a Business Intelligence Dashboard MVP for normal business communications and uploaded business files. It supports paste text, TXT upload, PDF text extraction, DOCX text extraction, CSV parsing and XLSX worksheet parsing. Supported analysis purposes are Customer Support, Business Email, Sales Conversation, Internal Team, General Communication, Business Audit and Budget Review.
 
-PDF extraction, Word/DOCX parsing, CSV ingestion, Excel ingestion, CRM sync, email integrations, Slack, Microsoft Teams, Google Workspace, ticket creation, Salesforce and HubSpot are still roadmap items and are not connected.
+Business analysis returns a structured summary, intent, communication purpose, priority, sentiment, risk level, requested actions, important entities, key topics, recommended next step, recommended reply outline, confidence and explainability. Spreadsheet and business-record reviews may also include data overview, notable trends, exceptions/anomalies, budget variance indicators, revenue/expense observations, missing or inconsistent entries, preliminary audit observations and recommended follow-up checks.
+
+Business Audit is an AI-assisted preliminary review only. It is not a certified external audit, legal opinion, statutory compliance certification or financial advice. Budget Review is decision-support analysis only and does not invent totals when source data is incomplete.
+
+Supported file extensions:
+
+- `.txt`
+- `.pdf`
+- `.docx`
+- `.csv`
+- `.xlsx`
+
+Unsupported file formats and limits:
+
+- Legacy `.doc` is not supported. Export as `.docx`.
+- Legacy `.xls` is not supported. Export as `.xlsx`.
+- Macro-enabled `.xlsm` is rejected.
+- Scanned/image-only PDFs are detected as having no extractable text. OCR is not implemented in the current MVP.
+- Attachments embedded inside uploaded documents are not imported.
+- Formulas in spreadsheets are not evaluated; only cached/displayed values are used when available.
+- Uploaded files are parsed server-side for analysis and are not permanently stored by this MVP.
+- Default upload limit is 4 MB. Configure `BUSINESS_UPLOAD_MAX_BYTES` to lower or raise the limit, capped at 10 MB for Vercel-friendly execution.
+- CSV/XLSX parsing is bounded to 200 rows, 30 columns and 500 characters per cell before analysis. Analysis input is bounded to 12,000 characters with a 900-character preview.
+
+CRM sync, Slack, Microsoft Teams, Google Workspace write actions, ticket creation, Salesforce, HubSpot and autonomous workflows remain planned and are not connected.
 
 ## Brand Assets
 
@@ -120,6 +144,7 @@ Set these in the deployment platform environment. Do not commit `.env.local`.
 - `OPENAI_API_KEY`: required for live AI analysis.
 - `OPENAI_MODEL`: optional; defaults to the provider configured in code when unset.
 - `OPENAI_BASE_URL`: optional; set this for OpenAI-compatible providers such as OpenRouter.
+- `BUSINESS_UPLOAD_MAX_BYTES`: optional business file upload limit in bytes. Defaults to 4 MB and is capped at 10 MB.
 - `NEXT_PUBLIC_APP_URL`: public deployed app URL used for callback display, for example `https://YOUR_DEPLOYMENT_URL`.
 - `APP_BASE_URL`: server-side base URL used by workers, for example `https://YOUR_DEPLOYMENT_URL`.
 - `INTERNAL_INTEGRATION_SECRET`: shared secret for the Discord worker to call server-side processing.

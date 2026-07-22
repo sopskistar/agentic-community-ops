@@ -47,7 +47,7 @@ On 2026-07-18, the platform UI received a polish pass without adding features or
 
 ## Stage 2: Business Intelligence Dashboard
 
-Status: MVP started 2026-07-19. The `/business` route now provides the second working communication context after Web3 Community Security. It supports pasted text, TXT upload, business profile selection, analysis purpose selection, local demonstration analysis and explainable structured results. It does not connect external AI, extract PDF/DOCX content, parse CSV/Excel, sync CRMs, send email or persist business analyses.
+Status: MVP expanded 2026-07-22. The `/business` route now provides the second working communication context after Web3 Community Security. It supports pasted text, TXT/PDF/DOCX/CSV/XLSX upload, business profile selection, analysis purpose selection, local demonstration analysis, extraction previews, Business Audit, Budget Review and explainable structured results. It does not connect CRM systems, send email, persist business analyses, support OCR, parse legacy DOC/XLS safely, or execute autonomous actions.
 
 1. Add BI analysis types and local demonstration analyzer. Completed 2026-07-19.
    - Scope: summary, intent, sentiment, priority, risk, requested actions, entities, recommendations, reply outline and explanations.
@@ -58,17 +58,20 @@ Status: MVP started 2026-07-19. The `/business` route now provides the second wo
    - Scope: parser that splits pasted conversation text into normalized messages with stable ordering.
    - Tests: common transcript formats and malformed input.
 
-3. Add plain-text and CSV ingestion.
+3. Add plain-text and CSV ingestion. Completed 2026-07-22.
    - Scope: local upload UI/API, size limits, row mapping, errors per row.
-   - Tests: fixture uploads and validation failures.
+   - Delivered: server-side validation, TXT parser, CSV parser, bounded table summaries and extraction preview UI.
+   - Tests: fixture uploads, validation failures, quoted CSV values, row/column limits and truncation.
 
-4. Add Excel ingestion.
+4. Add Excel ingestion. Completed for XLSX 2026-07-22.
    - Scope: parser dependency, sheet/column mapping, row limits.
-   - Tests: `.xlsx` fixtures with valid and invalid rows.
+   - Delivered: XLSX worksheet detection, worksheet selection, bounded row/column/cell summaries and formula non-execution. Legacy XLS and XLSM remain unsupported.
+   - Tests: `.xlsx` fixtures, worksheet selection, limits, cached formula results and unsupported XLS/XLSM rejection.
 
-5. Add PDF and Word ingestion.
+5. Add PDF and Word ingestion. Completed for text PDFs and DOCX 2026-07-22.
    - Scope: text extraction only; no OCR unless separately approved.
-   - Tests: parser success, parser failure, file size/type rejection.
+   - Delivered: page-aware PDF text extraction, no-text PDF detection, DOCX text extraction and safe parse failures. Legacy DOC and OCR remain unsupported.
+   - Tests: parser success, no-text PDFs, encrypted/corrupted PDFs, DOCX paragraph/table text, invalid DOCX and file size/type rejection.
 
 6. Add BI report metrics.
    - Scope: measured dashboard panels for intent, sentiment, priority, complaints, leads, FAQs, and escalations.
@@ -107,7 +110,9 @@ Status: foundation started 2026-07-20. Google/Gmail, Meta, Telegram and Discord 
 
 These groups are roadmap only unless explicitly marked implemented above.
 
-- Planned Communication Intelligence: Discord, Telegram, Gmail, Facebook Messenger, Instagram, Website Live Chat, WhatsApp Business, Slack and Microsoft Teams.
+- Implemented Communication Intelligence sources: Gmail readonly, Telegram, Facebook Messenger and Discord Gateway through Railway.
+- Foundation Ready: Instagram webhook verification and supported payload normalization.
+- Planned Communication Intelligence: Website Live Chat, WhatsApp Business, Slack, Microsoft Teams, Outlook and broader provider coverage.
 - Future Social and Community Intelligence: X, YouTube comments, LinkedIn company pages and comments, TikTok, Reddit, social listening, sentiment analysis, brand-risk detection, lead identification and complaint identification.
 - Future AI Marketing Intelligence: Meta Ads, X Ads, LinkedIn Ads, TikTok Ads, Google Ads, YouTube campaign intelligence, campaign recommendations, audience suggestions, ad-copy generation, creative briefs, performance monitoring and human approval before campaign launch or budget changes.
 - Future AI Email Workspace: `gmail.modify`, `gmail.send`, labels, archive, follow-up workflows, human-approved sending, phishing detection and priority detection.

@@ -3,13 +3,37 @@ import Link from "next/link";
 const currentMvp = [
   "Web3 Community Security",
   "Business Communication Intelligence",
+  "Paste text, TXT, PDF, DOCX, CSV and XLSX analysis",
+  "Gmail readonly sync and analysis",
+  "Telegram message ingestion",
+  "Facebook Messenger ingestion",
+  "Discord Gateway ingestion",
+  "Durable integration event log",
+  "Human-approval-required suggestions",
   "AI-powered message analysis",
   "Scam and phishing detection",
   "Explainable deterministic decisions",
-  "AI-generated reply suggestions",
   "Batch analysis",
   "Security and communication reports",
   "Normalized message pipeline",
+] as const;
+
+const availableToday = [
+  "Web3 Community Security",
+  "Business Communication Intelligence",
+  "Gmail readonly analysis",
+  "Telegram ingestion",
+  "Facebook Messenger ingestion",
+  "Discord Gateway ingestion",
+  "PDF, DOCX, CSV and XLSX business-file analysis",
+] as const;
+
+const roadmapToday = [
+  "AI Email Workspace actions",
+  "AI Marketing Intelligence",
+  "AI Business Intelligence",
+  "AI Audit & Compliance expansion",
+  "AI Business Operator",
 ] as const;
 
 const roadmapPhases = [
@@ -108,45 +132,95 @@ const roadmapPhases = [
 ] as const;
 
 const channelAwareness = [
-  { channel: "Web3", status: "Supported Today" },
-  { channel: "Business Communication", status: "Supported Today" },
-  { channel: "Email", status: "Planned" },
-  { channel: "Facebook", status: "Planned" },
-  { channel: "Instagram", status: "Planned" },
-  { channel: "Discord", status: "Planned" },
-  { channel: "Telegram", status: "Planned" },
-  { channel: "WhatsApp Business", status: "Planned" },
-  { channel: "Slack", status: "Planned" },
-  { channel: "Microsoft Teams", status: "Planned" },
-  { channel: "X", status: "Planned" },
-  { channel: "YouTube", status: "Planned" },
-  { channel: "LinkedIn", status: "Planned" },
-  { channel: "TikTok", status: "Planned" },
-  { channel: "Reddit", status: "Planned" },
-];
+  {
+    channel: "Gmail readonly",
+    status: "Implemented",
+    detail:
+      "Readonly Gmail messages can be synced, normalized and analyzed. Sending and mailbox modification remain unavailable.",
+  },
+  {
+    channel: "Discord",
+    status: "Live",
+    detail:
+      "A persistent Railway Gateway worker receives supported Discord messages and forwards them to the shared analysis pipeline.",
+  },
+  {
+    channel: "Telegram",
+    status: "Live",
+    detail:
+      "Telegram text messages are received through a verified webhook and analyzed through the shared pipeline.",
+  },
+  {
+    channel: "Facebook Messenger",
+    status: "Implemented",
+    detail:
+      "Supported Page Messenger events are normalized and analyzed in approval-required mode.",
+  },
+  {
+    channel: "Instagram",
+    status: "Foundation Ready",
+    detail:
+      "Webhook verification and supported payload normalization exist. Broader production event coverage remains limited.",
+  },
+  {
+    channel: "Manual and files",
+    status: "Implemented",
+    detail:
+      "Pasted text plus TXT, PDF, DOCX, CSV and XLSX uploads feed the Business Communication Intelligence workflow.",
+  },
+  {
+    channel: "Website Live Chat",
+    status: "Planned",
+    detail:
+      "Planned live-chat adapters will identify FAQs, purchase intent, lead qualification and urgent support needs.",
+  },
+  {
+    channel: "Outlook, Slack and Teams",
+    status: "Planned",
+    detail:
+      "Planned workplace adapters will require provider credentials, permissions and production review before activation.",
+  },
+  {
+    channel: "X, YouTube, LinkedIn, TikTok and Reddit",
+    status: "Planned",
+    detail:
+      "Planned social intelligence will remain human-reviewed and will not launch ads or moderation actions autonomously.",
+  },
+] as const;
 
-const plannedBusinessInputs = [
-  "Paste Text",
-  "TXT Upload",
-  "PDF",
-  "DOCX",
-  "CSV",
-  "Excel",
-  "Website Live Chat",
-  "Email",
-  "Discord",
-  "Telegram",
-  "Facebook",
-  "Instagram",
-  "WhatsApp",
-  "Slack",
-  "Teams",
-  "X",
-  "YouTube",
-  "LinkedIn",
-  "TikTok",
-  "Reddit",
-];
+const inputSourceGroups = [
+  {
+    title: "Implemented File Inputs",
+    status: "Implemented",
+    items: ["Paste Text", "TXT", "PDF", "DOCX", "CSV", "XLSX"],
+  },
+  {
+    title: "Implemented Communication Sources",
+    status: "Implemented",
+    items: ["Gmail", "Telegram", "Facebook Messenger", "Discord"],
+  },
+  {
+    title: "Foundation Ready",
+    status: "Foundation Ready",
+    items: ["Instagram"],
+  },
+  {
+    title: "Planned",
+    status: "Planned",
+    items: [
+      "Website Live Chat",
+      "Outlook",
+      "WhatsApp Business",
+      "Slack",
+      "Microsoft Teams",
+      "X",
+      "YouTube",
+      "LinkedIn",
+      "TikTok",
+      "Reddit",
+    ],
+  },
+] as const;
 
 const communicationContexts = [
   {
@@ -158,32 +232,50 @@ const communicationContexts = [
   {
     context: "Business Communication",
     detail:
-      "The business dashboard analyzes pasted or TXT business messages with structured, explainable demonstration logic.",
+      "The business dashboard analyzes pasted text, supported files and common business communication purposes with explainable AI-assisted review.",
     status: "Implemented",
   },
   {
     context: "Customer Support",
     detail:
-      "Planned analysis will identify support intent, urgency, complaint patterns and recommended next actions.",
-    status: "Planned",
+      "Available in the Business MVP as a selectable analysis purpose for support intent, urgency and next actions.",
+    status: "Available in Business MVP",
   },
   {
     context: "Sales Conversations",
     detail:
-      "Planned scoring will separate product questions, buying signals, objections and follow-up opportunities.",
-    status: "Planned",
+      "Available in the Business MVP for buying signals, objections, product questions and follow-up opportunities.",
+    status: "Implemented analysis purpose",
   },
   {
     context: "Business Email",
     detail:
-      "Planned email intelligence will handle formal threads, attachments, action items and summaries.",
-    status: "Planned",
+      "Available in the Business MVP for formal messages, action items, priority and risk review.",
+    status: "Implemented analysis purpose",
   },
   {
     context: "Internal Teams",
     detail:
-      "Planned team workflows will summarize decisions, requests, blockers and follow-up ownership.",
-    status: "Planned",
+      "Available in the Business MVP for internal updates, blockers, requested actions and team follow-up.",
+    status: "Implemented analysis purpose",
+  },
+  {
+    context: "General Communication",
+    detail:
+      "Available in the Business MVP for broad intent, sentiment, risk, urgency and recommended actions.",
+    status: "Implemented analysis purpose",
+  },
+  {
+    context: "Business Audit",
+    detail:
+      "Available as an AI-assisted preliminary review for findings, risks, missing information and human-review questions.",
+    status: "Implemented analysis purpose",
+  },
+  {
+    context: "Budget Review",
+    detail:
+      "Available as preliminary decision support for revenue, expense, variance and follow-up observations.",
+    status: "Implemented analysis purpose",
   },
   {
     context: "HR",
@@ -192,9 +284,15 @@ const communicationContexts = [
     status: "Planned",
   },
   {
-    context: "Social Media",
+    context: "Marketing Communication",
     detail:
       "Planned social analysis will adapt to campaigns, comments, DMs, engagement and brand risk.",
+    status: "Planned",
+  },
+  {
+    context: "Executive Operations",
+    detail:
+      "Planned executive workflows will summarize cross-channel decisions, risks, owners and follow-up.",
     status: "Planned",
   },
   {
@@ -204,9 +302,9 @@ const communicationContexts = [
     status: "Planned",
   },
   {
-    context: "General Communication",
+    context: "Advanced Social Intelligence",
     detail:
-      "Planned general analysis will classify intent, sentiment, risk, urgency and recommended actions.",
+      "Planned monitoring will support broader social listening, sentiment, complaints, leads and brand-risk detection.",
     status: "Planned",
   },
 ];
@@ -214,18 +312,18 @@ const communicationContexts = [
 const pipelineStages = [
   {
     label: "Incoming Message",
-    status: "Manual and API input exist today.",
+    status: "Manual, uploaded-file and connected-source input exist today.",
     state: "Implemented",
   },
   {
     label: "Normalize",
-    status: "Typed foundation exists; adapters are next.",
-    state: "In Progress",
+    status: "Shared normalized message and data models exist for supported inputs.",
+    state: "Implemented",
   },
   {
     label: "Identify Communication Context",
-    status: "Implemented for Web3 and business communications; broader contexts are planned.",
-    state: "Planned",
+    status: "Implemented for Web3 Community Security and Business Communication Intelligence.",
+    state: "Implemented",
   },
   {
     label: "Deterministic Rules",
@@ -244,8 +342,8 @@ const pipelineStages = [
   },
   {
     label: "Human Approval",
-    status: "Required for external replies and actions; approval queues are roadmap.",
-    state: "Planned",
+    status: "Suggestions and external actions remain approval-required.",
+    state: "Implemented",
   },
   {
     label: "Reports",
@@ -254,13 +352,17 @@ const pipelineStages = [
   },
   {
     label: "Audit Trail",
-    status: "Integration events exist; durable multi-tenant audit views are future.",
-    state: "Planned",
+    status: "Durable integration events and workflow records exist; multi-tenant audit views are future.",
+    state: "Implemented",
   },
 ] as const;
 
 const statusStyles = {
+  Live: "border-emerald-200 bg-emerald-50 text-emerald-800",
   Implemented: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  "Available in Business MVP": "border-teal-200 bg-teal-50 text-teal-800",
+  "Implemented analysis purpose": "border-teal-200 bg-teal-50 text-teal-800",
+  "Foundation Ready": "border-sky-200 bg-sky-50 text-sky-800",
   "Current MVP": "border-emerald-200 bg-emerald-50 text-emerald-800",
   "In Progress": "border-sky-200 bg-sky-50 text-sky-800",
   "Partial MVP": "border-teal-200 bg-teal-50 text-teal-800",
@@ -268,22 +370,26 @@ const statusStyles = {
   Future: "border-slate-200 bg-slate-50 text-slate-700",
 } as const;
 
+function getStatusStyle(status: string) {
+  return statusStyles[status as keyof typeof statusStyles] ?? statusStyles.Planned;
+}
+
 const architectureNodes = [
   {
-    title: "Communication Channels",
-    text: "Manual input, TXT upload, Web3 and business contexts today; more channels are planned.",
+    title: "Inputs and Channels",
+    text: "Implemented: Paste Text, TXT, PDF, DOCX, CSV, XLSX, Gmail, Telegram, Facebook Messenger and Discord. Foundation ready: Instagram. Remaining channels are planned.",
   },
   {
     title: "Normalized Message Model",
-    text: "A shared typed model keeps providers, uploads and manual messages consistent.",
+    text: "Implemented typed models keep providers, uploads and manual messages consistent before analysis.",
   },
   {
     title: "Communication Intelligence Engine",
-    text: "Deterministic rules and AI analysis classify risk, intent, context and recommendations.",
+    text: "Implemented deterministic rules and AI-assisted classification produce risk, intent, sentiment, suggestions and explainability.",
   },
   {
     title: "Outputs",
-    text: "Risk, intent, classification, recommendations, reports, audit and approval workflows.",
+    text: "Implemented outputs include analysis, event log, suggestions, reports and human approval records. Autonomous execution remains planned.",
   },
 ];
 
@@ -350,36 +456,30 @@ export default function Home() {
             </p>
             <div className="mt-7 grid max-w-3xl gap-4 md:grid-cols-2">
               <StatusList
-                title="Currently Implemented"
-                items={["Web3 Community Security", "Business Communication Intelligence"]}
-                marker="✓"
+                title="Available Today"
+                items={availableToday}
+                marker="Live"
                 tone="implemented"
               />
               <StatusList
                 title="Roadmap"
-                items={[
-                  "Email Intelligence",
-                  "Marketing Intelligence",
-                  "Business Intelligence",
-                  "AI Audit",
-                  "AI Business Operator",
-                ]}
+                items={roadmapToday}
                 marker="Roadmap"
                 tone="planned"
               />
             </div>
             <div className="mt-8 grid gap-3 sm:flex sm:flex-row sm:items-center">
               <Link href="/demo" className="btn btn-primary min-h-12 px-6">
-                Try Web3 MVP
+                Guided Demo
               </Link>
               <Link href="/business" className="btn btn-secondary min-h-12 px-6">
-                Try Business MVP
+                Business Intelligence
               </Link>
               <Link
                 href="/security-engine"
                 className="btn btn-secondary min-h-12 px-6"
               >
-                View Engine
+                Communication Engine
               </Link>
             </div>
             <dl className="mt-9 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
@@ -456,9 +556,10 @@ export default function Home() {
             </h2>
             <p className="mt-5 text-base leading-7 text-slate-600">
               The current engine powers Web3 Community Security and Business
-              Communication Intelligence through the same normalized
-              communication pipeline. Roadmap items below are clearly labeled
-              and are not claimed as live.
+              Communication Intelligence through the same normalized pipeline.
+              Business analysis now accepts pasted text plus TXT, PDF, DOCX,
+              CSV and XLSX files. Roadmap items below are clearly labeled and
+              are not claimed as live.
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -507,41 +608,39 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[0.75fr_1fr]">
           <div>
-            <p className="kicker">Future Inputs</p>
+            <p className="kicker">Inputs and Communication Sources</p>
             <h2 className="mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl">
-              Future inputs for the same communication intelligence pipeline.
+              Implemented inputs and planned source expansion.
             </h2>
             <p className="mt-5 text-base leading-7 text-slate-600">
-              Paste Text and TXT Upload are implemented in the Business
-              Intelligence Dashboard. Every other input listed here is planned
-              and not yet implemented.
+              Manual input, supported business files and selected live
+              communication sources already feed the engine. Planned sources
+              require additional provider credentials, permissions and testing
+              before activation.
             </p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {plannedBusinessInputs.map((input) => (
-              <div key={input} className="interactive-card p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm font-semibold text-slate-800">
-                    {input}
-                  </p>
-                  <span
-                    className={`rounded-full border px-2.5 py-1 text-[0.68rem] font-bold uppercase ${
-                      input === "Paste Text" || input === "TXT Upload"
-                        ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-                        : "border-dashed border-amber-300 bg-amber-50 text-amber-800"
-                    }`}
-                  >
-                    {input === "Paste Text" || input === "TXT Upload"
-                      ? "Implemented"
-                      : "Planned"}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {inputSourceGroups.map((group) => (
+              <article key={group.title} className="interactive-card p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h3 className="text-lg font-semibold text-slate-950">
+                    {group.title}
+                  </h3>
+                  <span className={`badge ${getStatusStyle(group.status)}`}>
+                    {group.status}
                   </span>
                 </div>
-                <p className="mt-2 text-xs font-medium text-slate-500">
-                  {input === "Paste Text" || input === "TXT Upload"
-                    ? "Available in /business"
-                    : "Not yet implemented"}
-                </p>
-              </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </article>
             ))}
           </div>
         </div>
@@ -568,15 +667,7 @@ export default function Home() {
                     {item.context}
                   </h3>
                   <span
-                    className={`badge ${
-                      item.status === "Current MVP"
-                        ? statusStyles["Current MVP"]
-                        : item.status === "Implemented"
-                          ? statusStyles.Implemented
-                        : item.status === "Future"
-                          ? statusStyles.Future
-                          : statusStyles.Planned
-                    }`}
+                    className={`badge ${getStatusStyle(item.status)}`}
                   >
                     {item.status}
                   </span>
@@ -605,8 +696,7 @@ export default function Home() {
                   className={`h-full rounded-xl border p-5 ${
                     stage.state === "Implemented"
                       ? "border-emerald-300/35 bg-emerald-400/10"
-                      : stage.state === "In Progress" ||
-                          stage.state === "Partial MVP"
+                      : stage.state === "Partial MVP"
                         ? "border-sky-300/30 bg-sky-400/10"
                         : "border-white/10 bg-white/[0.05]"
                   }`}
@@ -619,8 +709,7 @@ export default function Home() {
                       className={`rounded-full border px-2.5 py-1 text-[0.68rem] font-bold uppercase ${
                         stage.state === "Implemented"
                           ? "border-emerald-300/40 bg-emerald-400/15 text-emerald-100"
-                          : stage.state === "In Progress" ||
-                              stage.state === "Partial MVP"
+                          : stage.state === "Partial MVP"
                             ? "border-sky-300/40 bg-sky-400/15 text-sky-100"
                             : "border-white/15 bg-white/5 text-slate-300"
                       }`}
@@ -664,7 +753,7 @@ export default function Home() {
               <article key={phase.phase} className="interactive-card p-6">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <p className="kicker">{phase.phase}</p>
-                  <span className={`badge ${statusStyles[phase.status]}`}>
+                  <span className={`badge ${getStatusStyle(phase.status)}`}>
                     {phase.status}
                   </span>
                 </div>
@@ -692,11 +781,10 @@ export default function Home() {
             Same normalized pipeline, source-specific priorities.
           </h2>
           <p className="mt-5 text-base leading-7 text-slate-600">
-            Future channel adapters will normalize messages into the same data
-            model. Analysis can then account for how each channel is used
-            without fragmenting the core workflow.
-            Supported today: Web3 and Business Communication. Planned channels
-            remain disabled until implemented.
+            Communication contexts describe the work being performed. Source
+            channels describe where the content came from. Supported sources
+            use provider-aware normalization while preserving the same core
+            analysis and human-review safety model.
           </p>
         </div>
         <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -707,18 +795,13 @@ export default function Home() {
                   {channel.channel}
                 </h3>
                 <span
-                  className={`badge ${
-                    channel.status === "Supported Today"
-                      ? statusStyles.Implemented
-                      : statusStyles.Planned
-                  }`}
+                  className={`badge ${getStatusStyle(channel.status)}`}
                 >
                   {channel.status}
                 </span>
               </div>
               <p className="mt-3 text-sm leading-6 text-slate-600">
-                All channels normalize into the same internal message model
-                before analysis.
+                {channel.detail}
               </p>
             </article>
           ))}
@@ -761,9 +844,14 @@ export default function Home() {
               "Reports",
               "Audit",
               "Approval Queue",
+              "Implemented: Event Log",
+              "Implemented: Human Approval Records",
               "Future: Developer APIs",
               "Future: Automation",
               "Future: SDKs",
+              "Planned: Email Sending",
+              "Planned: Moderation Actions",
+              "Planned: CRM Actions",
             ].map(
               (output) => (
                 <div
@@ -813,32 +901,47 @@ export default function Home() {
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-100">
-                Try the implemented MVP
+                Try the implemented platform
               </p>
               <h2 className="mt-3 max-w-2xl text-3xl font-semibold">
-                Explore Web3 Community Security and Business Communication
-                Intelligence today. Roadmap capabilities remain disabled until
-                implemented.
+                Explore the AgenticOps AI Platform
               </h2>
+              <p className="mt-3 max-w-3xl text-sm leading-6 text-emerald-50">
+                Try the working communication engine, Web3 security case study,
+                business communication analysis, file intelligence, connected
+                integrations and human-approval workflow.
+              </p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap md:justify-end">
               <Link
                 href="/demo"
                 className="btn min-h-12 bg-white px-6 text-teal-800 hover:bg-teal-50"
               >
-                Web3 Demo
+                Guided Demo
               </Link>
               <Link
                 href="/business"
                 className="btn min-h-12 border border-white/40 px-6 text-white hover:bg-white/10"
               >
-                Business Dashboard
+                Business Intelligence
               </Link>
               <Link
-                href="/dashboard"
+                href="/security-engine"
                 className="btn min-h-12 border border-white/40 px-6 text-white hover:bg-white/10"
               >
-                Open Dashboard
+                Communication Engine
+              </Link>
+              <Link
+                href="/integrations"
+                className="btn min-h-12 border border-white/40 px-6 text-white hover:bg-white/10"
+              >
+                Integrations
+              </Link>
+              <Link
+                href="/docs/asp"
+                className="btn min-h-12 border border-white/40 px-6 text-white hover:bg-white/10"
+              >
+                ASP Docs
               </Link>
             </div>
           </div>

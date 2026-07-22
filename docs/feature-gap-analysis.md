@@ -6,9 +6,9 @@ Date: 2026-07-20
 
 The website now positions the product as AgenticOps AI, one AI communication engine for multiple communication contexts. The implemented communication contexts are Web3 Community Security and Business Communication Intelligence.
 
-Stage 1 is partially implemented. The deterministic Web3 security engine, AI-assisted suggestions, single/batch APIs, and report UI exist. Discord and Telegram are currently source labels only; there are no reusable adapter interfaces or live channel connectors.
+Stage 1 is partially implemented. The deterministic Web3 security engine, AI-assisted suggestions, single/batch APIs, report UI, Telegram webhook ingestion and Discord Gateway ingestion through the Railway worker exist. Broader tenant-aware channel identity and moderation controls are still missing.
 
-Stage 2 is early but has a working `/business` MVP. Users can paste business text, upload TXT, choose a business profile and purpose, and receive local demonstration analysis with summary, intent, priority, sentiment, risk, requested actions, entities, recommended next step and confidence. Full conversations, PDF/DOCX/CSV/Excel ingestion, CRM sync, email workspace features, support-ticket ingestion, durable BI reporting and automation are not implemented.
+Stage 2 has a working `/business` MVP. Users can paste business text, upload TXT/PDF/DOCX/CSV/XLSX, choose a business profile and purpose, preview bounded extraction results, and receive local demonstration analysis with summary, intent, priority, sentiment, risk, requested actions, entities, recommended next step, confidence, audit observations and budget observations where applicable. Full conversation grouping, OCR, legacy DOC/XLS support, CRM sync, email workspace actions, support-ticket ingestion, durable BI reporting and automation are not implemented.
 
 Stage 3 foundation is partially implemented. Google OAuth/Gmail readonly, Meta webhook verification/reception, Telegram webhook reception, a Discord worker entry point, provider adapters, webhook deduplication, redacted development event logging and analyze-only normalized processing now exist. Production usage still requires provider console configuration, deployed callback/webhook URLs, durable encrypted token storage, authentication/tenant ownership, and human approval workflows. Website live chat is still not implemented.
 
@@ -30,15 +30,15 @@ Stage 4 is not implemented beyond safe reply suggestions and escalation flags. T
 | Community security reports | Browser-local | `report-client.tsx`, `createBatchSummary` | Server-side persisted reports and trend history | Persistence | Medium | Stage 1/2 |
 | Public A2A API | Basic HTTP API exists | `/api/v1/analyse`, `/api/v1/analyse/batch`, public schemas | Authentication, rate limits, tenant scoping, versioning, OKX payment if approved | Auth, persistence, deployment URL | High | Stage 1 |
 | OKX ASP materials | Prepared docs/artifacts | `ASP_REGISTRATION.md`, `/docs/asp`, `public/service-manifest.json` | Deployment URL replacement and external submission | Production deployment, user approval | High | Stage 1 |
-| Discord support | Development worker foundation | `workers/discord-bot.mjs`, `lib/integrations/adapters/discord.ts` | Persistent worker deployment, install flow, tenant mapping, durable logs | Discord bot token, Gateway intents, worker runtime | High | Stage 1/3 |
-| Telegram support | Webhook foundation | `/api/webhooks/telegram`, `lib/integrations/adapters/telegram.ts` | Production webhook registration, tenant mapping, durable logs | Telegram bot token, webhook secret | High | Stage 1/3 |
+| Discord support | Live/implemented via Railway worker | `workers/discord-bot.mjs`, `/api/integrations/messages`, `lib/integrations/adapters/discord.ts` | Tenant mapping, install flow UX, approval execution | Discord bot token, Gateway intents, Railway worker | High | Stage 1/3 |
+| Telegram support | Live/implemented webhook ingestion | `/api/webhooks/telegram`, `lib/integrations/adapters/telegram.ts` | Tenant mapping and approved outbound layer | Telegram bot token, webhook secret | High | Stage 1/3 |
 | Paste individual messages | Implemented | Analyse dashboard and API | Tenant/user context | Auth/persistence later | Low | Stage 2 |
 | Paste conversations | Not implemented | None | Conversation parser and multi-message grouping | Normalized message model | Medium | Stage 2 |
-| CSV upload | Not implemented | None | Upload UI/API, parser, mapping, tests | Parser dependency, storage limits | Medium | Stage 2 |
-| Excel upload | Not implemented | None | XLS/XLSX parser and mapping | Parser dependency | Medium | Stage 2 |
-| PDF upload | Not implemented | None | Text extraction, size limits, parser failure handling | PDF parser, optional OCR | High | Stage 2 |
-| Word upload | Not implemented | None | DOCX text extraction | DOCX parser | Medium | Stage 2 |
-| Plain-text upload | Implemented for TXT in `/business` | `app/business`, `lib/business` | Server-side persistence, larger files, file-to-message splitting | File ingestion module | Low | Stage 2 |
+| CSV upload | Implemented with bounds | `lib/business-ingestion/parse-csv.ts`, `/api/business/ingest`, `app/business/business-client.tsx` | Durable BI records and richer column mapping | Parser tests, storage decision | Medium | Stage 2 |
+| Excel upload | Implemented for XLSX only | `lib/business-ingestion/parse-spreadsheet.ts`, `/api/business/ingest` | Legacy XLS support if safe, richer sheet mapping | ExcelJS, storage decision | Medium | Stage 2 |
+| PDF upload | Implemented for text-based PDFs | `lib/business-ingestion/parse-pdf.ts`, `/api/business/ingest` | OCR for scanned PDFs if approved | PDF parser, OCR service optional | High | Stage 2 |
+| Word upload | Implemented for DOCX only | `lib/business-ingestion/parse-docx.ts`, `/api/business/ingest` | Legacy DOC support if safe | DOCX parser | Medium | Stage 2 |
+| Plain-text upload | Implemented for TXT in `/business` | `app/business`, `lib/business-ingestion`, `lib/business` | Server-side persistence and file-to-message splitting | Storage decision | Low | Stage 2 |
 | Customer intent | Partially implemented | AI category and `detectedIntent` | Dedicated BI schema and deterministic fallback labels | `lib/intelligence` | Medium | Stage 2 |
 | Sales/purchase intent | Partial | `SALES_LEAD` category | Lead scoring fields and report metrics | BI schema | Medium | Stage 2 |
 | Support requests | Partial | `CUSTOMER_SUPPORT`, `TRANSACTION_ISSUE` | Priority and routing rules | BI schema, persistence | Medium | Stage 2 |
@@ -49,9 +49,9 @@ Stage 4 is not implemented beyond safe reply suggestions and escalation flags. T
 | Leads | Partial category only | `SALES_LEAD` | Lead fields, routing, export | BI schema/persistence | Medium | Stage 2 |
 | Conversation summaries | Not implemented | None | Conversation grouping and summarizer | Normalized conversations, AI provider | Medium | Stage 2 |
 | Recommended actions | Implemented at message level | AI output and rules | BI-specific action taxonomy | BI schema | Medium | Stage 2 |
-| Instagram Business | Webhook foundation only | `/api/webhooks/meta`, `lib/integrations/adapters/meta.ts` | Meta app review, OAuth/page subscriptions, tenant mapping, durable logs | Meta app, app secret, review | High | Stage 3 |
-| Facebook Pages | Webhook foundation only | `/api/webhooks/meta`, `lib/integrations/adapters/meta.ts` | Meta app review, OAuth/page subscriptions, tenant mapping, durable logs | Meta app, app secret, page token | High | Stage 3 |
-| Email | Gmail readonly foundation | `/api/integrations/google/*`, `/integrations/gmail`, `lib/integrations/google/gmail-service.ts` | Production token store, account ownership, pagination UX, MIME parsing, non-Gmail providers | Google OAuth app, Gmail readonly scope | High | Stage 3 |
+| Instagram Business | Foundation ready | `/api/webhooks/meta`, `lib/integrations/adapters/meta.ts` | Production event verification, Meta app review, OAuth/page subscriptions, tenant mapping | Meta app, app secret, review | High | Stage 3 |
+| Facebook Pages | Implemented for supported Messenger/comment ingestion | `/api/webhooks/meta`, `lib/integrations/adapters/meta.ts` | Page subscription verification, tenant mapping, approved outbound layer | Meta app, app secret, page token | High | Stage 3 |
+| Email | Implemented for Gmail readonly sync/analyze | `/api/integrations/google/*`, `/integrations/gmail`, `lib/integrations/google/gmail-service.ts` | Account ownership, richer pagination UX, MIME parsing beyond snippets, non-Gmail providers | Google OAuth app, Gmail readonly scope | High | Stage 3 |
 | Website live chat | Not implemented | None | Widget/API, session IDs, webhook-like ingest | Frontend widget, persistence | Medium | Stage 3 |
 | AI auto-reply | Not implemented | Suggestions only | Automation rule engine and send guard | Reply workflow, channel adapters | High | Stage 4 |
 | Human approval | Not implemented | Escalation flags only | Approval queue, state transitions, reviewer identity | Auth, persistence | High | Stage 4 |
@@ -66,7 +66,7 @@ Stage 4 is not implemented beyond safe reply suggestions and escalation flags. T
 - Current message source is a small enum, not a normalized message abstraction.
 - API routes have no authentication, tenant scoping, idempotency keys, rate limits, or request provenance.
 - Webhook signature verification exists for Meta when `META_APP_SECRET` is configured and Telegram validates the webhook secret when configured, but there is no production-grade rate limiting, tenant attribution or durable webhook/audit storage yet.
-- File ingestion is absent, and uploaded documents will need strict size/type validation.
+- File ingestion exists for TXT, PDF, DOCX, CSV and XLSX with strict size/type validation. Remaining gaps are OCR, legacy DOC/XLS support, durable BI record storage and richer document segmentation.
 - AI prompts and outputs are not versioned in an audit log.
 - No background job or retry abstraction exists for large batches, webhooks, or outbound sends.
 - The public landing page mentions multiple channels. Gmail, Meta, Telegram and Discord now have analyze-only foundations, but they are not autonomous customer-operation integrations and require configuration before real provider events can be processed.

@@ -20,8 +20,9 @@ export default function BusinessPage() {
               <p className="mt-5 max-w-3xl text-base leading-7 text-slate-600">
                 Analyze normal business communications as the second working
                 communication context after Web3 Community Security. This MVP
-                uses local demonstration logic for explainable summaries,
-                intent, priority, sentiment, risk and next-step recommendations.
+                uses server-side file extraction plus local demonstration logic
+                for explainable summaries, intent, priority, sentiment, risk
+                and next-step recommendations.
               </p>
             </div>
             <div className="section-card p-5 md:p-6">
@@ -29,12 +30,14 @@ export default function BusinessPage() {
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <StatusPill label="Paste text" status="Implemented" />
                 <StatusPill label="TXT upload" status="Implemented" />
-                <StatusPill label="PDF extraction" status="Coming Soon" />
+                <StatusPill label="PDF/DOCX files" status="Implemented" />
+                <StatusPill label="CSV/XLSX files" status="Implemented" />
                 <StatusPill label="CRM sync" status="Planned" />
               </div>
               <p className="mt-5 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold leading-6 text-amber-900">
-                Demonstration logic only: no external AI call, CRM integration,
-                email sending or document extraction runs on this page.
+                Business analysis remains decision-support only: no external
+                business AI call, CRM integration, email sending or autonomous
+                action runs on this page.
               </p>
             </div>
           </div>
@@ -51,7 +54,7 @@ function StatusPill({
   status,
 }: {
   label: string;
-  status: "Implemented" | "Coming Soon" | "Planned";
+  status: "Implemented" | "Planned";
 }) {
   const statusClass =
     status === "Implemented"

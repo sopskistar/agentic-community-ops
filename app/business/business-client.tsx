@@ -18,28 +18,28 @@ const uploadFormats = [
   },
   {
     label: "TXT",
-    detail: "Plain-text files are loaded in the browser.",
+    detail: "Plain-text files are extracted server-side.",
     status: "Implemented",
   },
   {
     label: "PDF",
-    detail: "Extraction is not implemented yet.",
-    status: "Coming Soon",
+    detail: "Text-based PDFs are extracted. OCR is not implemented.",
+    status: "Implemented",
   },
   {
     label: "DOCX",
-    detail: "Word document parsing is not implemented yet.",
-    status: "Coming Soon",
+    detail: "Word documents are parsed for readable text.",
+    status: "Implemented",
   },
   {
     label: "CSV",
-    detail: "Structured row analysis is planned.",
-    status: "Coming Soon",
+    detail: "Rows and columns are parsed with safe limits.",
+    status: "Implemented",
   },
   {
-    label: "Excel",
-    detail: "Spreadsheet parsing is planned.",
-    status: "Coming Soon",
+    label: "XLSX",
+    detail: "Worksheets are parsed without evaluating formulas.",
+    status: "Implemented",
   },
 ] as const;
 
@@ -79,7 +79,38 @@ const sampleMessages = [
     content:
       "Team, the launch checklist is almost complete. Please confirm the support owner and send final release notes by tomorrow.",
   },
+  {
+    label: "Audit sample",
+    content:
+      "Q2 vendor approvals include missing policy references and two invoices marked TBD. Please review control evidence and confirm who approved the exception.",
+    purpose: "Business Audit" as const,
+  },
+  {
+    label: "Budget sample",
+    content:
+      "Revenue increased 8% this month, but vendor expenses are over budget by $12,400. Travel has missing categories and duplicate entries need review.",
+    purpose: "Budget Review" as const,
+  },
 ];
+
+type BusinessExtraction = {
+  filename: string;
+  fileTypeLabel: string;
+  sizeBytes: number;
+  analysisContent: string;
+  preview: string;
+  extractedCharacterCount: number;
+  truncated: boolean;
+  pageCount?: number;
+  worksheetName?: string;
+  availableWorksheets?: string[];
+  detectedColumns?: string[];
+  importedRowCount?: number;
+  truncatedRowCount?: number;
+  importedColumnCount?: number;
+  extractionSummary: string;
+  warnings: string[];
+};
 
 export function BusinessClient() {
   const [content, setContent] = useState(sampleMessages[0].content);
@@ -88,6 +119,8 @@ export function BusinessClient() {
   const [profileId, setProfileId] = useState("support-center");
   const [analysis, setAnalysis] = useState<BusinessAnalysisResult | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [extraction, setExtraction] = useState<BusinessExtraction | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const selectedProfile = useMemo(
     () =>
@@ -110,23 +143,52 @@ export function BusinessClient() {
     setContent(nextContent);
     setAnalysis(null);
     setUploadError(null);
+    setExtraction(null);
   }
 
-  async function handleTxtUpload(file: File | undefined) {
+  async function handleBusinessUpload(file: File | undefined) {
     setUploadError(null);
     setAnalysis(null);
+    setExtraction(null);
 
     if (!file) {
       return;
     }
 
-    if (!file.name.toLowerCase().endsWith(".txt") && file.type !== "text/plain") {
-      setUploadError("Only TXT upload is implemented in this MVP.");
-      return;
-    }
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch("/api/business/ingest", {
+        method: "POST",
+        body: formData,
+      });
+      const payload = (await response.json()) as
+        | { extraction: BusinessExtraction }
+        | { error?: { message?: string }; message?: string };
 
-    const text = await file.text();
-    setContent(text.slice(0, 6000));
+      if (!response.ok || !("extraction" in payload)) {
+        setUploadError(
+          "error" in payload
+            ? payload.error?.message ?? "Uploaded file could not be processed."
+            : "Uploaded file could not be processed.",
+        );
+        return;
+      }
+
+      setExtraction(payload.extraction);
+      setContent(payload.extraction.analysisContent);
+    } catch {
+      setUploadError("Uploaded file could not be processed.");
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  function removeExtraction() {
+    setExtraction(null);
+    setAnalysis(null);
+    setUploadError(null);
   }
 
   return (
@@ -140,9 +202,9 @@ export function BusinessClient() {
                 Paste or load a business message.
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-                Paste text directly or upload a TXT file. Other document and
-                spreadsheet formats are shown as roadmap placeholders and are
-                not parsed by this MVP.
+                Paste text directly or upload TXT, PDF, DOCX, CSV or XLSX files.
+                Files are parsed server-side, summarized with safe limits and
+                sent into the Business Communication analysis workflow.
               </p>
             </div>
             <span className="badge border-emerald-200 bg-emerald-50 text-emerald-800">
@@ -168,12 +230,12 @@ export function BusinessClient() {
                   setAnalysis(null);
                 }}
                 rows={9}
-                maxLength={6000}
+                maxLength={12000}
                 className="field leading-6"
                 placeholder="Paste a business email, support note, sales message or team update."
               />
               <span className="block text-xs text-slate-500">
-                {content.length}/6000 characters
+                {content.length}/12000 characters
               </span>
             </label>
 
@@ -187,7 +249,12 @@ export function BusinessClient() {
                     <button
                       key={sample.label}
                       type="button"
-                      onClick={() => loadSample(sample.content)}
+                      onClick={() => {
+                        loadSample(sample.content);
+                        if ("purpose" in sample && sample.purpose) {
+                          setPurpose(sample.purpose);
+                        }
+                      }}
                       className="btn btn-secondary min-h-9 px-3 py-2 text-xs"
                     >
                       {sample.label}
@@ -198,21 +265,35 @@ export function BusinessClient() {
 
               <label className="space-y-2">
                 <span className="text-sm font-semibold text-slate-800">
-                  Upload TXT
+                  Upload file
                 </span>
                 <input
                   type="file"
-                  accept=".txt,text/plain"
-                  onChange={(event) => handleTxtUpload(event.target.files?.[0])}
+                  accept=".txt,text/plain,.pdf,application/pdf,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.csv,text/csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  onChange={(event) => handleBusinessUpload(event.target.files?.[0])}
                   className="field text-sm"
                 />
               </label>
             </div>
 
+            {isUploading ? (
+              <p className="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm font-semibold text-sky-900">
+                Extracting file content...
+              </p>
+            ) : null}
+
             {uploadError ? (
               <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
                 {uploadError}
               </p>
+            ) : null}
+
+            {extraction ? (
+              <ExtractionPreview
+                extraction={extraction}
+                onAnalyze={runAnalysis}
+                onRemove={removeExtraction}
+              />
             ) : null}
           </div>
         </div>
@@ -293,6 +374,13 @@ export function BusinessClient() {
             >
               Analyze Communication
             </button>
+            {(purpose === "Business Audit" || purpose === "Budget Review") ? (
+              <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs font-semibold leading-5 text-amber-900">
+                {purpose === "Business Audit"
+                  ? "Business Audit is an AI-assisted preliminary review, not a certified external audit or legal compliance certification."
+                  : "Budget Review is decision-support analysis, not financial advice or formal accounting assurance."}
+              </p>
+            ) : null}
           </section>
         </aside>
       </section>
@@ -395,6 +483,87 @@ function ProfileDetail({ label, value }: { label: string; value: string }) {
   );
 }
 
+function ExtractionPreview({
+  extraction,
+  onAnalyze,
+  onRemove,
+}: {
+  extraction: BusinessExtraction;
+  onAnalyze: () => void;
+  onRemove: () => void;
+}) {
+  return (
+    <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+        <div>
+          <p className="text-sm font-semibold text-emerald-950">
+            Extraction preview
+          </p>
+          <p className="mt-1 text-xs leading-5 text-emerald-900">
+            {extraction.extractionSummary}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={onAnalyze} className="btn btn-primary min-h-9 px-3 py-2 text-xs">
+            Analyze extracted content
+          </button>
+          <button type="button" onClick={onRemove} className="btn btn-secondary min-h-9 px-3 py-2 text-xs">
+            Remove file
+          </button>
+        </div>
+      </div>
+      <dl className="mt-4 grid gap-3 text-xs sm:grid-cols-2 lg:grid-cols-3">
+        <PreviewDetail label="Filename" value={extraction.filename} />
+        <PreviewDetail label="File type" value={extraction.fileTypeLabel} />
+        <PreviewDetail label="File size" value={`${extraction.sizeBytes} bytes`} />
+        {extraction.pageCount !== undefined ? (
+          <PreviewDetail label="Page count" value={String(extraction.pageCount)} />
+        ) : null}
+        {extraction.worksheetName ? (
+          <PreviewDetail label="Worksheet" value={extraction.worksheetName} />
+        ) : null}
+        {extraction.importedRowCount !== undefined ? (
+          <PreviewDetail label="Rows imported" value={String(extraction.importedRowCount)} />
+        ) : null}
+        {extraction.importedColumnCount !== undefined ? (
+          <PreviewDetail label="Columns" value={String(extraction.importedColumnCount)} />
+        ) : null}
+        <PreviewDetail
+          label="Extracted characters"
+          value={String(extraction.extractedCharacterCount)}
+        />
+        <PreviewDetail label="Truncated" value={extraction.truncated ? "Yes" : "No"} />
+      </dl>
+      {extraction.detectedColumns?.length ? (
+        <p className="mt-3 text-xs leading-5 text-emerald-900">
+          Columns: {extraction.detectedColumns.join(", ")}
+        </p>
+      ) : null}
+      {extraction.warnings.length ? (
+        <ul className="mt-3 list-disc space-y-1 pl-5 text-xs leading-5 text-amber-900">
+          {extraction.warnings.map((warning) => (
+            <li key={warning}>{warning}</li>
+          ))}
+        </ul>
+      ) : null}
+      <p className="mt-4 rounded-lg bg-white/80 p-3 text-xs leading-5 text-slate-700">
+        {extraction.preview}
+      </p>
+    </section>
+  );
+}
+
+function PreviewDetail({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-white/80 p-3">
+      <dt className="font-bold uppercase tracking-[0.12em] text-emerald-800">
+        {label}
+      </dt>
+      <dd className="mt-1 break-words font-semibold text-slate-800">{value}</dd>
+    </div>
+  );
+}
+
 function ResultsPanel({
   analysis,
 }: {
@@ -452,6 +621,24 @@ function ResultsPanel({
               title="Suggested Actions"
               items={analysis.suggestedActions}
             />
+            {analysis.dataOverview ? (
+              <ResultList title="Data Overview" items={analysis.dataOverview} />
+            ) : null}
+            {analysis.auditObservations ? (
+              <ResultList title="Audit Observations" items={analysis.auditObservations} />
+            ) : null}
+            {analysis.revenueExpenseObservations ? (
+              <ResultList
+                title="Revenue / Expense Observations"
+                items={analysis.revenueExpenseObservations}
+              />
+            ) : null}
+            {analysis.budgetVarianceIndicators ? (
+              <ResultList
+                title="Budget Variance"
+                items={analysis.budgetVarianceIndicators}
+              />
+            ) : null}
           </div>
         </section>
 
@@ -491,6 +678,74 @@ function ResultsPanel({
           ))}
         </ul>
       </section>
+
+      {(analysis.scopeReviewed || analysis.recommendedFollowUpChecks) ? (
+        <section className="section-card border-amber-200 bg-amber-50 p-5 md:p-6">
+          <h2 className="text-xl font-semibold text-amber-950">
+            Preliminary business review disclaimer
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-amber-950">
+            This is an AI-assisted business review for decision support. It is
+            not formal accounting assurance, statutory audit, legal compliance
+            certification or financial advice.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {analysis.scopeReviewed ? (
+              <ResultList title="Scope Reviewed" items={analysis.scopeReviewed} />
+            ) : null}
+            {analysis.keyFindings ? (
+              <ResultList title="Key Findings" items={analysis.keyFindings} />
+            ) : null}
+            {analysis.riskIndicators ? (
+              <ResultList title="Risk Indicators" items={analysis.riskIndicators} />
+            ) : null}
+            {analysis.missingInformation ? (
+              <ResultList title="Missing Information" items={analysis.missingInformation} />
+            ) : null}
+            {analysis.dataQualityConcerns ? (
+              <ResultList title="Data Quality Concerns" items={analysis.dataQualityConcerns} />
+            ) : null}
+            {analysis.policyOrProcessConcerns ? (
+              <ResultList
+                title="Policy Or Process Concerns"
+                items={analysis.policyOrProcessConcerns}
+              />
+            ) : null}
+            {analysis.exceptionsOrAnomalies ? (
+              <ResultList
+                title="Exceptions Or Anomalies"
+                items={analysis.exceptionsOrAnomalies}
+              />
+            ) : null}
+            {analysis.missingOrInconsistentEntries ? (
+              <ResultList
+                title="Missing Or Inconsistent Entries"
+                items={analysis.missingOrInconsistentEntries}
+              />
+            ) : null}
+            {analysis.notableTrends ? (
+              <ResultList title="Trend Summary" items={analysis.notableTrends} />
+            ) : null}
+            {analysis.recommendedFollowUpChecks ? (
+              <ResultList
+                title="Recommended Follow-up Checks"
+                items={analysis.recommendedFollowUpChecks}
+              />
+            ) : null}
+            {analysis.questionsRequiringHumanReview ? (
+              <ResultList
+                title="Questions Requiring Human Review"
+                items={analysis.questionsRequiringHumanReview}
+              />
+            ) : null}
+          </div>
+          {analysis.preliminaryAuditScore ? (
+            <p className="mt-5 rounded-lg bg-white/70 p-3 text-sm font-semibold text-amber-950">
+              {analysis.preliminaryAuditScore}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
     </section>
   );
 }

@@ -41,6 +41,7 @@ export function analyseBusinessCommunication(
     riskLevel,
     requestedActions,
   });
+  const businessReview = createBusinessReviewSections(content, lowerContent, input.purpose);
 
   return {
     summary: createSummary(sentences, input.purpose),
@@ -63,6 +64,7 @@ export function analyseBusinessCommunication(
       intent,
       priority,
       riskLevel,
+      purpose: input.purpose,
     }),
     explanation: createExplanation({
       input,
@@ -78,6 +80,7 @@ export function analyseBusinessCommunication(
       responseStyle: input.profile.responseStyle,
     },
     analysisMode: "Local demonstration logic",
+    ...businessReview,
   };
 }
 
@@ -102,6 +105,14 @@ function detectIntent(
   lowerContent: string,
   purpose: BusinessAnalysisInput["purpose"],
 ) {
+  if (purpose === "Business Audit") {
+    return "Preliminary business audit review";
+  }
+
+  if (purpose === "Budget Review") {
+    return "Budget and variance review";
+  }
+
   if (containsAny(lowerContent, ["complaint", "unhappy", "frustrated", "angry"])) {
     return "Complaint";
   }
@@ -293,11 +304,32 @@ function createReplyOutline({
   intent,
   priority,
   riskLevel,
+  purpose,
 }: {
   intent: string;
   priority: BusinessPriority;
   riskLevel: BusinessRiskLevel;
+  purpose: BusinessAnalysisInput["purpose"];
 }) {
+  if (purpose === "Business Audit") {
+    return [
+      "State that this is a preliminary AI-assisted business review, not a certified audit.",
+      "Summarize the reviewed scope and key findings.",
+      "List missing evidence or data-quality concerns for human review.",
+      "Recommend follow-up checks with an accountable owner.",
+    ];
+  }
+
+  if (purpose === "Budget Review") {
+    return [
+      "State that this is decision-support analysis, not financial advice.",
+      "Summarize revenue and expense observations from the provided data.",
+      "Do not calculate totals or variances when the source data is incomplete.",
+      "Flag unusual entries, missing categories or possible variances.",
+      "Recommend human review before budget decisions.",
+    ];
+  }
+
   return [
     "Open with a professional acknowledgement.",
     `Address the detected intent: ${intent}.`,
@@ -306,6 +338,109 @@ function createReplyOutline({
       ? "Avoid making commitments on sensitive details until an owner reviews the message."
       : "Close with a clear offer to help or confirm follow-up.",
   ];
+}
+
+function createBusinessReviewSections(
+  content: string,
+  lowerContent: string,
+  purpose: BusinessAnalysisInput["purpose"],
+) {
+  if (purpose === "Business Audit") {
+    const hasPolicy = containsAny(lowerContent, ["policy", "approval", "control", "process"]);
+    const hasMissing = containsAny(lowerContent, ["missing", "unknown", "n/a", "tbd", "blank"]);
+    const hasMoney = /[$£€]\s?\d|\b\d+(?:\.\d+)?%\b/.test(content);
+    const concerns = [
+      hasMissing ? "Missing or incomplete values were mentioned." : "No explicit missing values were detected in the supplied text.",
+      hasPolicy ? "Policy, approval or process terms appear in the source material." : "No explicit policy or approval references were detected.",
+    ];
+
+    return {
+      dataOverview: [
+        "AI-assisted business review based only on the uploaded or pasted content.",
+        hasMoney ? "Financial values or percentages appear in the material." : "No obvious financial values were detected.",
+      ],
+      scopeReviewed: ["Provided document, message or table content only."],
+      keyFindings: detectTopics(lowerContent).map((topic) => `Relevant topic: ${topic}.`),
+      riskIndicators: detectRisk(lowerContent) === "High"
+        ? ["High-risk business, legal, payment or security language detected."]
+        : ["No high-risk language was detected by local rules."],
+      missingInformation: hasMissing
+        ? ["The content references missing, unknown or placeholder values."]
+        : ["No explicit missing-information marker was detected."],
+      dataQualityConcerns: concerns,
+      policyOrProcessConcerns: hasPolicy
+        ? ["Policy, control, approval or process terms require human validation."]
+        : ["No policy/process concern was detected in local review."],
+      auditObservations: [
+        "This is a preliminary AI-assisted business review, not a certified external audit.",
+      ],
+      recommendedFollowUpChecks: [
+        "Validate source completeness with the document owner.",
+        "Review high-risk or missing entries manually before decisions.",
+      ],
+      questionsRequiringHumanReview: [
+        "Is the source data complete and approved?",
+        "Are any financial, legal or compliance statements supported by evidence?",
+      ],
+      preliminaryAuditScore: deriveAuditBand(lowerContent),
+    };
+  }
+
+  if (purpose === "Budget Review") {
+    const hasRevenue = containsAny(lowerContent, ["revenue", "sales", "income", "arr", "mrr"]);
+    const hasExpense = containsAny(lowerContent, ["expense", "cost", "spend", "vendor", "invoice"]);
+    const hasVariance = containsAny(lowerContent, ["variance", "over budget", "under budget", "forecast"]);
+    return {
+      dataOverview: ["AI-assisted budget review based only on supplied content."],
+      revenueExpenseObservations: [
+        hasRevenue ? "Revenue or income terms were detected." : "No explicit revenue terms were detected.",
+        hasExpense ? "Expense, cost or invoice terms were detected." : "No explicit expense terms were detected.",
+      ],
+      budgetVarianceIndicators: [
+        hasVariance ? "Variance or forecast language was detected." : "No explicit variance language was detected.",
+      ],
+      notableTrends: [
+        containsAny(lowerContent, ["increase", "decrease", "growth", "decline"])
+          ? "Trend language appears in the source."
+          : "No explicit trend language was detected.",
+      ],
+      exceptionsOrAnomalies: [
+        containsAny(lowerContent, ["unusual", "unexpected", "duplicate", "missing"])
+          ? "Possible exception or anomaly language detected."
+          : "No obvious anomaly terms were detected.",
+      ],
+      missingOrInconsistentEntries: [
+        containsAny(lowerContent, ["missing", "blank", "unknown", "duplicate"])
+          ? "Potential missing, duplicate or inconsistent entries were referenced."
+          : "No explicit missing or duplicate entry language was detected.",
+      ],
+      recommendedFollowUpChecks: [
+        "Confirm totals against the original financial system before decisions.",
+        "Review unusual entries and missing categories with a human owner.",
+      ],
+    };
+  }
+
+  return {};
+}
+
+function deriveAuditBand(lowerContent: string) {
+  const highSignals = ["lawsuit", "breach", "fraud", "missing", "unapproved"].filter(
+    (keyword) => lowerContent.includes(keyword),
+  ).length;
+  const mediumSignals = ["invoice", "payment", "contract", "variance", "policy"].filter(
+    (keyword) => lowerContent.includes(keyword),
+  ).length;
+
+  if (highSignals > 0) {
+    return "High preliminary risk band: high-severity terms were detected.";
+  }
+
+  if (mediumSignals > 1) {
+    return "Medium preliminary risk band: multiple review-sensitive terms were detected.";
+  }
+
+  return "Low preliminary risk band: few review-sensitive terms were detected.";
 }
 
 function createExplanation({

@@ -7,6 +7,9 @@ import type {
   MessageAnalysisInput,
 } from "../../lib/analysis/types";
 import type { AiAnalysisProvider } from "../../lib/ai/types";
+import { analyseBusinessCommunication } from "../../lib/business/analyse-business-communication";
+import { businessProfiles } from "../../lib/business/profiles";
+import type { BusinessAnalysisPurpose } from "../../lib/business/types";
 
 const novaBridgeProject = {
   projectName: "NovaBridge",
@@ -88,6 +91,49 @@ const demoMessages = [
   },
 ];
 
+const businessDemoExamples: {
+  label: string;
+  purpose: BusinessAnalysisPurpose;
+  content: string;
+}[] = [
+  {
+    label: "Customer support request",
+    purpose: "Customer Support",
+    content:
+      "A customer says their invoice portal login failed twice and asks for help before their renewal call tomorrow.",
+  },
+  {
+    label: "Sales inquiry",
+    purpose: "Sales Conversation",
+    content:
+      "A procurement lead asks for enterprise pricing, implementation timing and a security review before a demo next week.",
+  },
+  {
+    label: "Business email",
+    purpose: "Business Email",
+    content:
+      "The partner requests a signed agreement, updated statement of work and confirmation of the launch checklist by Friday.",
+  },
+  {
+    label: "Internal team update",
+    purpose: "Internal Team",
+    content:
+      "The operations team notes that onboarding is blocked until finance confirms the vendor budget and support updates the handoff notes.",
+  },
+  {
+    label: "Business audit sample",
+    purpose: "Business Audit",
+    content:
+      "Quarterly vendor review shows missing approval notes, inconsistent invoice categories and two urgent exceptions requiring manager review.",
+  },
+  {
+    label: "Budget review sample",
+    purpose: "Budget Review",
+    content:
+      "Marketing spend increased 18 percent while revenue stayed flat. Travel expenses are missing categories and two line items need follow-up.",
+  },
+];
+
 const demoAiProvider: AiAnalysisProvider = {
   async classifyMessage(input) {
     const matchedDemoMessage =
@@ -111,6 +157,14 @@ export default async function DemoPage() {
     })),
   );
   const batchSummary = createBatchSummary(batchResults);
+  const businessAnalyses = businessDemoExamples.map((example) => ({
+    ...example,
+    result: analyseBusinessCommunication({
+      content: example.content,
+      purpose: example.purpose,
+      profile: businessProfiles[0],
+    }),
+  }));
 
   const mostImportantSeedRule = seedPhraseAnalysis.triggeredRules[0];
 
@@ -120,21 +174,21 @@ export default async function DemoPage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-10 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div>
             <p className="kicker">
-              Guided Judge Demo
+              Guided Platform Demo
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">
-              NovaBridge Security Desk
+              AgenticOps AI Guided Platform Demo
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
-              A 90-second walkthrough of the current Web3 Community Security
-              MVP: deterministic risk checks, AI-assisted classification, safe
-              reply suggestions, batch review and a recomputable report. No
-              login or external setup required.
+              A guided walkthrough of the implemented communication engine:
+              Web3 Community Security, Business Communication Intelligence,
+              normalized inputs, deterministic checks, AI-assisted reasoning,
+              approval-required suggestions and auditable reporting.
             </p>
             <p className="mt-4 max-w-3xl rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold leading-6 text-emerald-900">
-              This demo showcases the current Web3 Community Security MVP.
-              Future demos will include business email, customer support,
-              social messaging and omnichannel communication intelligence.
+              The NovaBridge case study remains the reproducible Web3 Security
+              demo. Business examples below use the implemented Business
+              Communication Intelligence logic.
             </p>
           </div>
           <form action="/demo">
@@ -149,15 +203,40 @@ export default async function DemoPage() {
       </header>
 
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-10 sm:px-6 lg:px-8">
+        <nav
+          aria-label="Demo sections"
+          className="sticky top-16 z-10 -mx-4 border-y border-slate-200 bg-white/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        >
+          <div className="flex flex-wrap gap-2">
+            {[
+              ["Overview", "#overview"],
+              ["Pipeline", "#pipeline"],
+              ["Web3 Case Study", "#web3-case-study"],
+              ["Business Case Study", "#business-case-study"],
+              ["Integrations", "#integrations"],
+              ["Roadmap", "#roadmap"],
+            ].map(([label, href]) => (
+              <Link
+                key={href}
+                href={href}
+                className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 hover:border-emerald-300 hover:text-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+        </nav>
+
         <section
-          aria-label="Demo overview"
-          className="grid gap-4 md:grid-cols-4"
+          id="overview"
+          aria-label="Platform overview"
+          className="scroll-mt-32 grid gap-4 md:grid-cols-4"
         >
           {[
-            ["Context", "Fictional Web3 support desk"],
-            ["Input", "Ten reproducible messages"],
-            ["Decision", "Rules first, AI second"],
-            ["Output", "Risk, evidence and suggested reply"],
+            ["Contexts", "Web3 Security and Business Communication"],
+            ["Sources", "Manual, files and connected integrations"],
+            ["Decision", "Rules, AI reasoning and explainability"],
+            ["Safety", "Human approval before external actions"],
           ].map(([label, value]) => (
             <div key={label} className="metric-card p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
@@ -170,11 +249,42 @@ export default async function DemoPage() {
           ))}
         </section>
 
-        <section className="grid gap-6 lg:grid-cols-[0.85fr_1fr]">
+        <section id="pipeline" className="scroll-mt-32 section-card p-5 md:p-6">
+          <p className="kicker">Shared Communication Pipeline</p>
+          <h2 className="mt-3 text-3xl font-semibold">
+            One path from message to auditable recommendation.
+          </h2>
+          <div className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              "Incoming message",
+              "Normalize",
+              "Identify context",
+              "Deterministic rules",
+              "AI analysis",
+              "Recommendations",
+              "Human approval",
+              "Report and audit trail",
+            ].map((step, index) => (
+              <div key={step} className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-emerald-700">
+                  Step {index + 1}
+                </p>
+                <p className="mt-2 text-sm font-semibold text-slate-800">
+                  {step}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="web3-case-study" className="scroll-mt-32 grid gap-6 lg:grid-cols-[0.85fr_1fr]">
           <div>
             <span className="inline-flex size-10 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
               1
             </span>
+            <p className="mt-4 text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">
+              Implemented Case Study 1
+            </p>
             <h2 className="mt-4 text-3xl font-semibold">
               Analysis knowledge base
             </h2>
@@ -394,6 +504,127 @@ export default async function DemoPage() {
             ].map((item) => (
               <div key={item} className="metric-card p-4 text-sm font-semibold text-emerald-900">
                 {item}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="business-case-study"
+          className="scroll-mt-32 section-card p-5 md:p-6"
+        >
+          <p className="kicker">Implemented Case Study 2</p>
+          <h2 className="mt-3 text-3xl font-semibold">
+            Business Communication Demonstration
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+            These examples use the implemented Business Communication
+            Intelligence pipeline for customer support, sales, email, internal
+            updates, preliminary business audit and budget review. Results are
+            decision-support analysis, not legal, financial or certified audit
+            advice.
+          </p>
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            {businessAnalyses.map((example) => (
+              <article key={example.label} className="interactive-card p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h3 className="text-lg font-semibold text-slate-950">
+                    {example.label}
+                  </h3>
+                  <span className="badge border-teal-200 bg-teal-50 text-teal-800">
+                    {example.purpose}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  {example.content}
+                </p>
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  <MiniMetric label="Intent" value={example.result.intent} />
+                  <MiniMetric label="Priority" value={example.result.priority} />
+                  <MiniMetric label="Risk" value={example.result.riskLevel} />
+                </div>
+                <p className="mt-4 text-sm font-semibold text-slate-800">
+                  {example.result.summary}
+                </p>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  Next step: {example.result.recommendedNextStep}
+                </p>
+                <p className="mt-3 text-xs font-semibold text-slate-500">
+                  Why: {example.result.explanation[0]}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="integrations" className="scroll-mt-32 section-card p-5 md:p-6">
+          <p className="kicker">Connected Sources</p>
+          <h2 className="mt-3 text-3xl font-semibold">
+            Implemented integrations feed the same pipeline.
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+            {[
+              [
+                "Gmail",
+                "Implemented",
+                "Readonly sync and analysis; no sending or mailbox modification.",
+              ],
+              [
+                "Telegram",
+                "Live",
+                "Webhook ingestion, analysis and durable events are working.",
+              ],
+              [
+                "Facebook Messenger",
+                "Implemented",
+                "Supported Page Messenger events are analyzed with approval-required suggestions.",
+              ],
+              [
+                "Discord",
+                "Live",
+                "Railway Gateway worker forwards supported messages to the Vercel pipeline.",
+              ],
+              [
+                "Instagram",
+                "Foundation Ready",
+                "Verification and supported normalization exist; broader event coverage remains limited.",
+              ],
+            ].map(([name, status, detail]) => (
+              <article key={name} className="metric-card p-4">
+                <p className="text-lg font-semibold text-slate-950">{name}</p>
+                <span className="mt-3 inline-flex rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[0.68rem] font-bold uppercase text-slate-700">
+                  {status}
+                </span>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  {detail}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="roadmap" className="scroll-mt-32 section-card p-5 md:p-6">
+          <p className="kicker">Roadmap</p>
+          <h2 className="mt-3 text-3xl font-semibold">
+            Future platform areas remain disabled until implemented.
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              "AI Email Workspace actions",
+              "Marketing Intelligence",
+              "Ads with human approval",
+              "Business Intelligence expansion",
+              "Audit & Compliance",
+              "AI Business Operator",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm font-semibold text-slate-700"
+              >
+                <span>{item}</span>
+                <span className="mt-2 block text-xs font-bold uppercase text-slate-500">
+                  Roadmap
+                </span>
               </div>
             ))}
           </div>

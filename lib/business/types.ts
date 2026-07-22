@@ -4,6 +4,8 @@ export const businessAnalysisPurposes = [
   "Sales Conversation",
   "Internal Team",
   "General Communication",
+  "Business Audit",
+  "Budget Review",
 ] as const;
 
 export type BusinessAnalysisPurpose = (typeof businessAnalysisPurposes)[number];
@@ -48,6 +50,22 @@ export type BusinessAnalysisResult = {
   suggestedActions: string[];
   recommendedReplyOutline: string[];
   explanation: string[];
+  dataOverview?: string[];
+  notableTrends?: string[];
+  exceptionsOrAnomalies?: string[];
+  budgetVarianceIndicators?: string[];
+  revenueExpenseObservations?: string[];
+  missingOrInconsistentEntries?: string[];
+  auditObservations?: string[];
+  recommendedFollowUpChecks?: string[];
+  scopeReviewed?: string[];
+  keyFindings?: string[];
+  riskIndicators?: string[];
+  missingInformation?: string[];
+  dataQualityConcerns?: string[];
+  policyOrProcessConcerns?: string[];
+  questionsRequiringHumanReview?: string[];
+  preliminaryAuditScore?: string;
   profileMetadata: {
     profileName: string;
     industry: string;

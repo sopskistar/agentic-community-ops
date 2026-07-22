@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-22 - Session: business file intelligence and guided platform demo
+
+- What was built: Added real server-side Business Communication file ingestion for TXT, PDF, DOCX, CSV and XLSX; added extraction previews; routed extracted bounded content into the existing `/business` analysis workflow; added Business Audit and Budget Review purposes; corrected homepage capability statuses; and repositioned `/demo` as an AgenticOps AI guided platform demo while preserving the NovaBridge Web3 case study.
+- Problems found: Homepage/docs still described several implemented integrations and file inputs as planned. The Business analyzer let generic invoice/contract keyword intent override the selected Business Audit purpose. PDF page labels were counted as extractable text for empty PDFs.
+- Bugs fixed: Purpose-specific Business Audit/Budget Review intent now wins over generic keyword intent. PDF no-text detection checks extracted page text before adding page markers. Status copy now labels Gmail, Telegram, Facebook Messenger and Discord as implemented/live, and Instagram as Foundation Ready.
+- Important technical decisions: Supported upload extensions are `.txt`, `.pdf`, `.docx`, `.csv` and `.xlsx`. Legacy `.doc`, legacy `.xls` and macro-enabled `.xlsm` are unsupported. Scanned PDFs report that OCR is not implemented. Uploaded files remain ephemeral, original files are not persisted, spreadsheet formulas are not evaluated, and business/audit/budget outputs are decision-support only.
+- Tests performed: Focused ingestion/status/demo tests passed with 29 tests across 9 files. Final validation passed: `npm test` passed with 170 tests across 35 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated `/api/business/ingest`; `npm run discord:worker -- --validate` passed with dummy non-secret environment values. `npm audit --omit=dev` still reports existing Next-transitive `postcss` and `sharp` advisories; `npm audit fix --force` proposes a breaking downgrade to `next@9.3.3`, so it was not applied.
+- New rules learned: Capability status labels must be audited against repository behavior before homepage copy changes; business audit wording must avoid certified-audit, legal, financial or compliance guarantees.
+
 ## 2026-07-22 - Session: AgenticOps AI platform repositioning
 
 - What was built: Repositioned the product as AgenticOps AI, an AI Communication Intelligence Platform. Updated homepage hero, current MVP framing, communication contexts, platform pipeline, six-phase strategic roadmap, channel-aware analysis, future inputs, architecture illustration, enterprise roadmap labels, footer branding, metadata, policy page branding, ASP docs branding, README and architecture docs.

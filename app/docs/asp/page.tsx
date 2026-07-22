@@ -68,7 +68,9 @@ const sections = [
   },
   {
     title: "Demo Route",
-    items: ["/demo provides a no-login NovaBridge guided judge demonstration."],
+    items: [
+      "/demo provides a no-login AgenticOps AI guided platform demonstration with the NovaBridge Web3 case study preserved for ASP review.",
+    ],
   },
   {
     title: "Deployment Checklist",
