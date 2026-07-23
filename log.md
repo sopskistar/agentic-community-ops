@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-23 - Session: post-Release-4 correction pass
+
+- What was built: Fixed homepage capability-panel dark-mode contrast, added semantic warning tokens for Business Intelligence disclaimers, broadened `/security-engine` positioning around normalized source/context/rule separation, added implemented message sources and platform flow, clarified Platform Dashboard onboarding, exposed direct project actions, added project breadcrumbs/workflow navigation, and changed Batch Review to timeout safely, store completed results with timestamps and route to the report.
+- Problems found: Hero capability panels used light card styling that became low contrast in dark mode; `/security-engine` still read as Web3-only; Batch Review could leave users on the page with a `Reviewing...` button instead of opening the report; report access was hidden behind profile configuration; and Business warning copy used low-contrast amber/red combinations in dark mode.
+- Bugs fixed: Batch failures, malformed responses and timeouts now reset loading state and preserve entered messages. Successful batch reviews store browser-local results and navigate automatically to `/dashboard/projects/[id]/report`.
+- Important technical decisions: No routes were renamed, no implemented features were removed, no provider sends/moderation/actions were added, and the SEC-001 through SEC-015 deterministic catalogue remains published and active.
+- Tests performed: `npm test` passed with 211 tests across 47 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated the existing 38 app routes without metadata warnings; `npm run discord:worker -- --validate` passed with dummy non-secret environment values; `npm audit --omit=dev` reported 0 vulnerabilities.
+- New rules learned: Dashboard workflow should always expose profile, single-message review, batch review and report as direct actions; users should not need configuration/edit mode to find reports.
+
 ## 2026-07-23 - Session: production polish and documentation
 
 - What was built: Centralized app version/metadata, added robots and sitemap handlers, added global loading and 404 states, added a public architecture page, expanded ASP documentation, rewrote README, improved footer links and strengthened global dark-mode contrast mappings.

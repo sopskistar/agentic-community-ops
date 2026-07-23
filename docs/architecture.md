@@ -21,6 +21,20 @@ The official logo asset is served from `public/logo/Agentic-Ops.jpg` and used by
 
 AgenticOps AI is a Next.js 16 App Router application with public pages, dashboard pages, route handlers, and domain logic in `lib/`. The current product includes a Web3 community security MVP and a Business Communication Intelligence MVP.
 
+The deterministic security catalogue should be understood as one module inside the platform-wide analysis flow:
+
+```text
+Source
+  -> Normalize
+  -> Identify Context
+  -> Deterministic Checks
+  -> AI-Assisted Analysis
+  -> Suggested Action
+  -> Human Review
+```
+
+Implemented source inputs include manual text, Gmail readonly sync, Facebook Messenger, Instagram supported events, Telegram, Discord Gateway and TXT/PDF/DOCX/CSV/XLSX uploads. Source channel does not automatically determine risk. The SEC-001 through SEC-015 rules remain the active Web3-originated deterministic security catalogue, while Business Communication Intelligence uses structured explainable analysis appropriate to the selected business purpose.
+
 Current pages:
 
 - `/`: product landing page.
@@ -35,9 +49,9 @@ Current pages:
 - `/security-engine`: public deterministic rule catalog.
 - `/docs/asp`: human-readable ASP registration documentation.
 - `/docs/architecture`: public platform architecture overview.
-- `/dashboard`: local project knowledge-base list.
+- `/dashboard`: Platform Dashboard for local communication profiles, trusted documentation, official links, single-message review, batch review and report entry points.
 - `/dashboard/projects/new`: create a project profile.
-- `/dashboard/projects/[id]`: edit a project profile.
+- `/dashboard/projects/[id]`: project overview plus project configuration.
 - `/dashboard/projects/[id]/analyse`: single-message review UI.
 - `/dashboard/projects/[id]/batch`: paste-based batch review UI.
 - `/dashboard/projects/[id]/report`: browser-local report UI based on the latest stored batch.

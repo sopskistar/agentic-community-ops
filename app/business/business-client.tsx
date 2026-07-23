@@ -410,7 +410,7 @@ export function BusinessClient() {
 
 function BusinessDisclaimer() {
   return (
-    <section className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-6 text-amber-950">
+    <section className="warning-card rounded-xl p-4 text-sm font-semibold leading-6">
       {businessSafetyDisclaimer} AgenticOps AI does not certify financial
       statements, submit tax filings, connect bank accounts, execute payments,
       approve budgets or replace human auditors, finance professionals or legal
@@ -1065,7 +1065,7 @@ function ReportPreview({ report }: { report: BusinessReportRecord }) {
         <ResultList title="Required Actions" items={report.reportData.requiredActions} />
         <ResultList title="Human Review Notes" items={report.reportData.humanReviewNotes} />
         <ResultList title="Limitations" items={report.reportData.limitations} />
-        <p className="rounded-lg border border-amber-200 bg-amber-50 p-4 font-semibold text-amber-950">
+        <p className="warning-card rounded-lg p-4 font-semibold">
           {report.reportData.disclaimer}
         </p>
       </div>

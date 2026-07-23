@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { projectRepository } from "../../../../../lib/projects/local-json-project-repository";
+import { ProjectBreadcrumbs, ProjectWorkflowNav } from "../../project-navigation";
 
 import { AnalyseClient } from "./analyse-client";
 
@@ -25,6 +26,7 @@ export default async function ProjectAnalysePage({
   return (
     <main className="app-bg min-h-screen text-slate-950">
       <div className="page-shell max-w-6xl">
+        <ProjectBreadcrumbs project={project} current="Review Message" />
         <div className="section-card mb-6 flex flex-col gap-4 p-6 md:flex-row md:items-end md:justify-between md:p-7">
           <div>
             <p className="kicker">
@@ -35,15 +37,16 @@ export default async function ProjectAnalysePage({
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
               Run deterministic rules first, then AI-assisted classification
-              and safe reply suggestions using this profile. Today&apos;s rule
-              module focuses on Web3 Community Security.
+              and safe reply suggestions using this profile. Messages are
+              normalized before context-aware analysis runs.
             </p>
+            <ProjectWorkflowNav project={project} active="analyse" />
           </div>
           <Link
             href={`/dashboard/projects/${project.id}`}
             className="btn btn-secondary"
           >
-            Edit Project
+            Project Overview
           </Link>
         </div>
 

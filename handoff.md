@@ -8,6 +8,8 @@ On 2026-07-23, Release 3 expanded `/integrations` into the Integrations & AI Wor
 
 On 2026-07-23, Release 4 production polish centralized app metadata/versioning, added robots and sitemap handlers, added a public architecture page, expanded ASP documentation, rewrote README, improved footer links, added global 404/loading states and strengthened global dark-mode contrast mappings. The release preserved all implemented product functionality and did not add autonomous external actions. Validation passed with 205 tests across 46 files, lint, TypeScript, production build, Discord worker validation and dependency audit.
 
+On 2026-07-23, the post-Release-4 correction pass fixed unreadable homepage capability panels in dark mode, changed Business warning cards to semantic warning tokens, repositioned `/security-engine` around source normalization, context-aware analysis and the active SEC-001 through SEC-015 deterministic catalogue, clarified Platform Dashboard project actions, added project breadcrumbs/workflow navigation, and fixed Batch Review so successful runs store results and route to the report while failures/timeouts reset the button and preserve entered messages. Validation passed with 211 tests across 47 files, lint, TypeScript, production build, Discord worker validation and dependency audit.
+
 On 2026-07-18, a current-state audit and staged expansion plan were added under `docs/architecture.md`, `docs/feature-gap-analysis.md`, and `docs/implementation-plan.md`. The first approved implementation task then added the reusable messaging foundation under `lib/messages/`. No production UI, API behavior, environment variables, OKX/ASP identity, external integrations, or storage implementation were changed.
 
 On 2026-07-18, branding and website positioning were updated to use the official supplied logo at `public/logo/Agentic-Ops.jpg` and to present the product vision as an AI Communication Intelligence Platform. The landing page clearly separates current Web3 security MVP capabilities from roadmap phases and future enterprise features. No external APIs, OAuth, secrets, database, existing API contracts, OKX ASP registration or messaging foundation internals were changed.
@@ -42,7 +44,7 @@ Repository blockers for Stages 1-4: no durable multi-tenant persistence for proj
 
 # Next Actions
 
-- Recommended next Codex prompt: "Add tenant-safe authentication and ownership boundaries for integration workflow records and business records. Keep outbound execution disabled by default, keep Gmail readonly, keep uploaded files ephemeral, and add tests proving one organization cannot view or approve another organization’s records."
+- Recommended next Codex prompt: "Add tenant-safe authentication and ownership boundaries for integration workflow records, business records and browser-local dashboard/project reports. Keep outbound execution disabled by default, keep Gmail readonly, keep uploaded files ephemeral, and add tests proving one organization cannot view or approve another organization’s records."
 - Use `/demo` as the primary guided platform recording flow; use `/demo#web3-case-study` for the NovaBridge Web3 case study and `/demo#business-case-study` for the Business Communication case study.
 - Use `/security-engine` when judges ask for the published deterministic rule list.
 - Deploy the application and replace placeholder deployment URLs in ASP materials.

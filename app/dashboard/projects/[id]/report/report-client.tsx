@@ -14,6 +14,7 @@ type StoredBatch = {
   summary: BatchAnalysisSummary;
   successfulResults: BatchAnalysedMessage[];
   failedResults: Array<{ index: number; content?: string; error: string }>;
+  savedAt?: string;
 };
 
 export function ReportClient({ project }: { project: Project }) {
@@ -67,10 +68,13 @@ export function ReportClient({ project }: { project: Project }) {
   if (!storedBatch || !recomputedSummary || !report) {
     return (
       <div className="section-card border-dashed p-8 text-center">
-        <h2 className="text-2xl font-semibold">No batch results stored</h2>
+        <h2 className="text-2xl font-semibold">
+          No completed batch analysis is available for this project.
+        </h2>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
-          Run batch analysis for this project first. The report uses actual
-          analysis results stored in this browser.
+          Reports are calculated from stored analysis results. Run Batch Review
+          first, then this page will show measured risk, category, rule and
+          escalation data.
         </p>
         <Link
           href={`/dashboard/projects/${project.id}/batch`}
@@ -84,6 +88,28 @@ export function ReportClient({ project }: { project: Project }) {
 
   return (
     <div className="space-y-8">
+      <div className="section-card p-5 md:p-6">
+        <p className="kicker">Report Source</p>
+        <h2 className="mt-2 text-2xl font-semibold">
+          {recomputedSummary.totalMessages} messages included.
+        </h2>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <SourceDetail
+            label="Last updated"
+            value={
+              storedBatch.savedAt
+                ? new Date(storedBatch.savedAt).toLocaleString()
+                : "Stored before timestamp tracking"
+            }
+          />
+          <SourceDetail label="Source" value="Browser-local batch analysis results" />
+          <SourceDetail
+            label="Measured results"
+            value={`${storedBatch.successfulResults.length} successful, ${storedBatch.failedResults.length} failed`}
+          />
+        </div>
+      </div>
+
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
@@ -143,6 +169,17 @@ export function ReportClient({ project }: { project: Project }) {
           not invent counts, cases, links or outcomes.
         </p>
       </section>
+    </div>
+  );
+}
+
+function SourceDetail({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+        {label}
+      </p>
+      <p className="mt-2 text-sm font-semibold text-slate-800">{value}</p>
     </div>
   );
 }

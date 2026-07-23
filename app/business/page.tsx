@@ -33,7 +33,7 @@ export default function BusinessPage() {
                 <StatusPill label="CSV/XLSX files" status="Implemented" />
                 <StatusPill label="CRM sync" status="Planned" />
               </div>
-              <p className="mt-5 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold leading-6 text-amber-900">
+              <p className="warning-card mt-5 rounded-lg px-4 py-3 text-sm font-semibold leading-6">
                 Business analysis remains decision-support only: no external
                 business AI call, CRM integration, email sending or autonomous
                 action runs on this page.

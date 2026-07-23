@@ -24,9 +24,10 @@ export default async function DashboardPage() {
               Knowledge Hub
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-              Manage official documentation, verified links and response tone
-              for the current message analysis workflow. User-submitted links
-              are never treated as official sources.
+              Create a communication profile, define trusted documentation and
+              official links, analyze individual or batch messages, and
+              generate an auditable report. User-submitted links are never
+              treated as official sources.
             </p>
           </div>
           <Link
@@ -81,6 +82,46 @@ export default async function DashboardPage() {
               />
             </section>
 
+            <section className="section-card mt-6 p-5 md:p-6">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p className="kicker">How it works</p>
+                  <h2 className="mt-2 text-2xl font-semibold">
+                    Profile, review, report.
+                  </h2>
+                </div>
+                <Link href="/security-engine" className="btn btn-secondary">
+                  View Engine
+                </Link>
+              </div>
+              <div className="mt-5 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                <Concept
+                  title="Communication Profile"
+                  text="Stores approved documentation, trusted official links and response tone."
+                />
+                <Concept
+                  title="Single Message Review"
+                  text="Analyzes one message through deterministic and AI-assisted checks."
+                />
+                <Concept
+                  title="Batch Review"
+                  text="Analyzes up to 25 messages and records measured results."
+                />
+                <Concept
+                  title="Report"
+                  text="Aggregates stored results, triggered rules, categories, risks and escalations."
+                />
+                <Concept
+                  title="Official Links"
+                  text="Only explicitly configured links are treated as trusted."
+                />
+                <Concept
+                  title="Human Review"
+                  text="Suggested replies and actions remain approval-required."
+                />
+              </div>
+            </section>
+
             <section className="mt-6 grid gap-5 lg:grid-cols-2">
               {projects.map((project) => (
                 <article
@@ -121,12 +162,32 @@ export default async function DashboardPage() {
                       </dd>
                     </div>
                   </dl>
-                  <Link
-                    href={`/dashboard/projects/${project.id}`}
-                    className="btn btn-secondary mt-auto w-fit"
-                  >
-                    Manage Profile
-                  </Link>
+                  <div className="mt-auto grid gap-2 pt-5 sm:grid-cols-2">
+                    <Link
+                      href={`/dashboard/projects/${project.id}`}
+                      className="btn btn-primary"
+                    >
+                      Open Project
+                    </Link>
+                    <Link
+                      href={`/dashboard/projects/${project.id}/analyse`}
+                      className="btn btn-secondary"
+                    >
+                      Review Message
+                    </Link>
+                    <Link
+                      href={`/dashboard/projects/${project.id}/batch`}
+                      className="btn btn-secondary"
+                    >
+                      Batch Review
+                    </Link>
+                    <Link
+                      href={`/dashboard/projects/${project.id}/report`}
+                      className="btn btn-secondary"
+                    >
+                      View Report
+                    </Link>
+                  </div>
                 </article>
               ))}
             </section>
@@ -134,6 +195,15 @@ export default async function DashboardPage() {
         )}
       </div>
     </main>
+  );
+}
+
+function Concept({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
   );
 }
 

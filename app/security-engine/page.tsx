@@ -18,6 +18,30 @@ const severityCounts = publicSecurityRules.reduce<Record<RiskSeverity, number>>(
   { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 },
 );
 
+const implementedMessageSources = [
+  "Manual input",
+  "Gmail readonly sync",
+  "Facebook Messenger",
+  "Instagram",
+  "Telegram",
+  "Discord Gateway",
+  "TXT",
+  "PDF",
+  "DOCX",
+  "CSV",
+  "XLSX",
+];
+
+const pipelineSteps = [
+  "Source",
+  "Normalize",
+  "Identify Context",
+  "Deterministic Checks",
+  "AI-Assisted Analysis",
+  "Suggested Action",
+  "Human Review",
+];
+
 export default function SecurityEnginePage() {
   return (
     <main className="app-bg text-slate-950">
@@ -29,14 +53,21 @@ export default function SecurityEnginePage() {
                 Analysis Engine
               </p>
               <h1 className="mt-3 max-w-4xl text-3xl font-semibold text-slate-950 sm:text-5xl">
-                Deterministic rules for the current MVP.
+                Deterministic checks inside the communication intelligence engine.
               </h1>
               <p className="mt-5 max-w-3xl text-base leading-7 text-slate-600">
-                Deterministic rules are one module of the broader communication
-                intelligence engine. They set the minimum risk level before AI
-                analysis runs. Today&apos;s rule catalog focuses on Web3 Community
-                Security; future rule suites can use the same foundation for
-                other communication contexts.
+                The published SEC-001 through SEC-015 catalogue originated in
+                the Web3 Community Security MVP and remains active today. The
+                broader platform now receives normalized inputs from Gmail,
+                Facebook Messenger, Instagram, Telegram, Discord, manual text
+                and supported business documents. Source channel does not
+                automatically determine risk: messages are normalized first,
+                then context-aware deterministic and AI-assisted analysis runs.
+              </p>
+              <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+                Business Communication Intelligence uses structured,
+                explainable analysis after normalization. It should not be read
+                as applying every Web3-specific rule to every business context.
               </p>
               <div className="mt-6 flex flex-wrap gap-2">
                 <span className="badge border-emerald-200 bg-emerald-50 text-emerald-800">
@@ -68,6 +99,46 @@ export default function SecurityEnginePage() {
               )}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+        <div className="section-card p-5 md:p-6">
+          <p className="kicker">Implemented message sources</p>
+          <h2 className="mt-3 text-2xl font-semibold">Inputs normalized before analysis.</h2>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            These sources can feed implemented AgenticOps AI workflows today.
+            Provider status is still evidence-based; configured credentials
+            alone do not mean a provider is actively receiving events.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {implementedMessageSources.map((source) => (
+              <span
+                key={source}
+                className="badge border-emerald-200 bg-emerald-50 text-emerald-800"
+              >
+                {source}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="section-card p-5 md:p-6">
+          <p className="kicker">Platform flow</p>
+          <h2 className="mt-3 text-2xl font-semibold">Source, context and rules stay separate.</h2>
+          <ol className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {pipelineSteps.map((step, index) => (
+              <li
+                key={step}
+                className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+              >
+                <span className="text-xs font-black uppercase tracking-[0.14em] text-teal-700">
+                  Step {index + 1}
+                </span>
+                <p className="mt-2 text-sm font-semibold text-slate-800">{step}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 

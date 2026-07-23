@@ -974,19 +974,16 @@ function StatusList({
   tone: "implemented" | "planned";
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+    <div className="capability-panel rounded-xl p-4" data-tone={tone}>
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-600">
         {title}
       </p>
       <ul className="mt-3 space-y-2">
         {items.map((item) => (
           <li key={item} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
             <span
-              className={`rounded-full px-2 py-0.5 text-[0.68rem] font-black uppercase ${
-                tone === "implemented"
-                  ? "bg-emerald-100 text-emerald-800"
-                  : "bg-amber-100 text-amber-800"
-              }`}
+              className="status-marker rounded-full px-2 py-0.5 text-[0.68rem] font-black uppercase"
+              data-tone={tone}
             >
               {marker}
             </span>

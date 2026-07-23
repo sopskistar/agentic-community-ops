@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import type { BatchAnalysisSummary } from "../../../../../lib/analysis/batch";
@@ -21,6 +22,7 @@ const demoMessages = [
 ];
 
 const riskFilters = ["ALL", "LOW", "MEDIUM", "HIGH", "CRITICAL"] as const;
+const batchRequestTimeoutMs = 45_000;
 
 type BatchApiResponse = {
   summary: BatchAnalysisSummary;
@@ -36,9 +38,11 @@ type BatchApiResponse = {
     content?: string;
     error: string;
   }>;
+  savedAt?: string;
 };
 
 export function BatchClient({ project }: { project: Project }) {
+  const router = useRouter();
   const [rawMessages, setRawMessages] = useState("");
   const [source, setSource] = useState("MANUAL");
   const [result, setResult] = useState<BatchApiResponse | null>(null);
@@ -46,6 +50,7 @@ export function BatchClient({ project }: { project: Project }) {
     useState<(typeof riskFilters)[number]>("ALL");
   const [categoryFilter, setCategoryFilter] = useState("ALL");
   const [isLoading, setIsLoading] = useState(false);
+  const [completionMessage, setCompletionMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const messages = useMemo(
@@ -80,14 +85,23 @@ export function BatchClient({ project }: { project: Project }) {
   }, [categoryFilter, result, riskFilter]);
 
   async function runBatchAnalysis() {
+    if (isLoading) {
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
+    setCompletionMessage(null);
     setResult(null);
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), batchRequestTimeoutMs);
 
     try {
       const response = await fetch("/api/v1/analyse/batch", {
         method: "POST",
         headers: { "content-type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           projectId: project.id,
           messages: messages.map((content) => ({
@@ -96,18 +110,38 @@ export function BatchClient({ project }: { project: Project }) {
           })),
         }),
       });
-      const body = await response.json();
+      const body = await parseBatchResponse(response);
 
       if (!response.ok) {
         setError(getApiErrorMessage(body, "Batch analysis failed."));
         return;
       }
 
-      setResult(body);
-      localStorage.setItem(getBatchStorageKey(project.id), JSON.stringify(body));
-    } catch {
-      setError("Batch analysis request failed.");
+      if (!isBatchApiResponse(body)) {
+        setError("Batch analysis returned an unreadable response. Please retry.");
+        return;
+      }
+
+      const storedBody = { ...body, savedAt: new Date().toISOString() };
+      setResult(storedBody);
+      localStorage.setItem(getBatchStorageKey(project.id), JSON.stringify(storedBody));
+      setCompletionMessage("Batch analysis complete. Opening the measured report.");
+      router.push(`/dashboard/projects/${project.id}/report`);
+    } catch (caughtError) {
+      if (caughtError instanceof DOMException && caughtError.name === "AbortError") {
+        setError("Batch analysis timed out. Your messages are still here; retry when ready.");
+        return;
+      }
+      if (
+        caughtError instanceof Error &&
+        caughtError.name === "AbortError"
+      ) {
+        setError("Batch analysis timed out. Your messages are still here; retry when ready.");
+        return;
+      }
+      setError("Batch analysis request failed. Please retry.");
     } finally {
+      window.clearTimeout(timeout);
       setIsLoading(false);
     }
   }
@@ -206,7 +240,27 @@ export function BatchClient({ project }: { project: Project }) {
 
       {error ? (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800">
-          {error}
+          <p>{error}</p>
+          <button
+            type="button"
+            onClick={runBatchAnalysis}
+            disabled={messages.length === 0 || messages.length > 25 || isLoading}
+            className="btn btn-secondary mt-3"
+          >
+            Retry
+          </button>
+        </div>
+      ) : null}
+
+      {completionMessage ? (
+        <div
+          role="status"
+          className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-800"
+        >
+          {completionMessage}{" "}
+          <Link href={`/dashboard/projects/${project.id}/report`} className="underline">
+            View Report
+          </Link>
         </div>
       ) : null}
 
@@ -332,6 +386,32 @@ function getApiErrorMessage(body: unknown, fallback: string) {
   }
 
   return fallback;
+}
+
+async function parseBatchResponse(response: Response) {
+  try {
+    return await response.json();
+  } catch {
+    return {
+      error: {
+        message: response.ok
+          ? "Batch analysis returned malformed JSON."
+          : "Batch analysis failed with an unreadable response.",
+      },
+    };
+  }
+}
+
+function isBatchApiResponse(body: unknown): body is BatchApiResponse {
+  return (
+    typeof body === "object" &&
+    body !== null &&
+    "summary" in body &&
+    "successfulResults" in body &&
+    Array.isArray(body.successfulResults) &&
+    "failedResults" in body &&
+    Array.isArray(body.failedResults)
+  );
 }
 
 function Metric({ label, value }: { label: string; value: number }) {

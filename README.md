@@ -33,6 +33,28 @@ application or local development server to capture current UI states.
 - Encrypted Google OAuth token storage.
 - Privacy and Data Deletion pages.
 
+## Platform Dashboard Workflow
+
+The Platform Dashboard manages communication profiles for the current Web3
+Community Security workflow. A profile stores approved documentation, explicitly
+trusted official links and the approved response tone.
+
+Recommended flow:
+
+```text
+Platform Dashboard
+  -> Communication Profile
+  -> Review one message or a batch
+  -> Store measured results in the browser
+  -> View or export the report
+```
+
+Single Message Review analyzes one message through deterministic and
+AI-assisted checks. Batch Review analyzes up to 25 messages, stores the measured
+results locally in the browser, and opens the report view. Reports are
+calculated from stored analysis results; users do not need to open Edit Project
+to find the report.
+
 ## Roadmap
 
 Roadmap items are not implemented unless explicitly listed above.
@@ -65,6 +87,12 @@ Inputs and Channels
 Important boundaries:
 
 - AI can enrich output but cannot lower deterministic Web3 risk.
+- Source channel, normalized message, communication context, deterministic
+  checks, AI-assisted analysis and human review are separate layers.
+- The published SEC-001 through SEC-015 catalogue originated in the Web3
+  Community Security MVP. Business Communication Intelligence uses structured
+  explainable analysis, but not every Web3-specific rule is applied to every
+  business context.
 - Integration workflows separate received message, analysis, suggestion,
   approval state, execution state and audit events.
 - Current external integrations are analyze-only.

@@ -16,6 +16,8 @@ On 2026-07-18, the platform UI received a polish pass without adding features or
 
 On 2026-07-23, Release 4 added production polish: centralized app metadata/versioning, robots and sitemap routes, global loading and 404 states, a public architecture page, expanded ASP docs, README refresh and stronger global dark-mode mappings.
 
+On 2026-07-23, a post-Release-4 correction pass fixed dark-mode readability for homepage capability panels and Business warning cards, repositioned `/security-engine` as a platform analysis engine page with a Web3-originated deterministic catalogue, clarified Platform Dashboard navigation, and changed Batch Review to timeout safely, preserve entered messages on error, store completed results and route users directly to the report.
+
 ## Stage 1: Universal Web3 Community Security
 
 1. Add a type-only normalized message model. Completed 2026-07-18.
