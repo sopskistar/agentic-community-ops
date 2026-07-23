@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-23 - Session: production polish and documentation
+
+- What was built: Centralized app version/metadata, added robots and sitemap handlers, added global loading and 404 states, added a public architecture page, expanded ASP documentation, rewrote README, improved footer links and strengthened global dark-mode contrast mappings.
+- Problems found: Footer version and app metadata were hardcoded, the Architecture footer link did not have a route, ASP docs were too narrow for a production documentation page, and dark-mode mappings did not cover several badge/table/code/background variants.
+- Bugs fixed: Added the missing Architecture route and replaced hardcoded footer versioning with the centralized app config.
+- Important technical decisions: Release 4 remains a polish/documentation release; no implemented functionality was removed and no autonomous external execution was added.
+- Tests performed: `npm test` passed with 205 tests across 46 files; `npm run lint` passed; `npx tsc --noEmit` passed; `npm run build` passed and generated 38 static/dynamic app routes; `npm run discord:worker -- --validate` passed with dummy non-secret environment values; `npm audit --omit=dev` reported 0 vulnerabilities.
+- New rules learned: Version, app URL and platform metadata should be centralized so SEO, footer and documentation stay synchronized.
+
 ## 2026-07-22 - Session: business file intelligence and guided platform demo
 
 - What was built: Added real server-side Business Communication file ingestion for TXT, PDF, DOCX, CSV and XLSX; added extraction previews; routed extracted bounded content into the existing `/business` analysis workflow; added Business Audit and Budget Review purposes; corrected homepage capability statuses; and repositioned `/demo` as an AgenticOps AI guided platform demo while preserving the NovaBridge Web3 case study.

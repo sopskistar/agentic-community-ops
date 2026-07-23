@@ -3,17 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 import { AppNav } from "./components/app-nav";
+import { appDescription, appName, appVersion, getAppBaseUrl } from "../lib/app-config";
 
-const appUrl =
-  process.env.NEXT_PUBLIC_APP_URL?.trim() ||
-  process.env.APP_BASE_URL?.trim() ||
-  "https://agenticopsai.xyz";
+const appUrl = getAppBaseUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
-  title: "AgenticOps AI | AI Communication Intelligence Platform",
-  description:
-    "AgenticOps AI analyzes communication across implemented Web3 community security and business communication contexts, with explainable AI, deterministic rules and human approval workflows.",
+  title: {
+    default: `${appName} | AI Communication Intelligence Platform`,
+    template: `%s | ${appName}`,
+  },
+  description: appDescription,
   keywords: [
     "AgenticOps AI",
     "AI communication intelligence",
@@ -25,12 +25,17 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo/Agentic-Ops.jpg",
     shortcut: "/logo/Agentic-Ops.jpg",
+    apple: "/apple-icon.jpg",
+  },
+  alternates: {
+    canonical: "/",
   },
   openGraph: {
-    title: "AgenticOps AI | AI Communication Intelligence Platform",
-    description:
-      "Current MVP: Web3 Community Security and Business Communication Intelligence. Roadmap: email, marketing, audit and AI business operator workflows.",
-    siteName: "AgenticOps AI",
+    title: `${appName} | AI Communication Intelligence Platform`,
+    description: appDescription,
+    siteName: appName,
+    url: appUrl,
+    type: "website",
     images: [
       {
         url: "/logo/Agentic-Ops.jpg",
@@ -39,6 +44,16 @@ export const metadata: Metadata = {
         alt: "AgenticOps AI logo",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${appName} | AI Communication Intelligence Platform`,
+    description: appDescription,
+    images: ["/logo/Agentic-Ops.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -78,9 +93,7 @@ export default function RootLayout({
                   height={36}
                   className="rounded-lg border border-slate-200 object-contain"
                 />
-                <p className="font-semibold text-slate-950">
-                  AgenticOps AI
-                </p>
+                <p className="font-semibold text-slate-950">{appName}</p>
               </div>
               <p className="mt-1 text-xs">
                 Copyright 2026 AgenticOps AI. All rights reserved.
@@ -88,7 +101,7 @@ export default function RootLayout({
             </div>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
               <Link
-                href="https://github.com/"
+                href="https://github.com/sopskistar/agentic-community-ops"
                 className="font-semibold text-slate-700 transition-colors hover:text-teal-700"
               >
                 GitHub
@@ -98,6 +111,18 @@ export default function RootLayout({
                 className="font-semibold text-slate-700 transition-colors hover:text-teal-700"
               >
                 Documentation
+              </Link>
+              <Link
+                href="/docs/architecture"
+                className="font-semibold text-slate-700 transition-colors hover:text-teal-700"
+              >
+                Architecture
+              </Link>
+              <Link
+                href="/integrations"
+                className="font-semibold text-slate-700 transition-colors hover:text-teal-700"
+              >
+                Support
               </Link>
               <Link
                 href="/privacy"
@@ -112,7 +137,7 @@ export default function RootLayout({
                 Data Deletion
               </Link>
               <span className="badge border-slate-200 bg-slate-50 text-slate-700">
-                Version 0.1.0
+                {appVersion}
               </span>
             </div>
           </div>

@@ -339,7 +339,7 @@ async function recordGmailDiagnostic(
       ...entry,
     });
   } catch {
-    console.error("gmail_event_persistence_failed");
+    // Diagnostics are best-effort and must not leak provider details.
   }
 }
 

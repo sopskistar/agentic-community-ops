@@ -34,6 +34,7 @@ Current pages:
 - `/data-deletion`: public data deletion instructions.
 - `/security-engine`: public deterministic rule catalog.
 - `/docs/asp`: human-readable ASP registration documentation.
+- `/docs/architecture`: public platform architecture overview.
 - `/dashboard`: local project knowledge-base list.
 - `/dashboard/projects/new`: create a project profile.
 - `/dashboard/projects/[id]`: edit a project profile.
@@ -75,6 +76,7 @@ Current domain modules:
 - `lib/business-ingestion/`: server-side upload validation plus TXT, PDF, DOCX, CSV and XLSX parsers, bounded extraction summaries, preview helpers and tests.
 - `lib/integrations/`: provider-neutral normalized integration messages, adapters, OAuth helpers, token storage, Gmail service, webhook security, dedupe, durable event/workflow repository, workspace status derivation, internal approval state and analyze-only processing.
 - `lib/projects/`: project knowledge-base types, Zod validation, repository interface, local JSON repository, and tests.
+- `lib/app-config.ts`: centralized app name, version and base URL helpers for metadata and footer consistency.
 - `lib/api/`: structured API error responses.
 
 Current persistence:

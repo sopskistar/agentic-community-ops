@@ -24,7 +24,7 @@ export default function GlobalError({
             <button
               type="button"
               onClick={reset}
-              className="btn mt-6 bg-red-600 text-white hover:bg-red-700"
+              className="btn btn-primary mt-6"
             >
               Try again
             </button>

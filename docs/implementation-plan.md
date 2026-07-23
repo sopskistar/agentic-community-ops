@@ -14,6 +14,8 @@ The homepage now uses platform-wide positioning: one AI communication engine, mu
 
 On 2026-07-18, the platform UI received a polish pass without adding features or changing contracts. Homepage status labels, roadmap cards, the communication pipeline, demo framing, rules catalog, dashboard profile cards and empty states were tightened so implemented capabilities and roadmap items are easier to distinguish.
 
+On 2026-07-23, Release 4 added production polish: centralized app metadata/versioning, robots and sitemap routes, global loading and 404 states, a public architecture page, expanded ASP docs, README refresh and stronger global dark-mode mappings.
+
 ## Stage 1: Universal Web3 Community Security
 
 1. Add a type-only normalized message model. Completed 2026-07-18.

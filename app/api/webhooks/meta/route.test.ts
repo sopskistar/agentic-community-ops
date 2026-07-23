@@ -361,7 +361,7 @@ describe("Meta webhook route", () => {
     expect(JSON.stringify(events)).not.toContain("private message");
   });
 
-  it("emits a safe diagnostic when persistence fails", async () => {
+  it("handles persistence failure without logging secrets or payloads", async () => {
     process.env.META_APP_SECRET = "app-secret";
     const errors: string[] = [];
     const originalConsoleError = console.error;
@@ -381,7 +381,7 @@ describe("Meta webhook route", () => {
       );
 
       expect(response.status).toBe(200);
-      expect(errors).toContain("meta_event_persistence_failed");
+      expect(errors).toEqual([]);
       expect(JSON.stringify(errors)).not.toContain("app-secret");
       expect(JSON.stringify(errors)).not.toContain("Hello Meta");
     } finally {

@@ -194,13 +194,7 @@ async function recordMetaDiagnostic(entry: CreateIntegrationEventLogEntry) {
   try {
     await addIntegrationEventLogEntry(entry);
   } catch {
-    const isCommentEvent =
-      entry.eventType.includes("comment") || entry.eventType.includes("mention");
-    console.error(
-      isCommentEvent
-        ? "meta_comment_persistence_failed"
-        : "meta_event_persistence_failed",
-    );
+    // Diagnostics are best-effort and must not leak raw Meta payload details.
   }
 }
 

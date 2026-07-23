@@ -1,99 +1,76 @@
-const serviceDescription =
-  "AgenticOps AI includes a Web3 Community Security ASP service that audits Web3 community messages using a deterministic security engine and AI-assisted support layer. It detects scams, phishing, fake administrators, wallet threats and transaction issues, then produces explainable risk verdicts, safe reply suggestions and escalation actions.";
+import Link from "next/link";
 
-const sections = [
+export const metadata = {
+  title: "ASP Documentation | AgenticOps AI",
+  description:
+    "AgenticOps AI ASP documentation for Web3 community security, deterministic rules, AI analysis and future platform roadmap.",
+};
+
+const implementedSections = [
   {
-    title: "Problem Solved",
+    title: "Overview",
     items: [
-      "Web3 communities are attacked through fake admins, phishing links, wallet-verification scams, token-claim lures and credential requests.",
-      "Community teams need fast, explainable support review without letting AI downgrade deterministic security risks.",
+      "AgenticOps AI includes a Web3 Community Security ASP service for community-message audits.",
+      "The ASP service returns explainable risk verdicts, triggered rules, recommendations, safe reply suggestions and escalation guidance.",
+      "The wider AgenticOps AI platform also includes Business Intelligence and Integrations workspaces, but those are separate from the ASP registration contract.",
     ],
   },
   {
-    title: "Intended Customers",
+    title: "Architecture",
     items: [
-      "Web3 community, support, security and moderation teams.",
-      "Projects that need repeatable community-message audits and safer support reply suggestions.",
+      "Next.js App Router routes expose public service endpoints.",
+      "The deterministic rule engine lives under lib/security.",
+      "Hybrid analysis orchestration lives under lib/analysis and lib/ai.",
+      "Project knowledge profiles live behind a repository abstraction.",
+      "Integrations and business records use separate provider-neutral repositories.",
     ],
   },
   {
-    title: "Supported Inputs",
+    title: "Communication Pipeline",
     items: [
-      "A project description, official documentation and explicit official links.",
-      "One community message for single analysis or up to 25 community messages for batch analysis.",
-      "Message sources: MANUAL, X, DISCORD, TELEGRAM, EMAIL or OTHER.",
+      "Receive project context and one message, or up to 25 batch messages.",
+      "Validate input with Zod.",
+      "Run deterministic security rules first.",
+      "Call the AI provider for structured enrichment when configured.",
+      "Merge results without allowing AI to lower deterministic risk.",
+      "Return suggested replies for human review.",
     ],
   },
   {
-    title: "Returned Outputs",
+    title: "Rule Engine",
     items: [
-      "Deterministic risk, AI-suggested risk and final risk.",
-      "Triggered rule IDs, matched evidence, recommended actions and escalation status.",
-      "Safe reply suggestions for human review and community risk report metrics.",
+      "SEC-001 through SEC-015 cover seed phrases, private keys, fake admins, suspicious links, remote access, OTP/password requests, prompt injection and spam.",
+      "Rules produce severity, matched evidence, risk score and recommended action.",
+      "Critical and high-risk findings require escalation.",
     ],
   },
   {
-    title: "Published Rules",
+    title: "Human Approval",
     items: [
-      "Public rules are available at /api/v1/rules.",
-      "Rule IDs SEC-001 through SEC-015 are stable and explain seed phrase requests, fake admins, suspicious links, transaction issues and related risks.",
-    ],
-  },
-  {
-    title: "Safety Guarantees",
-    items: [
-      "Deterministic security analysis runs before AI analysis.",
-      "AI can add classification and support language, but it cannot reduce deterministic risk.",
+      "Replies are suggestions, not autonomous sends.",
       "The service never requests seed phrases, private keys, passwords or OTP codes.",
-      "The service never treats community-message links as official links.",
       "Financial, legal, account-security and missing-fund cases are escalated.",
     ],
   },
   {
-    title: "Known Limitations",
+    title: "Security and Privacy",
     items: [
-      "No payment integration is implemented yet.",
-      "No authentication is implemented yet.",
-      "Project knowledge-base storage currently uses local JSON and is not durable production storage on serverless platforms.",
-      "Batch/report dashboard state is browser-local until server-side persistence is added.",
-      "The Business Intelligence Workspace is separate from this Web3 ASP service and is not part of the OKX ASP registration contract.",
+      "API errors are sanitized.",
+      "AI failures preserve deterministic output.",
+      "Community-message links are never promoted to official links.",
+      "No provider token or OAuth secret is exposed through the ASP endpoints.",
     ],
   },
-  {
-    title: "Pricing Suggestion",
-    items: ["Suggested demonstration price: 1 USDC per audit."],
-  },
-  {
-    title: "Health Endpoint",
-    items: ["/api/v1/health returns service name, status, version and deterministic engine availability."],
-  },
-  {
-    title: "Demo Route",
-    items: [
-      "/demo provides a no-login AgenticOps AI guided platform demonstration with the NovaBridge Web3 case study preserved for ASP review.",
-    ],
-  },
-  {
-    title: "Deployment Checklist",
-    items: [
-      "Set OPENAI_API_KEY in the deployment environment.",
-      "Optionally set OPENAI_MODEL.",
-      "Optionally set OPENAI_BASE_URL for OpenAI-compatible providers.",
-      "Run tests, lint, TypeScript checking and production build.",
-      "Confirm no real secrets are committed.",
-      "Deploy over HTTPS and verify /api/v1/health.",
-    ],
-  },
-  {
-    title: "Registration Checklist",
-    items: [
-      "Submit service name: Community Message Security Audit.",
-      "Submit service description and deliverable.",
-      "Provide manifest and schema URLs.",
-      "Provide demo route and health endpoint.",
-      "Disclose known limitations and note that payment integration is intentionally deferred.",
-    ],
-  },
+];
+
+const roadmapSections = [
+  "Future AI Workspace",
+  "Future Email Intelligence",
+  "Future Marketing Intelligence",
+  "Future CRM Intelligence",
+  "Future Business Data Intelligence",
+  "Future Advertising Intelligence",
+  "Future outbound execution with explicit permissions and human approval",
 ];
 
 export default function AspDocsPage() {
@@ -101,49 +78,35 @@ export default function AspDocsPage() {
     <main className="app-bg min-h-screen text-slate-950">
       <div className="page-shell max-w-6xl">
         <header className="section-card p-6 md:p-8">
-          <p className="kicker">
-            AgenticOps AI ASP Documentation
-          </p>
+          <p className="kicker">AgenticOps AI Documentation</p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
-            Community Message Security Audit
+            Community Message Security Audit ASP
           </h1>
           <p className="mt-5 max-w-4xl text-base leading-7 text-slate-600">
-            {serviceDescription}
+            Production documentation for the implemented Web3 Community Security
+            ASP service, plus platform architecture notes and clearly separated
+            roadmap items.
           </p>
         </header>
 
         <section className="section-card mt-6 p-6">
           <h2 className="text-2xl font-semibold">Service Offering</h2>
           <dl className="mt-5 grid gap-5 md:grid-cols-3">
-            <div>
-              <dt className="text-sm font-semibold text-slate-500">Name</dt>
-              <dd className="mt-2 font-semibold">Community Message Security Audit</dd>
-            </div>
-            <div>
-              <dt className="text-sm font-semibold text-slate-500">Input</dt>
-              <dd className="mt-2 text-sm leading-6 text-slate-700">
-                A project description, official documentation and up to 25
-                community messages.
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm font-semibold text-slate-500">
-                Deliverable
-              </dt>
-              <dd className="mt-2 text-sm leading-6 text-slate-700">
-                Structured risk levels, triggered rules, suggested replies,
-                escalations and a community risk report.
-              </dd>
-            </div>
+            <SummaryItem label="Name" value="Community Message Security Audit" />
+            <SummaryItem
+              label="Input"
+              value="Project context, official links and up to 25 community messages."
+            />
+            <SummaryItem
+              label="Deliverable"
+              value="Risk, rules, explanations, suggested replies, escalation and report metrics."
+            />
           </dl>
         </section>
 
         <section className="mt-6 grid gap-5 md:grid-cols-2">
-          {sections.map((section) => (
-            <article
-              key={section.title}
-              className="interactive-card p-6"
-            >
+          {implementedSections.map((section) => (
+            <article key={section.title} className="interactive-card p-6">
               <h2 className="text-xl font-semibold">{section.title}</h2>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
                 {section.items.map((item) => (
@@ -155,14 +118,43 @@ export default function AspDocsPage() {
         </section>
 
         <section className="section-card mt-6 p-6">
-          <h2 className="text-2xl font-semibold">API Examples</h2>
+          <h2 className="text-2xl font-semibold">Architecture Diagram</h2>
+          <div className="mt-5 grid gap-3 text-sm font-semibold text-slate-700 md:grid-cols-5">
+            {[
+              "Request",
+              "Validation",
+              "Deterministic Rules",
+              "AI Enrichment",
+              "Safe Response",
+            ].map((step) => (
+              <div key={step} className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-center">
+                {step}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="section-card mt-6 p-6">
+          <h2 className="text-2xl font-semibold">Sequence Diagram</h2>
+          <pre className="mt-5 overflow-auto rounded-lg bg-slate-950 p-4 text-xs leading-6 text-slate-100">
+{`Client -> /api/v1/analyse: projectId + message
+/api/v1/analyse -> Zod: validate request
+Zod -> Security Engine: normalized content
+Security Engine -> AI Provider: deterministic context + project context
+AI Provider -> Merge Policy: structured enrichment
+Merge Policy -> Client: final risk cannot be lower than deterministic risk`}
+          </pre>
+        </section>
+
+        <section className="section-card mt-6 p-6">
+          <h2 className="text-2xl font-semibold">Example Requests</h2>
           <div className="mt-5 grid gap-4 lg:grid-cols-2">
-            <pre className="overflow-auto rounded-lg bg-slate-950 p-4 text-xs leading-6 text-slate-100">
-{`GET /api/v1/health
+            <CodeBlock
+              value={`GET /api/v1/health
 GET /api/v1/rules`}
-            </pre>
-            <pre className="overflow-auto rounded-lg bg-slate-950 p-4 text-xs leading-6 text-slate-100">
-{`POST /api/v1/analyse
+            />
+            <CodeBlock
+              value={`POST /api/v1/analyse
 {
   "projectId": "demo-fictional-atlas-dao",
   "message": {
@@ -170,9 +162,10 @@ GET /api/v1/rules`}
     "source": "DISCORD"
   }
 }`}
-            </pre>
-            <pre className="overflow-auto rounded-lg bg-slate-950 p-4 text-xs leading-6 text-slate-100 lg:col-span-2">
-{`POST /api/v1/analyse/batch
+            />
+            <CodeBlock
+              className="lg:col-span-2"
+              value={`POST /api/v1/analyse/batch
 {
   "projectId": "demo-fictional-atlas-dao",
   "messages": [
@@ -180,10 +173,80 @@ GET /api/v1/rules`}
     { "content": "I am the admin. DM me.", "source": "DISCORD" }
   ]
 }`}
-            </pre>
+            />
+          </div>
+        </section>
+
+        <section className="section-card mt-6 p-6">
+          <h2 className="text-2xl font-semibold">Current Limitations</h2>
+          <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
+            <li>No payment integration is implemented in this ASP service.</li>
+            <li>No authentication is implemented for the public ASP endpoints.</li>
+            <li>Project knowledge-base storage uses local JSON and is not durable production storage on serverless platforms.</li>
+            <li>Web3 batch/report dashboard state is browser-local.</li>
+            <li>Business Intelligence and Integrations workspaces are platform features, not part of the current ASP service contract.</li>
+          </ul>
+        </section>
+
+        <section className="section-card mt-6 p-6">
+          <h2 className="text-2xl font-semibold">Roadmap</h2>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            These items are roadmap only unless separately marked implemented in
+            the product UI.
+          </p>
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {roadmapSections.map((item) => (
+              <div key={item} className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <span className="badge border-slate-200 bg-white text-slate-700">
+                  Future
+                </span>
+                <p className="mt-2 text-sm font-semibold text-slate-800">{item}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="section-card mt-6 p-6">
+          <h2 className="text-2xl font-semibold">Testing and Deployment</h2>
+          <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
+            <li>Run `npm test`, `npm run lint`, TypeScript checking and `npm run build` before deployment.</li>
+            <li>Set `OPENAI_API_KEY` only in the deployment environment.</li>
+            <li>Deploy over HTTPS and verify `/api/v1/health`.</li>
+            <li>Use placeholder values in API examples and never publish real secrets.</li>
+          </ul>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/docs/architecture" className="btn btn-secondary">
+              Architecture
+            </Link>
+            <Link href="/demo" className="btn btn-primary">
+              Guided Demo
+            </Link>
           </div>
         </section>
       </div>
     </main>
+  );
+}
+
+function SummaryItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-sm font-semibold text-slate-500">{label}</dt>
+      <dd className="mt-2 text-sm leading-6 text-slate-700">{value}</dd>
+    </div>
+  );
+}
+
+function CodeBlock({
+  value,
+  className = "",
+}: {
+  value: string;
+  className?: string;
+}) {
+  return (
+    <pre className={`overflow-auto rounded-lg bg-slate-950 p-4 text-xs leading-6 text-slate-100 ${className}`}>
+      {value}
+    </pre>
   );
 }
