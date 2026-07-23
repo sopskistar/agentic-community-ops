@@ -47,6 +47,7 @@ export const securityRuleDefinitions: SecurityRuleDefinition[] = [
     requiresEscalationByDefault: true,
     patterns: [
       /\b(share|send|provide|enter|confirm|verify|give|dm|message)\b.{0,50}\b(seed|recovery|secret)\s+(phrase|words?)\b/,
+      /\b(require|requires|required|need|needs|needed|ask|asks|request|requests)\b.{0,50}\b(seed|recovery|secret)\s+(phrase|words?)\b/,
       /\b(seed|recovery|secret)\s+(phrase|words?)\b.{0,50}\b(required|needed|verify|confirm|send|share)\b/,
     ],
     safeContextPatterns: safeEducationalContext,
@@ -61,6 +62,7 @@ export const securityRuleDefinitions: SecurityRuleDefinition[] = [
     requiresEscalationByDefault: true,
     patterns: [
       /\b(share|send|provide|enter|confirm|verify|give|dm|message)\b.{0,50}\bprivate\s+key\b/,
+      /\b(require|requires|required|need|needs|needed|ask|asks|request|requests)\b.{0,50}\bprivate\s+key\b/,
       /\bprivate\s+key\b.{0,50}\b(required|needed|verify|confirm|send|share)\b/,
     ],
     safeContextPatterns: safeEducationalContext,

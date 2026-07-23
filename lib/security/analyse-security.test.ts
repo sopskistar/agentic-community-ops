@@ -155,6 +155,22 @@ describe("analyseSecurity", () => {
     expect(result.safeToAutoReply).toBe(false);
   });
 
+  it("detects credential requests when request wording precedes the secret type", () => {
+    const seedResult = analyseSecurity(
+      "Urgent wallet verification requires your seed phrase.",
+    );
+    const keyResult = analyseSecurity("Fake admin asks for a private key.");
+
+    expect(seedResult.triggeredRules.map((rule) => rule.ruleId)).toContain(
+      "SEC-001",
+    );
+    expect(seedResult.deterministicRisk).toBe("CRITICAL");
+    expect(keyResult.triggeredRules.map((rule) => rule.ruleId)).toContain(
+      "SEC-002",
+    );
+    expect(keyResult.deterministicRisk).toBe("CRITICAL");
+  });
+
   it("marks HIGH rules as requiring escalation by default", () => {
     const result = analyseSecurity(
       "Guaranteed profit if you connect your wallet to our claim page.",
