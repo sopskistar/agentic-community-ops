@@ -3,7 +3,7 @@ import { z } from "zod";
 import { analyseMessage } from "../analysis/analyse-message";
 import type { HybridMessageAnalysisResult } from "../analysis/types";
 import { createDefaultAiAnalysisProvider } from "../ai/default-provider";
-import type { AiAnalysisProvider } from "../ai/types";
+import { createTimeoutAiAnalysisProvider } from "../ai/timeout-provider";
 import { analyseBusinessCommunication } from "../business/analyse-business-communication";
 import { businessProfiles } from "../business/profiles";
 import type { BusinessAnalysisPurpose } from "../business/types";
@@ -121,7 +121,10 @@ export async function analyzeCommunicationRisk(
   input: unknown,
 ): Promise<OkxAnalysisResponse> {
   const request = okxAnalysisRequestSchema.parse(input);
-  const aiProvider = createTimeoutAiProvider(createDefaultAiAnalysisProvider());
+  const aiProvider = createTimeoutAiAnalysisProvider(
+    createDefaultAiAnalysisProvider(),
+    serviceTimeoutMs,
+  );
   const securityAnalysis = await analyseMessage(
     {
       ...agenticOpsServiceProfile,
@@ -165,34 +168,6 @@ export async function analyzeCommunicationRisk(
   };
 
   return okxAnalysisResponseSchema.parse(result);
-}
-
-function createTimeoutAiProvider(provider: AiAnalysisProvider): AiAnalysisProvider {
-  return {
-    async classifyMessage(input, context) {
-      return withTimeout(
-        provider.classifyMessage(input, context),
-        serviceTimeoutMs,
-        "AI analysis timed out.",
-      );
-    },
-  };
-}
-
-function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string) {
-  return new Promise<T>((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error(message)), timeoutMs);
-    promise.then(
-      (value) => {
-        clearTimeout(timeout);
-        resolve(value);
-      },
-      (error: unknown) => {
-        clearTimeout(timeout);
-        reject(error);
-      },
-    );
-  });
 }
 
 function purposeForContext(context: OkxAnalysisRequest["context"]): BusinessAnalysisPurpose {

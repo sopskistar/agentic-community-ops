@@ -12,11 +12,13 @@ import type {
   BatchFailedMessage,
 } from "../../../../../lib/analysis/batch";
 import { createDefaultAiAnalysisProvider } from "../../../../../lib/ai/default-provider";
+import { createTimeoutAiAnalysisProvider } from "../../../../../lib/ai/timeout-provider";
 import { projectRepository } from "../../../../../lib/projects/local-json-project-repository";
 
 const maxBatchSize = 25;
 const maxRequestBodyLength = 75_000;
 const aiConcurrency = 3;
+const aiTimeoutMs = 8_000;
 
 const batchRequestSchema = z.object({
   projectId: z.string().trim().min(1).max(120),
@@ -76,7 +78,10 @@ export async function POST(request: Request) {
       return [{ index, message: parsedMessage.data }];
     });
 
-    const aiProvider = createDefaultAiAnalysisProvider();
+    const aiProvider = createTimeoutAiAnalysisProvider(
+      createDefaultAiAnalysisProvider(),
+      aiTimeoutMs,
+    );
     const successfulResults = await mapWithConcurrency(
       validMessages,
       aiConcurrency,

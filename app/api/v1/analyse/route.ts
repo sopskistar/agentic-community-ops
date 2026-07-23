@@ -7,9 +7,11 @@ import {
 import { analyseMessage } from "../../../../lib/analysis/analyse-message";
 import { analyseApiRequestSchema } from "../../../../lib/analysis/api-schemas";
 import { createDefaultAiAnalysisProvider } from "../../../../lib/ai/default-provider";
+import { createTimeoutAiAnalysisProvider } from "../../../../lib/ai/timeout-provider";
 import { projectRepository } from "../../../../lib/projects/local-json-project-repository";
 
 const maxRequestBodyLength = 12_000;
+const aiTimeoutMs = 8_000;
 
 export async function POST(request: Request) {
   try {
@@ -44,7 +46,7 @@ export async function POST(request: Request) {
         messageContent: parsedRequest.message.content,
         messageSource: parsedRequest.message.source,
       },
-      createDefaultAiAnalysisProvider(),
+      createTimeoutAiAnalysisProvider(createDefaultAiAnalysisProvider(), aiTimeoutMs),
     );
 
     return Response.json({
