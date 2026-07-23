@@ -95,30 +95,35 @@ Status: workspace expanded 2026-07-22. The `/business` route now provides the se
 
 ## Stage 3: Communication Integrations
 
-Status: foundation started 2026-07-20. Google/Gmail, Meta, Telegram and Discord now have analyze-only integration infrastructure. Integration event/workflow records are provider-independent and durable through Vercel KV/Upstash REST when configured. Production use still requires deployment URL configuration, provider console setup, durable encrypted OAuth token storage, authentication/tenant ownership and human-approval workflows.
+Status: workspace expanded 2026-07-23. Google/Gmail, Meta, Telegram and Discord now have analyze-only integration infrastructure plus an Integrations & AI Workspace at `/integrations`. Integration event/workflow records are provider-independent and durable through Vercel KV/Upstash REST when configured. The workspace distinguishes connected, active, configured, webhook-verified, awaiting-first-event, degraded, error and planned providers from actual evidence. Production use still requires deployment URL configuration, provider console setup, durable encrypted OAuth token storage, authentication/tenant ownership and future provider-write approval workflows.
 
 1. Add integration registry and channel adapter test harness. Completed 2026-07-20 as foundation.
    - Scope: provider-neutral normalized message model, adapters, webhook validation, dedupe, durable event/workflow repository and analyze-only processing.
    - Delivered: `lib/integrations/`, Google OAuth routes, Gmail readonly routes, Meta webhook route, Telegram webhook route, internal worker endpoint and Discord worker entry point.
    - Tests: OAuth helper, token refresh, Meta verification/signature rejection, Telegram normalization, Discord normalization, dedupe, secret redaction and normalized-message validation.
 
-2. Implement website live chat as the first local-first channel.
+2. Add Integrations & AI Workspace. Completed 2026-07-23.
+   - Scope: provider status model, connected/available/planned views, read-only communication inbox, message detail, approval center, event log filters, health diagnostics and future catalogs.
+   - Delivered: `/integrations`, `/integrations/messages/[id]`, provider detail pages, `/api/integrations/approvals`, `/api/integrations/health`, and `lib/integrations/workspace.ts`.
+   - Tests: status derivation, environment variables not being enough for Connected, heartbeat-derived Discord status, inbox mapping, approval updates, route safety and raw status-code removal.
+
+3. Implement website live chat as the first local-first channel.
    - Scope: no external account required; normalized messages enter the same pipeline.
    - Tests: session creation, message ingestion, analysis, approval-safe reply suggestion.
 
-3. Implement email sandbox adapter.
+4. Implement email sandbox adapter.
    - Scope: provider abstraction and inbound fixture/sandbox support.
    - Tests: MIME/text normalization, attachments as metadata, no auto-send by default.
 
-4. Implement Discord sandbox adapter.
+5. Implement Discord sandbox adapter.
    - Scope: webhook/bot payload normalization and signature/token validation where applicable.
    - Tests: fixture payloads, duplicate handling, disabled send.
 
-5. Implement Telegram sandbox adapter.
+6. Implement Telegram sandbox adapter.
    - Scope: bot webhook normalization and outbound send abstraction behind configuration.
    - Tests: fixture payloads, duplicate handling, disabled send.
 
-6. Implement Facebook Pages and Instagram Business development-mode adapters.
+7. Implement Facebook Pages and Instagram Business development-mode adapters.
    - Scope: webhook verification, payload normalization, no production claims.
    - Tests: Meta fixture events and credential-missing failures.
 

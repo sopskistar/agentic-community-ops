@@ -26,7 +26,9 @@ Current pages:
 - `/`: product landing page.
 - `/demo`: no-login guided NovaBridge demo using the real hybrid analysis flow with a local mock AI provider.
 - `/business`: Business Intelligence Workspace for communication analysis, business file review, preliminary audit findings, budget review, generated reports, profile context and analysis history.
-- `/integrations`: integration status, callback URLs, redacted integration event/workflow log and safe next actions.
+- `/integrations`: Integrations & AI Workspace with provider overview, connected/available/planned catalogs, read-only communication inbox, approval center, event log and health diagnostics.
+- `/integrations/messages/[id]`: read-only bounded message detail and analysis view for integration workflows.
+- `/integrations/telegram`, `/integrations/discord`, `/integrations/facebook`, `/integrations/instagram`: provider detail workspaces.
 - `/integrations/gmail`: Gmail readonly inbox listing and manual analyze-only message review.
 - `/privacy`: public privacy policy.
 - `/data-deletion`: public data deletion instructions.
@@ -56,6 +58,10 @@ Current API routes:
 - `GET /api/integrations/google/callback`: validates OAuth state, exchanges code for tokens and stores encrypted token metadata server-side.
 - `GET/POST /api/integrations/gmail/messages`: lists a small recent Gmail inbox window and analyzes selected messages without modifying email.
 - `POST /api/integrations/messages`: internal worker endpoint for normalized analyze-only messages.
+- `GET /api/integrations/messages/[id]`: reads one sanitized integration workflow detail by validated ID.
+- `GET /api/integrations/approvals`: lists approval-required workflow records.
+- `PATCH /api/integrations/approvals/[id]`: updates internal approval state only; it does not execute external provider actions.
+- `GET /api/integrations/health`: returns sanitized provider health and metrics.
 - `GET/POST /api/webhooks/meta`: verifies Meta webhook setup and receives signed Facebook/Instagram messaging events.
 - `POST /api/webhooks/telegram`: receives Telegram updates with optional secret-token validation.
 
@@ -67,7 +73,7 @@ Current domain modules:
 - `lib/messages/`: normalized message foundation, channel/source enums, reusable message/conversation/reply/audit types, Zod schemas, and channel profile metadata for future adapters.
 - `lib/business/`: business communication analysis types, profiles, heuristic analyzer, audit finding generation, deterministic budget calculations, report generation, metrics, repository abstraction, request validation and tests.
 - `lib/business-ingestion/`: server-side upload validation plus TXT, PDF, DOCX, CSV and XLSX parsers, bounded extraction summaries, preview helpers and tests.
-- `lib/integrations/`: provider-neutral normalized integration messages, adapters, OAuth helpers, token storage, Gmail service, webhook security, dedupe, durable event/workflow repository and analyze-only processing.
+- `lib/integrations/`: provider-neutral normalized integration messages, adapters, OAuth helpers, token storage, Gmail service, webhook security, dedupe, durable event/workflow repository, workspace status derivation, internal approval state and analyze-only processing.
 - `lib/projects/`: project knowledge-base types, Zod validation, repository interface, local JSON repository, and tests.
 - `lib/api/`: structured API error responses.
 
@@ -90,6 +96,9 @@ Implemented:
 - Telegram webhook validates `TELEGRAM_WEBHOOK_SECRET` when configured.
 - Discord Gateway support is a separate worker entry point, not a serverless request handler.
 - All provider payloads are normalized before processing and then sent through the analyze-only AgenticOps AI processing service.
+- `/integrations` derives status from real OAuth records, webhook verification events, provider events and worker heartbeats. Environment variables alone produce `Configured` or `Awaiting First Event`, not `Connected`.
+- The Communication Inbox lists bounded workflow previews only. The Event Log lists operational lifecycle records only and does not display full message content.
+- The Approval Center can update internal review state and audit history. Internal approval never sends a provider reply or executes an external action.
 
 Development Only:
 
@@ -104,8 +113,7 @@ Planned/Future:
 - Tenant-aware production token ownership and account mapping.
 - Tenant-aware integration ownership and auth.
 - Production audit repository with retention policies, search and tenant isolation.
-- Human approval queues.
-- Outbound replies and moderation actions only after explicit authorization.
+- Provider write actions only after explicit authorization, provider permissions, idempotency, audit logging and confirmation.
 
 Meta webhook delivery still depends on external Meta dashboard setup: the callback URL must be configured as `https://agenticopsai.xyz/api/webhooks/meta`, the verify token must match `META_VERIFY_TOKEN`, Facebook Page webhook fields must be subscribed, the Page must be subscribed to the app, the Instagram professional account must be linked to the correct Page, Instagram messaging fields must be subscribed, and development-mode apps only deliver events for permitted roles/test assets until review/permissions allow broader traffic.
 

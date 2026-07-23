@@ -57,10 +57,25 @@ export type IntegrationWorkflowRecord = {
     outboundUnavailableReason: string;
   };
   approval?: {
-    status: "pending" | "approved" | "rejected";
+    status:
+      | "pending"
+      | "approved"
+      | "rejected"
+      | "needs_more_information"
+      | "resolved_internal";
     reviewerId?: string;
     reviewedAt?: string;
     notes?: string;
+    responsibleRole?: string;
+    internalPriority?: "Low" | "Medium" | "High" | "Critical";
+    history?: Array<{
+      previousStatus: string;
+      newStatus: string;
+      timestamp: string;
+      actorLabel: string;
+      note?: string;
+      reason?: string;
+    }>;
   };
   execution?: {
     status: "not_attempted" | "unavailable" | "succeeded" | "failed";
@@ -123,6 +138,72 @@ export async function listIntegrationWorkflowRecords(limit = 25) {
 
 export async function getIntegrationWorkflowRecord(id: string) {
   return getIntegrationEventRepository().getWorkflow(id);
+}
+
+export async function updateIntegrationWorkflowApproval({
+  workflowId,
+  status,
+  actorLabel = "Internal reviewer",
+  notes,
+  responsibleRole,
+  internalPriority,
+  reason,
+}: {
+  workflowId: string;
+  status: NonNullable<IntegrationWorkflowRecord["approval"]>["status"];
+  actorLabel?: string;
+  notes?: string;
+  responsibleRole?: string;
+  internalPriority?: NonNullable<
+    IntegrationWorkflowRecord["approval"]
+  >["internalPriority"];
+  reason?: string;
+}) {
+  const repository = getIntegrationEventRepository();
+  const workflow = await repository.getWorkflow(workflowId);
+  if (!workflow) {
+    return null;
+  }
+
+  const now = new Date().toISOString();
+  const previousStatus = workflow.approval?.status ?? "pending";
+  const approval = workflow.approval ?? { status: "pending" as const };
+  const updated: IntegrationWorkflowRecord = {
+    ...workflow,
+    updatedAt: now,
+    approval: {
+      ...approval,
+      status,
+      reviewedAt: now,
+      reviewerId: sanitizeWorkflowText(actorLabel, 120),
+      notes: notes ? sanitizeWorkflowText(notes, 500) : approval.notes,
+      responsibleRole: responsibleRole
+        ? sanitizeWorkflowText(responsibleRole, 160)
+        : approval.responsibleRole,
+      internalPriority: internalPriority ?? approval.internalPriority,
+      history: [
+        ...(approval.history ?? []),
+        {
+          previousStatus,
+          newStatus: status,
+          timestamp: now,
+          actorLabel: sanitizeWorkflowText(actorLabel, 120),
+          note: notes ? sanitizeWorkflowText(notes, 500) : undefined,
+          reason: reason ? sanitizeWorkflowText(reason, 300) : undefined,
+        },
+      ].slice(-25),
+    },
+  };
+
+  await repository.saveWorkflow(updated);
+  await addIntegrationEventLogEntry({
+    provider: workflow.provider,
+    eventType: "approval_status_updated",
+    processingStatus: "processed",
+    analysisStatus: workflow.analysis ? "completed" : "not_started",
+    externalId: workflow.receivedMessage.normalizedMessageId,
+  });
+  return updated;
 }
 
 export function getIntegrationEventRepository() {
@@ -442,4 +523,12 @@ function parseKvJsonList<T>(result: unknown) {
   return result
     .filter((value): value is string => typeof value === "string")
     .map((value) => JSON.parse(value) as T);
+}
+
+function sanitizeWorkflowText(value: string, maxLength: number) {
+  return redactSecret(value)
+    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
 }

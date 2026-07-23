@@ -38,6 +38,13 @@ export default function PrivacyPage() {
               the current implementation.
             </p>
             <p>
+              The Integrations & AI Workspace may store bounded normalized
+              message previews, analysis summaries, suggested replies,
+              provider-health diagnostics, worker heartbeat timestamps and
+              internal approval decisions. Raw webhook payloads, OAuth tokens and
+              provider secrets are not exposed to the browser.
+            </p>
+            <p>
               Current integrations run in analyze-only mode. AgenticOps AI does
               not automatically send external replies, delete messages, archive
               email, label email, ban users, publish posts, manage ads or change

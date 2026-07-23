@@ -42,6 +42,13 @@ export default function DataDeletionPage() {
                 profile knowledge text. Deleting an AgenticOps AI analysis record
                 does not delete the original provider message or source file.
               </li>
+              <li>
+                Integrations workspace: request deletion of bounded normalized
+                communication records, integration workflow records, approval
+                notes, diagnostics or worker heartbeat metadata. This does not
+                delete the original message from Gmail, Discord, Telegram,
+                Facebook or Instagram.
+              </li>
             </ul>
             <p>
               To request deletion, contact the project owner with the provider,

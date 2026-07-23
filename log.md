@@ -207,6 +207,15 @@
 - Tests performed: `npm test` passed with 53 tests; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed.
 - New rules learned: OpenAI-compatible provider configuration should expose API key, model, and optional base URL separately.
 
+## 2026-07-23 - Session: integrations and AI workspace
+
+- What was built: Refactored `/integrations` into an Integrations & AI Workspace with Overview, Connected, Available, Planned, Communication Inbox, Approval Center, Event Log and Health & Diagnostics sections; added provider status derivation, read-only message detail pages, provider detail pages, sanitized health API and internal approval update API.
+- Problems found: The prior integrations page mixed provider cards, URLs, logs and workflow records into one long view and could not update internal review state from the UI.
+- Bugs fixed: OAuth query status codes such as `google_connected` are now converted into readable temporary messages and the query parameter is cleaned after render.
+- Important technical decisions: Environment variables alone never produce Connected; Discord health uses durable heartbeat evidence; Approval Center decisions update internal state only and never execute external provider actions; planned CRM, Ads, Google Workspace, BigQuery and marketing capabilities are displayed without active connection buttons.
+- Tests performed: `npm test` passed with 200 tests across 45 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed on Next.js 16.2.11 and generated 35 static/dynamic routes; `npm run discord:worker -- --validate` passed with placeholder non-secret env values; `npm audit --omit=dev` passed with 0 vulnerabilities after updating Next.js and `eslint-config-next` to 16.2.11.
+- New rules learned: Integration status should be evidence-based, with message inbox records separate from operational lifecycle logs.
+
 ## 2026-07-22 - Session: business intelligence workspace expansion
 
 - What was built: Expanded `/business` into a structured Business Intelligence Workspace with Analyze, Audit, Budget, Reports, Knowledge Hub and Analysis History sections; added durable repository abstractions for business analyses, reports, profiles and proposed action records; added preliminary audit findings, deterministic budget calculations, report generation/export and executive metrics.

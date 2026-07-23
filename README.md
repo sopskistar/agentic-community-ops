@@ -167,6 +167,7 @@ Set these in the deployment platform environment. Do not commit `.env.local`.
 - `INTERNAL_INTEGRATION_SECRET`: shared secret for the Discord worker to call server-side processing.
 - `OAUTH_TOKEN_ENCRYPTION_KEY`: required for encrypted Google OAuth token storage in both production KV and local development fallback.
 - `INTEGRATION_EVENT_REPOSITORY`: optional; set to `memory` only for tests or explicit local fallback.
+- `INTEGRATION_MESSAGE_RETENTION_DAYS`: documented future retention control for bounded integration message/workflow records. Current durable workflow retention follows the selected repository behavior unless explicitly extended.
 - `KV_REST_API_URL`, `KV_REST_API_TOKEN`: recommended durable Vercel KV/Upstash REST storage for integration events and workflow records.
 - `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`: supported aliases for the same durable integration event repository.
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`: Google OAuth configuration.
@@ -187,7 +188,11 @@ Implemented foundation:
 - Meta event ingestion supports Facebook Messenger DMs, Instagram Direct Messages, Facebook Page comment add/edit/remove events, Instagram comments, Instagram mentions, message reactions, postbacks and mention-style webhook changes when Meta delivers supported payloads.
 - Telegram webhook receiver at `/api/webhooks/telegram`.
 - Discord Gateway worker entry point at `workers/discord-bot.mjs`.
-- Integration status page at `/integrations`.
+- Integrations & AI Workspace at `/integrations` with Overview, Connected, Available, Planned, Communication Inbox, Approval Center, Event Log and Health & Diagnostics sections.
+- Read-only integration message details at `/integrations/messages/[id]`.
+- Provider detail pages for Gmail, Telegram, Discord, Facebook and Instagram.
+- Internal-only approval updates at `/api/integrations/approvals/[id]`; approvals do not execute external actions.
+- Sanitized health summary at `/api/integrations/health`.
 - Privacy Policy at `/privacy` and Data Deletion Instructions at `/data-deletion`.
 - Provider-independent integration event/workflow repository for received messages, analysis records, suggested responses, pending approval state and execution status.
 
@@ -197,7 +202,20 @@ Development-only limitations:
 - Integration events and workflow records use Vercel KV/Upstash REST when configured. Tests use an in-memory repository, and local development without KV falls back to `.agenticops/integration-event-store.json`. The local file fallback is not suitable for Vercel production durability.
 - Discord requires a persistent worker runtime such as Railway, Render, Fly.io or a VM. Do not run the Gateway worker inside a Vercel request lifecycle.
 - All external channels are analyze-only. No automatic replies, moderation, email mutation, post publishing, ad management or user actions are implemented.
-- Suggested replies and actions are stored as pending human-approval workflow records. Execution remains unavailable until provider permissions, tenant ownership and explicit approval workflows are implemented.
+- Suggested replies and actions are stored as pending human-approval workflow records. Reviewers can approve internally, reject, request more information or mark resolved internally. These state changes do not send messages or execute provider actions.
+- Execution remains unavailable until provider permissions, tenant ownership, idempotency, audit logging and explicit human-approved execution workflows are implemented.
+
+Integration status meanings:
+
+- `Connected`: a durable OAuth or connection record exists and can be read successfully.
+- `Active`: the provider has delivered or synchronized a successful event recently.
+- `Webhook Verified`: webhook verification succeeded, but supported message delivery is not proven.
+- `Worker Online`: a persistent worker recently reported healthy operation.
+- `Configured`: environment values appear present, but success is not proven.
+- `Awaiting First Event`: configuration or verification exists, but no supported event has been received.
+- `Provider Review Required` or `Permission Required`: provider setup, Page linkage, App Review or scopes are still needed.
+- `Degraded` or `Error`: a recent sanitized processing failure exists.
+- `Planned`: no production implementation currently exists.
 
 Callback and webhook URLs:
 
@@ -256,6 +274,12 @@ Gmail readonly sync:
 - Duplicate syncs skip messages that already have a persisted workflow record.
 - Future `gmail.send`, `gmail.modify`, drafts, labels, archive and delete capabilities remain planned only and are not requested or implemented.
 
+Email Intelligence current scope:
+
+- Current Gmail scope is `gmail.readonly` only.
+- Implemented: connection status, manual sync, recent imported message records, categorization through analysis, priority/risk indicators, phishing-risk signals where detected, suggested reply outlines and human-review entries.
+- Not implemented: send, reply, archive, label, delete, modify inbox, automatic follow-up, shared inbox assignment or automatic inbox organization.
+
 Meta dashboard setup that code cannot perform automatically:
 
 - Configure callback URL: `https://agenticopsai.xyz/api/webhooks/meta`.
@@ -278,6 +302,14 @@ Meta ingestion privacy and diagnostics:
 - Durable diagnostics use redacted categories such as `meta_message_received`, `facebook_comment_received`, `facebook_comment_edited`, `facebook_comment_removed`, `instagram_comment_received`, `instagram_mention_received`, `meta_analysis_started`, `meta_analysis_completed`, `meta_suggested`, `meta_failed`, `meta_comment_unsupported` and `meta_payload_unsupported`.
 - Facebook and Instagram suggested replies remain approval-required. AgenticOps AI does not send replies, hide comments, delete comments, moderate users, publish content, manage ads or spend money.
 
+Future roadmaps shown in the Integrations & AI Workspace:
+
+- Email Workspace: draft complete replies, human-approved sending, `gmail.send`, `gmail.modify`, labels, archive, follow-up reminders, SLA tracking, shared inbox, assignment, thread summarization, attachment intelligence and email campaign analysis.
+- Marketing Intelligence: social comment intelligence, mentions, campaign engagement analysis, brand-risk detection, lead identification, complaint detection, content-performance analysis, creative briefs and campaign reports.
+- Advertising Intelligence: Meta Ads, Google Ads, YouTube campaigns, X Ads, LinkedIn Ads and TikTok Ads. AgenticOps AI must never spend money, launch campaigns, pause ads, change budgets, change targeting or publish creative without provider permissions, explicit human approval, audit logging and confirmation.
+- CRM Intelligence: HubSpot, Salesforce, Zendesk, Intercom and Freshdesk for contact-context enrichment, lead classification, ticket prioritization, CRM note preparation and human-approved CRM updates.
+- Business Data Intelligence: BigQuery, Google Cloud Platform, Google Workspace, Microsoft 365, data warehouses and BI tools for KPI dashboards, trend analysis, segmentation, anomaly detection and scheduled reporting. No Cloud Platform or BigQuery scopes are requested in this release.
+
 ## Storage Limitations
 
 The current project repository uses local JSON storage at `data/projects.json`. This is acceptable for the MVP demo and local development, but it is not durable production storage on serverless platforms:
@@ -285,7 +317,8 @@ The current project repository uses local JSON storage at `data/projects.json`. 
 - writes may be unavailable, read-only or ephemeral depending on the platform;
 - concurrent writes are not safe;
 - project edits may disappear across deployments or function instances;
-- batch results and reports are stored in browser `localStorage`, not server-side persistence.
+- Web3 batch results and Web3 project reports are stored in browser `localStorage`, not server-side persistence.
+- Business Intelligence Workspace analyses, reports, profiles and proposed actions use the business repository abstraction.
 - integration event/workflow records require `KV_REST_API_URL` and `KV_REST_API_TOKEN` or equivalent Upstash variables for durable serverless persistence.
 
 For production, replace the local JSON repository with a managed database or durable storage service before relying on project creation/editing, persistent reports or multi-user workflows.
