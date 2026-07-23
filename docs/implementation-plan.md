@@ -18,6 +18,8 @@ On 2026-07-23, Release 4 added production polish: centralized app metadata/versi
 
 On 2026-07-23, a post-Release-4 correction pass fixed dark-mode readability for homepage capability panels and Business warning cards, repositioned `/security-engine` as a platform analysis engine page with a Web3-originated deterministic catalogue, clarified Platform Dashboard navigation, and changed Batch Review to timeout safely, preserve entered messages on error, store completed results and route users directly to the report.
 
+On 2026-07-23, the OKX hackathon-readiness pass added a standalone analyze-only service at `/api/okx/analyze`, a minimal MCP JSON-RPC endpoint at `/api/mcp`, production smoke tests through `npm run test:production`, and submission documents under `docs/okx-submission.md`, `docs/okx-listing-copy.md` and `docs/okx-demo-script.md`. The recommended service mode is A2MCP. x402 is not enabled unless a separate paid-listing implementation is approved and live-tested.
+
 ## Stage 1: Universal Web3 Community Security
 
 1. Add a type-only normalized message model. Completed 2026-07-18.

@@ -4,7 +4,7 @@ import { getIntegrationWorkspaceData } from "../../lib/integrations/workspace";
 const appBaseUrl =
   process.env.NEXT_PUBLIC_APP_URL?.trim() ||
   process.env.APP_BASE_URL?.trim() ||
-  "https://YOUR_DEPLOYMENT_URL";
+  "https://agenticopsai.xyz";
 
 export const metadata = {
   title: "Integrations & AI Workspace | AgenticOps AI",

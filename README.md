@@ -32,6 +32,8 @@ application or local development server to capture current UI states.
 - Durable integration event/workflow storage through Vercel KV or Upstash REST.
 - Encrypted Google OAuth token storage.
 - Privacy and Data Deletion pages.
+- OKX-ready analyze-only endpoint at `https://agenticopsai.xyz/api/okx/analyze`
+  and MCP tool endpoint at `https://agenticopsai.xyz/api/mcp`.
 
 ## Platform Dashboard Workflow
 
@@ -129,6 +131,7 @@ Core:
 - `OPENAI_API_KEY`
 - `OPENAI_MODEL`
 - `OPENAI_BASE_URL`
+- `OPENAI_TIMEOUT_MS`
 - `NEXT_PUBLIC_APP_URL`
 - `APP_BASE_URL`
 
@@ -169,8 +172,9 @@ OAuth and integrations:
 ```bash
 npm test
 npm run lint
-npx tsc --noEmit
+npx tsc --noEmit --incremental false
 npm run build
+npm run test:production
 npm audit --omit=dev
 ```
 
@@ -217,10 +221,20 @@ Railway worker:
 - Human-readable ASP docs: `/docs/asp`
 - Architecture page: `/docs/architecture`
 - API testing guide: `docs/api-testing.md`
+- OKX submission readiness: `docs/okx-submission.md`
+- OKX listing copy: `docs/okx-listing-copy.md`
+- OKX demo script: `docs/okx-demo-script.md`
 - Public health: `/api/v1/health`
 - Public rules: `/api/v1/rules`
 - Single analysis: `/api/v1/analyse`
 - Batch analysis: `/api/v1/analyse/batch`
+- OKX callable analysis: `/api/okx/analyze`
+- MCP tool endpoint: `/api/mcp`
+
+Recommended OKX service mode: A2MCP. The exposed tool is
+`analyze_communication_risk`. x402 payment gating is not enabled in this
+release; do not list the service as paid until a compliant payment gate is
+implemented and live-tested.
 
 ## Known Limitations
 

@@ -1,8 +1,8 @@
 {
-  "name": "Community Message Security Audit",
+  "name": "AgenticOps Communication Risk & Intelligence Analysis",
   "provider": "AgenticOps AI",
   "version": "1.0.0",
-  "serviceDescription": "AgenticOps AI provides a Web3 Community Security service that audits Web3 community messages using a deterministic security engine and AI-assisted support layer. It detects scams, phishing, fake administrators, wallet threats and transaction issues, then produces explainable risk verdicts, safe reply suggestions and escalation actions.",
+  "serviceDescription": "AgenticOps AI analyzes communication messages for intent, sentiment, priority, security risk, recommended actions and human-review requirements. Web3 Community Security is the first implemented context; Business Communication Intelligence is the second implemented context.",
   "suggestedDemonstrationPrice": {
     "amount": "1",
     "currency": "USDC",
@@ -11,10 +11,13 @@
   "input": "A project description, official documentation and up to 25 community messages.",
   "deliverable": "Structured risk levels, triggered rules, suggested replies, escalations and a community risk report.",
   "endpoints": {
-    "health": "/api/v1/health",
+    "baseUrl": "https://agenticopsai.xyz",
+    "health": "https://agenticopsai.xyz/api/v1/health",
     "rules": "/api/v1/rules",
     "singleAnalysis": "/api/v1/analyse",
     "batchAnalysis": "/api/v1/analyse/batch",
+    "okxAnalysis": "https://agenticopsai.xyz/api/okx/analyze",
+    "mcp": "https://agenticopsai.xyz/api/mcp",
     "demo": "/demo",
     "documentation": "/docs/asp"
   },
@@ -33,7 +36,7 @@
     "Financial, missing-fund, legal and account-security cases are escalated."
   ],
   "knownLimitations": [
-    "No OKX payment integration is implemented yet.",
+    "No x402 payment gate is implemented yet.",
     "No authentication is implemented yet.",
     "Local JSON storage is used for project knowledge-base data.",
     "Batch/report dashboard state is currently browser-local."

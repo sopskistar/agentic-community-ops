@@ -45,6 +45,22 @@ describe("POST /api/v1/analyse", () => {
     expect(response.status).toBe(400);
   });
 
+  it("rejects oversized request payloads before analysis", async () => {
+    const response = await POST(
+      createJsonRequest({
+        projectId: "demo-fictional-atlas-dao",
+        message: {
+          content: "x".repeat(12_000),
+          source: "MANUAL",
+        },
+      }),
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(413);
+    expect(body.error.code).toBe("PAYLOAD_TOO_LARGE");
+  });
+
   it("returns 404 for unknown projects", async () => {
     const response = await POST(
       createJsonRequest({

@@ -30,6 +30,22 @@ describe("POST /api/v1/analyse/batch", () => {
     });
   });
 
+  it("rejects oversized batch payloads before processing", async () => {
+    const response = await POST(
+      request({
+        projectId: "demo-fictional-atlas-dao",
+        messages: Array.from({ length: 25 }, () => ({
+          content: "x".repeat(3_000),
+          source: "MANUAL",
+        })),
+      }),
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(413);
+    expect(body.error.code).toBe("PAYLOAD_TOO_LARGE");
+  });
+
   it("returns successful and failed results separately", async () => {
     const response = await POST(
       request({

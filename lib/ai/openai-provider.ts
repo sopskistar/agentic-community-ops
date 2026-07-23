@@ -13,12 +13,14 @@ export class OpenAiAnalysisProvider implements AiAnalysisProvider {
     apiKey = process.env.OPENAI_API_KEY,
     baseURL = process.env.OPENAI_BASE_URL?.trim() || undefined,
     model = process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
+    timeout = getOpenAiTimeoutMs(),
   }: {
     apiKey?: string;
     baseURL?: string;
     model?: string;
+    timeout?: number;
   } = {}) {
-    this.client = new OpenAI({ apiKey, baseURL });
+    this.client = new OpenAI({ apiKey, baseURL, timeout });
     this.model = model;
   }
 
@@ -61,6 +63,13 @@ export class OpenAiAnalysisProvider implements AiAnalysisProvider {
 
     return aiMessageAnalysisSchema.parse(JSON.parse(content));
   }
+}
+
+function getOpenAiTimeoutMs() {
+  const configured = Number(process.env.OPENAI_TIMEOUT_MS);
+  return Number.isFinite(configured) && configured > 0
+    ? Math.min(configured, 30_000)
+    : 15_000;
 }
 
 function buildSystemPrompt() {

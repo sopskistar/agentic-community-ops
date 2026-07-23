@@ -1,5 +1,14 @@
 # Project Log
 
+## 2026-07-23 - Session: OKX hackathon-readiness pass
+
+- What was built: Added standalone OKX communication risk analysis at `/api/okx/analyze`, a minimal analyze-only MCP JSON-RPC endpoint at `/api/mcp`, production smoke testing through `npm run test:production`, OKX submission docs, OKX listing copy and a 90-second demo script. Updated ASP docs, registration notes, service manifest, README and API testing docs to use `https://agenticopsai.xyz`.
+- Problems found: The repository had public analysis APIs but no standardized project-independent OKX endpoint or MCP tool endpoint. ASP docs still emphasized the old Web3-only service and placeholder deployment URLs.
+- Bugs fixed: Added an OpenAI-compatible provider timeout default to avoid unbounded model calls. Kept x402 disabled instead of implying paid payment readiness without official middleware and live payment verification.
+- Important technical decisions: Recommended OKX service mode is A2MCP. The public tool exposes only analyze-only communication risk intelligence and does not expose Gmail sync, OAuth, private provider events, approval mutation or autonomous execution.
+- Tests performed: Local validation passed with `npm test` at 224 tests across 49 files; `npm run lint` passed; `npx tsc --noEmit --incremental false` passed; `npm run build` passed and generated 40 app routes including `/api/okx/analyze` and `/api/mcp`; `npm run discord:worker -- --validate` passed with dummy non-secret environment values; `npm audit --omit=dev` reported 0 vulnerabilities. Pre-deploy `npm run test:production` passed existing production homepage, robots, sitemap, health and legacy analysis checks, then failed at `/api/okx/analyze` with 404 because the new route had not yet been deployed.
+- New rules learned: OKX listing copy must use the custom production domain and must not advertise x402 or paid execution until a real payment-gated request is implemented and verified.
+
 ## 2026-07-23 - Session: post-Release-4 correction pass
 
 - What was built: Fixed homepage capability-panel dark-mode contrast, added semantic warning tokens for Business Intelligence disclaimers, broadened `/security-engine` positioning around normalized source/context/rule separation, added implemented message sources and platform flow, clarified Platform Dashboard onboarding, exposed direct project actions, added project breadcrumbs/workflow navigation, and changed Batch Review to timeout safely, store completed results with timestamps and route to the report.

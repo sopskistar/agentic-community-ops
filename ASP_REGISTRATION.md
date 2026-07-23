@@ -2,14 +2,18 @@
 
 ## Service Description
 
-AgenticOps AI provides a Web3 Community Security ASP service that audits Web3 community messages using a deterministic security engine and AI-assisted support layer. It detects scams, phishing, fake administrators, wallet threats and transaction issues, then produces explainable risk verdicts, safe reply suggestions and escalation actions.
+AgenticOps AI provides a Communication Risk & Intelligence Analysis service. The first implemented context is Web3 Community Security, which audits community messages using a deterministic security engine and AI-assisted support layer. The second implemented context is Business Communication Intelligence. The OKX-ready service accepts one bounded communication message and returns explainable risk, intent, sentiment, priority, recommended action and human-review guidance.
 
 ## Service Offering
 
-- Name: Community Message Security Audit
-- Input: A project description, official documentation and up to 25 community messages.
-- Deliverable: Structured risk levels, triggered rules, suggested replies, escalations and a community risk report.
-- Suggested demonstration price: 1 USDC per audit.
+- Name: AgenticOps Communication Risk & Intelligence Analysis
+- Service mode: A2MCP
+- MCP endpoint: `https://agenticopsai.xyz/api/mcp`
+- Tool: `analyze_communication_risk`
+- Direct analysis endpoint: `https://agenticopsai.xyz/api/okx/analyze`
+- Input: one bounded message with `content`, `context` and `source`.
+- Deliverable: summary, intent, sentiment, priority, risk level, risk signals, suggested reply outline, recommended action, confidence and explanation.
+- Suggested hackathon price: free unless OKX requires a paid listing. x402 is not enabled in this release.
 
 ## Problem Solved
 
@@ -80,19 +84,39 @@ The public rule list includes stable IDs `SEC-001` through `SEC-015`.
 Health:
 
 ```bash
-curl https://YOUR_DEPLOYMENT_URL/api/v1/health
+curl https://agenticopsai.xyz/api/v1/health
 ```
 
 Rules:
 
 ```bash
-curl https://YOUR_DEPLOYMENT_URL/api/v1/rules
+curl https://agenticopsai.xyz/api/v1/rules
+```
+
+OKX callable analysis:
+
+```bash
+curl -X POST https://agenticopsai.xyz/api/okx/analyze \
+  -H "content-type: application/json" \
+  -d '{
+    "content": "Urgent wallet verification. Send your seed phrase now.",
+    "context": "web3-community",
+    "source": "telegram"
+  }'
+```
+
+MCP tool discovery:
+
+```bash
+curl -X POST https://agenticopsai.xyz/api/mcp \
+  -H "content-type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
 Single analysis:
 
 ```bash
-curl -X POST https://YOUR_DEPLOYMENT_URL/api/v1/analyse \
+curl -X POST https://agenticopsai.xyz/api/v1/analyse \
   -H "content-type: application/json" \
   -d '{
     "projectId": "demo-fictional-atlas-dao",
@@ -106,7 +130,7 @@ curl -X POST https://YOUR_DEPLOYMENT_URL/api/v1/analyse \
 Batch analysis:
 
 ```bash
-curl -X POST https://YOUR_DEPLOYMENT_URL/api/v1/analyse/batch \
+curl -X POST https://agenticopsai.xyz/api/v1/analyse/batch \
   -H "content-type: application/json" \
   -d '{
     "projectId": "demo-fictional-atlas-dao",
@@ -119,16 +143,16 @@ curl -X POST https://YOUR_DEPLOYMENT_URL/api/v1/analyse/batch \
 
 ## Public Registration URLs
 
-Replace `YOUR_DEPLOYMENT_URL` after deployment:
-
-- Service manifest: `https://YOUR_DEPLOYMENT_URL/service-manifest.json`
-- Single input schema: `https://YOUR_DEPLOYMENT_URL/schemas/single-analysis-input.json`
-- Single output schema: `https://YOUR_DEPLOYMENT_URL/schemas/single-analysis-output.json`
-- Batch input schema: `https://YOUR_DEPLOYMENT_URL/schemas/batch-analysis-input.json`
-- Batch output schema: `https://YOUR_DEPLOYMENT_URL/schemas/batch-analysis-output.json`
-- ASP documentation: `https://YOUR_DEPLOYMENT_URL/docs/asp`
-- Demo route: `https://YOUR_DEPLOYMENT_URL/demo`
-- Health endpoint: `https://YOUR_DEPLOYMENT_URL/api/v1/health`
+- Service manifest: `https://agenticopsai.xyz/service-manifest.json`
+- Single input schema: `https://agenticopsai.xyz/schemas/single-analysis-input.json`
+- Single output schema: `https://agenticopsai.xyz/schemas/single-analysis-output.json`
+- Batch input schema: `https://agenticopsai.xyz/schemas/batch-analysis-input.json`
+- Batch output schema: `https://agenticopsai.xyz/schemas/batch-analysis-output.json`
+- ASP documentation: `https://agenticopsai.xyz/docs/asp`
+- OKX submission readiness: `https://agenticopsai.xyz/docs/asp` and `docs/okx-submission.md`
+- Demo route: `https://agenticopsai.xyz/demo`
+- Health endpoint: `https://agenticopsai.xyz/api/v1/health`
+- MCP endpoint: `https://agenticopsai.xyz/api/mcp`
 
 ## Deployment Checklist
 
@@ -136,6 +160,8 @@ Replace `YOUR_DEPLOYMENT_URL` after deployment:
 - Set `OPENAI_API_KEY`.
 - Optionally set `OPENAI_MODEL`.
 - Verify `/api/v1/health`.
+- Verify `/api/okx/analyze`.
+- Verify `/api/mcp`.
 - Verify `/api/v1/rules`.
 - Verify `/demo`.
 - Verify `/docs/asp`.
@@ -147,7 +173,7 @@ Replace `YOUR_DEPLOYMENT_URL` after deployment:
 - Confirm ASP service name.
 - Confirm service description.
 - Confirm service offering, input and deliverable.
-- Confirm suggested demonstration price: 1 USDC per audit.
+- Confirm free listing is accepted, or approve a separate x402 implementation before paid listing.
 - Submit manifest and schema URLs.
 - Submit health endpoint.
 - Submit demo route.
@@ -156,4 +182,4 @@ Replace `YOUR_DEPLOYMENT_URL` after deployment:
 
 ## Payment Integration Policy
 
-Do not implement payment integration until the core product is deployed and working. The current price is a demonstration suggestion only.
+Do not claim payment support until x402 is implemented with official OKX middleware and a live paid request is verified. The current recommended hackathon listing is free A2MCP.

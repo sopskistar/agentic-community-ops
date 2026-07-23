@@ -62,6 +62,8 @@ Current API routes:
 - `GET /api/v1/rules`: returns the public deterministic rules.
 - `POST /api/v1/analyse`: validates a project/message request, loads a project from local JSON, runs deterministic-first hybrid analysis, and returns structured results.
 - `POST /api/v1/analyse/batch`: validates up to 25 messages, isolates invalid messages, runs analysis with concurrency 3, and returns successful results, failed results, and measured summary metrics.
+- `GET/POST /api/okx/analyze`: OKX-ready standalone analyze-only service for one bounded communication message. It accepts `content`, `context` and `source`, reuses the deterministic-first analysis pipeline plus Business Communication analysis signals, and returns stable communication risk/intelligence JSON.
+- `GET/POST /api/mcp`: minimal analyze-only JSON-RPC MCP endpoint exposing only `analyze_communication_risk`. It supports initialization, tool discovery and tool invocation. It does not expose Gmail sync, OAuth, private integration events, provider secrets or approval mutation.
 - `POST /api/business/ingest`: validates and parses supported business uploads without permanently storing original files, then returns sanitized extraction metadata, preview and bounded analysis content.
 - `GET/POST /api/business/analyses`: lists and saves bounded business analyses through the business repository.
 - `GET /api/business/analyses/[id]`: reads one saved business analysis by validated ID.
@@ -89,6 +91,7 @@ Current domain modules:
 - `lib/business/`: business communication analysis types, profiles, heuristic analyzer, audit finding generation, deterministic budget calculations, report generation, metrics, repository abstraction, request validation and tests.
 - `lib/business-ingestion/`: server-side upload validation plus TXT, PDF, DOCX, CSV and XLSX parsers, bounded extraction summaries, preview helpers and tests.
 - `lib/integrations/`: provider-neutral normalized integration messages, adapters, OAuth helpers, token storage, Gmail service, webhook security, dedupe, durable event/workflow repository, workspace status derivation, internal approval state and analyze-only processing.
+- `lib/okx/`: OKX-facing request/response schemas and the standalone communication risk analysis service used by `/api/okx/analyze` and `/api/mcp`.
 - `lib/projects/`: project knowledge-base types, Zod validation, repository interface, local JSON repository, and tests.
 - `lib/app-config.ts`: centralized app name, version and base URL helpers for metadata and footer consistency.
 - `lib/api/`: structured API error responses.

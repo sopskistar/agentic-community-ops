@@ -15,6 +15,7 @@ import { createDefaultAiAnalysisProvider } from "../../../../../lib/ai/default-p
 import { projectRepository } from "../../../../../lib/projects/local-json-project-repository";
 
 const maxBatchSize = 25;
+const maxRequestBodyLength = 75_000;
 const aiConcurrency = 3;
 
 const batchRequestSchema = z.object({
@@ -30,7 +31,16 @@ const batchMessageSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const rawBody = await request.text();
+    if (rawBody.length > maxRequestBodyLength) {
+      return apiErrorResponse({
+        code: "PAYLOAD_TOO_LARGE",
+        message: "Batch analysis request payload is too large.",
+        status: 413,
+      });
+    }
+
+    const body = JSON.parse(rawBody) as unknown;
     const parsedBatch = batchRequestSchema.parse(body);
 
     if (parsedBatch.messages.length > maxBatchSize) {

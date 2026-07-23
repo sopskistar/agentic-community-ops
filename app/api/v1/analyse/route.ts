@@ -9,9 +9,20 @@ import { analyseApiRequestSchema } from "../../../../lib/analysis/api-schemas";
 import { createDefaultAiAnalysisProvider } from "../../../../lib/ai/default-provider";
 import { projectRepository } from "../../../../lib/projects/local-json-project-repository";
 
+const maxRequestBodyLength = 12_000;
+
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const rawBody = await request.text();
+    if (rawBody.length > maxRequestBodyLength) {
+      return apiErrorResponse({
+        code: "PAYLOAD_TOO_LARGE",
+        message: "Analysis request payload is too large.",
+        status: 413,
+      });
+    }
+
+    const body = JSON.parse(rawBody) as unknown;
     const parsedRequest = analyseApiRequestSchema.parse(body);
     const project = await projectRepository.getById(parsedRequest.projectId);
 

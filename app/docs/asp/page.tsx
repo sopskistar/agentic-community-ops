@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
   title: "ASP Documentation | AgenticOps AI",
   description:
-    "AgenticOps AI ASP documentation for Web3 community security, deterministic rules, AI analysis and future platform roadmap.",
+    "AgenticOps AI ASP documentation for OKX-ready communication risk analysis, Web3 community security, deterministic rules and future platform roadmap.",
 };
 
 const implementedSections = [
@@ -11,6 +11,7 @@ const implementedSections = [
     title: "Overview",
     items: [
       "AgenticOps AI includes a Web3 Community Security ASP service for community-message audits.",
+      "For OKX.AI listing, the recommended service is AgenticOps Communication Risk & Intelligence Analysis through A2MCP.",
       "The ASP service returns explainable risk verdicts, triggered rules, recommendations, safe reply suggestions and escalation guidance.",
       "The wider AgenticOps AI platform also includes Business Intelligence and Integrations workspaces, but those are separate from the ASP registration contract.",
     ],
@@ -80,28 +81,35 @@ export default function AspDocsPage() {
         <header className="section-card p-6 md:p-8">
           <p className="kicker">AgenticOps AI Documentation</p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
-            Community Message Security Audit ASP
+            AgenticOps Communication Risk & Intelligence Analysis
           </h1>
           <p className="mt-5 max-w-4xl text-base leading-7 text-slate-600">
-            Production documentation for the implemented Web3 Community Security
-            ASP service, plus platform architecture notes and clearly separated
-            roadmap items.
+            Production documentation for the OKX-ready analyze-only A2MCP
+            service, the implemented Web3 Community Security catalogue,
+            platform architecture notes and clearly separated roadmap items.
           </p>
         </header>
 
         <section className="section-card mt-6 p-6">
           <h2 className="text-2xl font-semibold">Service Offering</h2>
           <dl className="mt-5 grid gap-5 md:grid-cols-3">
-            <SummaryItem label="Name" value="Community Message Security Audit" />
+            <SummaryItem
+              label="Name"
+              value="AgenticOps Communication Risk & Intelligence Analysis"
+            />
             <SummaryItem
               label="Input"
-              value="Project context, official links and up to 25 community messages."
+              value="One bounded message with content, context and source."
             />
             <SummaryItem
               label="Deliverable"
-              value="Risk, rules, explanations, suggested replies, escalation and report metrics."
+              value="Summary, intent, sentiment, priority, risk, signals, suggested reply outline and explanation."
             />
           </dl>
+          <div className="mt-5 grid gap-3 text-sm md:grid-cols-2">
+            <CodeBlock value="POST https://agenticopsai.xyz/api/okx/analyze" />
+            <CodeBlock value="POST https://agenticopsai.xyz/api/mcp" />
+          </div>
         </section>
 
         <section className="mt-6 grid gap-5 md:grid-cols-2">
@@ -151,7 +159,9 @@ Merge Policy -> Client: final risk cannot be lower than deterministic risk`}
           <div className="mt-5 grid gap-4 lg:grid-cols-2">
             <CodeBlock
               value={`GET /api/v1/health
-GET /api/v1/rules`}
+GET /api/v1/rules
+POST /api/okx/analyze
+POST /api/mcp`}
             />
             <CodeBlock
               value={`POST /api/v1/analyse
@@ -174,17 +184,26 @@ GET /api/v1/rules`}
   ]
 }`}
             />
+            <CodeBlock
+              className="lg:col-span-2"
+              value={`POST /api/okx/analyze
+{
+  "content": "Urgent wallet verification. Send your seed phrase now.",
+  "context": "web3-community",
+  "source": "telegram"
+}`}
+            />
           </div>
         </section>
 
         <section className="section-card mt-6 p-6">
           <h2 className="text-2xl font-semibold">Current Limitations</h2>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
-            <li>No payment integration is implemented in this ASP service.</li>
+            <li>x402 payment gating is not implemented in this ASP service.</li>
             <li>No authentication is implemented for the public ASP endpoints.</li>
             <li>Project knowledge-base storage uses local JSON and is not durable production storage on serverless platforms.</li>
             <li>Web3 batch/report dashboard state is browser-local.</li>
-            <li>Business Intelligence and Integrations workspaces are platform features, not part of the current ASP service contract.</li>
+            <li>The OKX-facing endpoint is stateless and does not expose Gmail sync, OAuth operations, private integration events or approval mutation.</li>
           </ul>
         </section>
 
@@ -210,8 +229,9 @@ GET /api/v1/rules`}
           <h2 className="text-2xl font-semibold">Testing and Deployment</h2>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-700">
             <li>Run `npm test`, `npm run lint`, TypeScript checking and `npm run build` before deployment.</li>
+            <li>Run `npm run test:production` against `https://agenticopsai.xyz` after deployment.</li>
             <li>Set `OPENAI_API_KEY` only in the deployment environment.</li>
-            <li>Deploy over HTTPS and verify `/api/v1/health`.</li>
+            <li>Deploy over HTTPS and verify `/api/v1/health`, `/api/okx/analyze` and `/api/mcp`.</li>
             <li>Use placeholder values in API examples and never publish real secrets.</li>
           </ul>
           <div className="mt-5 flex flex-wrap gap-3">
