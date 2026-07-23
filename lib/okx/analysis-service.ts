@@ -25,7 +25,7 @@ const okxSources = [
   "instagram",
 ] as const;
 
-const serviceTimeoutMs = 15_000;
+const serviceTimeoutMs = 8_000;
 
 export const okxAnalysisRequestSchema = z.object({
   content: z.string().trim().min(1).max(2_000),
