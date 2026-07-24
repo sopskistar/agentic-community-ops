@@ -119,6 +119,12 @@ export default function RootLayout({
                 Architecture
               </Link>
               <Link
+                href="/whitepaper"
+                className="font-semibold text-slate-700 transition-colors hover:text-teal-700"
+              >
+                White Paper
+              </Link>
+              <Link
                 href="/integrations"
                 className="font-semibold text-slate-700 transition-colors hover:text-teal-700"
               >

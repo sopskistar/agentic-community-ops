@@ -10,6 +10,7 @@
     "worker:discord": "node workers/discord-bot.mjs",
     "discord:worker": "node workers/discord-bot.mjs",
     "test": "vitest run",
+    "whitepaper:pdf": "node scripts/generate-whitepaper-pdf.mjs",
     "test:production": "node scripts/test-production.mjs"
   },
   "dependencies": {

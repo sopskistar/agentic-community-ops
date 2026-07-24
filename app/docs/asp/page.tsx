@@ -88,6 +88,18 @@ export default function AspDocsPage() {
             service, the implemented Web3 Community Security catalogue,
             platform architecture notes and clearly separated roadmap items.
           </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/whitepaper" className="btn btn-primary">
+              Download White Paper
+            </Link>
+            <a
+              href="/whitepaper/AgenticOps-AI-White-Paper-v1.pdf"
+              download
+              className="btn btn-secondary"
+            >
+              PDF Version
+            </a>
+          </div>
         </header>
 
         <section className="section-card mt-6 p-6">
@@ -237,6 +249,9 @@ POST /api/mcp`}
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/docs/architecture" className="btn btn-secondary">
               Architecture
+            </Link>
+            <Link href="/whitepaper" className="btn btn-secondary">
+              White Paper
             </Link>
             <Link href="/demo" className="btn btn-primary">
               Guided Demo

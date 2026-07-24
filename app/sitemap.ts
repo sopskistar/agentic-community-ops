@@ -10,6 +10,7 @@ const routes = [
   "/business",
   "/integrations",
   "/integrations/gmail",
+  "/whitepaper",
   "/docs/asp",
   "/docs/architecture",
   "/privacy",

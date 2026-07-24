@@ -481,6 +481,9 @@ export default function Home() {
               >
                 Communication Engine
               </Link>
+              <Link href="/whitepaper" className="btn btn-secondary min-h-12 px-6">
+                Download White Paper
+              </Link>
             </div>
             <dl className="mt-9 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
               <HeroStat label="Security rules" value="15" />
@@ -897,6 +900,37 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="section-card overflow-hidden">
+          <div className="grid gap-6 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+            <div>
+              <p className="kicker">Technical White Paper</p>
+              <h2 className="mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl">
+                📄 Read the White Paper
+              </h2>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
+                Learn how AgenticOps AI&apos;s Communication Intelligence
+                Platform works, including its architecture, current
+                capabilities, AI reasoning engine, MCP service, security model,
+                and future roadmap.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row md:justify-end">
+              <Link href="/whitepaper" className="btn btn-primary min-h-12 px-6">
+                Read Online
+              </Link>
+              <a
+                href="/whitepaper/AgenticOps-AI-White-Paper-v1.pdf"
+                download
+                className="btn btn-secondary min-h-12 px-6"
+              >
+                Download PDF
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="rounded-2xl bg-gradient-to-br from-teal-700 to-slate-950 px-6 py-9 text-white shadow-xl shadow-emerald-900/15 md:px-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
@@ -942,6 +976,12 @@ export default function Home() {
                 className="btn min-h-12 border border-white/40 px-6 text-white hover:bg-white/10"
               >
                 ASP Docs
+              </Link>
+              <Link
+                href="/whitepaper"
+                className="btn min-h-12 border border-white/40 px-6 text-white hover:bg-white/10"
+              >
+                Download White Paper
               </Link>
             </div>
           </div>

@@ -65,6 +65,18 @@ export default function ArchitectureDocsPage() {
             Future capabilities remain separated from current analyze-only
             functionality.
           </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/whitepaper" className="btn btn-primary">
+              Download White Paper
+            </Link>
+            <a
+              href="/whitepaper/AgenticOps-AI-White-Paper-v1.pdf"
+              download
+              className="btn btn-secondary"
+            >
+              PDF Version
+            </a>
+          </div>
         </section>
 
         <section className="mt-6 grid gap-5 md:grid-cols-2">
@@ -107,6 +119,9 @@ export default function ArchitectureDocsPage() {
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/docs/asp" className="btn btn-secondary">
             ASP Docs
+          </Link>
+          <Link href="/whitepaper" className="btn btn-secondary">
+            White Paper
           </Link>
           <Link href="/integrations" className="btn btn-primary">
             Integrations Workspace

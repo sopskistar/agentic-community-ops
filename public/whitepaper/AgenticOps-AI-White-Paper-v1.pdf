@@ -1,0 +1,535 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 9 /Kids [7 0 R 10 0 R 13 0 R 16 0 R 19 0 R 22 0 R 25 0 R 28 0 R 31 0 R] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Length 3242 >>
+stream
+BT
+/F2 17 Tf 54.00 726.00 Td (AgenticOps AI) Tj
+/F2 13 Tf 54.00 684.00 Td (Communication Intelligence Platform) Tj
+/F2 13 Tf 54.00 650.00 Td (Technical White Paper) Tj
+/F2 13 Tf 54.00 616.00 Td (Version 1.0) Tj
+/F1 10 Tf 54.00 590.00 Td (Date: July 24, 2026) Tj
+/F2 17 Tf 54.00 538.00 Td (Executive Summary) Tj
+/F1 10 Tf 54.00 504.00 Td (AgenticOps AI is an AI-powered Communication Intelligence Platform that helps organizations) Tj
+/F1 10 Tf 54.00 490.00 Td (analyze communications across multiple channels using deterministic security rules, AI) Tj
+/F1 10 Tf 54.00 476.00 Td (reasoning, explainable risk scoring, confidence scoring, and human approval workflows.) Tj
+/F1 10 Tf 54.00 457.00 Td (Modern organizations receive important conversations across community platforms, email, social) Tj
+/F1 10 Tf 54.00 443.00 Td (channels, support channels, documents, spreadsheets, and internal collaboration tools. These) Tj
+/F1 10 Tf 54.00 429.00 Td (communications contain operational signals, customer intent, risk indicators, fraud attempts,) Tj
+/F1 10 Tf 54.00 415.00 Td (support issues, complaints, sales opportunities, and security threats. Most teams still review) Tj
+/F1 10 Tf 54.00 401.00 Td (this information manually or through fragmented tools that do not share a common message model,) Tj
+/F1 10 Tf 54.00 387.00 Td (audit trail, or safety boundary.) Tj
+/F1 10 Tf 54.00 368.00 Td (AgenticOps AI addresses this gap by providing one unified analysis engine. Version 1.0 includes) Tj
+/F1 10 Tf 54.00 354.00 Td (two implemented communication contexts: Web3 Community Security and Business Communication) Tj
+/F1 10 Tf 54.00 340.00 Td (Intelligence. It also includes connected communication ingestion foundations, document) Tj
+/F1 10 Tf 54.00 326.00 Td (intelligence for supported file types, a Communication Inbox, an Approval Center, event logs,) Tj
+/F1 10 Tf 54.00 312.00 Td (reports, and durable workflow storage.) Tj
+/F1 10 Tf 54.00 293.00 Td (The platform is built around a safety-first operating model. It analyzes messages, explains why) Tj
+/F1 10 Tf 54.00 279.00 Td (a risk or recommendation was produced, generates suggested response guidance, and requires human) Tj
+/F1 10 Tf 54.00 265.00 Td (review for sensitive or external actions. AgenticOps AI does not autonomously send emails, reply) Tj
+/F1 10 Tf 54.00 251.00 Td (to communities, moderate users, spend money, modify inboxes, or launch campaigns.) Tj
+/F2 17 Tf 54.00 220.00 Td (The Problem) Tj
+/F1 10 Tf 54.00 186.00 Td (Organizations increasingly operate across fragmented communication channels. Customer) Tj
+/F1 10 Tf 54.00 172.00 Td (conversations, security incidents, operational issues, and business records are spread across) Tj
+/F1 10 Tf 54.00 158.00 Td (email, Telegram, Discord, Facebook Messenger, Instagram, uploaded documents, spreadsheets, and) Tj
+/F1 10 Tf 54.00 144.00 Td (manual workflows.) Tj
+/F1 10 Tf 54.00 125.00 Td (This fragmentation creates several problems:) Tj
+/F1 10 Tf 66.00 106.00 Td (- Web3 scams and phishing campaigns move quickly through community channels.) Tj
+/F1 10 Tf 66.00 92.00 Td (- Social engineering attacks often imitate administrators, support teams, wallet recovery) Tj
+/F1 10 Tf 66.00 78.00 Td (flows, or trusted brands.) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Length 86 >>
+stream
+BT /F1 8 Tf 54.00 28 Td (AgenticOps AI Technical White Paper v1.0 - Page 1 of 9) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents [5 0 R 6 0 R] >>
+endobj
+8 0 obj
+<< /Length 3244 >>
+stream
+BT
+/F1 10 Tf 66.00 738.00 Td (- Manual moderation is slow, inconsistent, and hard to audit.) Tj
+/F1 10 Tf 66.00 724.00 Td (- Business communication overload makes it difficult to identify urgent requests, complaints,) Tj
+/F1 10 Tf 66.00 710.00 Td (leads, risk indicators, and follow-up actions.) Tj
+/F1 10 Tf 66.00 696.00 Td (- Documents and spreadsheets contain important business signals, but they are rarely analyzed) Tj
+/F1 10 Tf 66.00 682.00 Td (together with communication records.) Tj
+/F1 10 Tf 66.00 668.00 Td (- Teams lack centralized communication intelligence that can normalize messages, analyze) Tj
+/F1 10 Tf 66.00 654.00 Td (context, explain risk, and preserve review history.) Tj
+/F1 10 Tf 54.00 635.00 Td (The result is operational risk. Teams may miss scams, respond inconsistently, overlook customer) Tj
+/F1 10 Tf 54.00 621.00 Td (intent, or make decisions without a clear audit trail.) Tj
+/F2 17 Tf 54.00 590.00 Td (The Solution) Tj
+/F1 10 Tf 54.00 556.00 Td (AgenticOps AI provides one unified intelligence engine capable of analyzing communications from) Tj
+/F1 10 Tf 54.00 542.00 Td (multiple inputs and channels through a shared pipeline.) Tj
+/F1 10 Tf 54.00 523.00 Td (The platform combines:) Tj
+/F1 10 Tf 66.00 504.00 Td (- Deterministic rules for stable, explainable security decisions.) Tj
+/F1 10 Tf 66.00 490.00 Td (- AI reasoning for classification, summarization, sentiment, intent, priority, and recommended) Tj
+/F1 10 Tf 66.00 476.00 Td (actions.) Tj
+/F1 10 Tf 66.00 462.00 Td (- Structured outputs that are safe for dashboards, integrations, reports, and external AI) Tj
+/F1 10 Tf 66.00 448.00 Td (systems.) Tj
+/F1 10 Tf 66.00 434.00 Td (- Confidence scoring to help users understand uncertainty.) Tj
+/F1 10 Tf 66.00 420.00 Td (- Human review workflows so recommendations remain controlled and auditable.) Tj
+/F1 10 Tf 54.00 401.00 Td (Every supported message or document is normalized before analysis. The system then identifies) Tj
+/F1 10 Tf 54.00 387.00 Td (the communication context, applies deterministic checks where appropriate, runs AI-assisted) Tj
+/F1 10 Tf 54.00 373.00 Td (reasoning, and returns explainable results. This architecture allows AgenticOps AI to support) Tj
+/F1 10 Tf 54.00 359.00 Td (Web3 Community Security, Business Communication Intelligence, connected integrations, document) Tj
+/F1 10 Tf 54.00 345.00 Td (analysis, and future expansion without creating separate one-off engines for every channel.) Tj
+/F2 17 Tf 54.00 314.00 Td (Current Platform) Tj
+/F1 10 Tf 54.00 280.00 Td (This section documents only capabilities that exist in Version 1.0.) Tj
+/F2 13 Tf 54.00 253.00 Td (Implemented Communication Contexts) Tj
+/F1 10 Tf 66.00 227.00 Td (- Web3 Community Security) Tj
+/F1 10 Tf 66.00 213.00 Td (- Business Communication Intelligence) Tj
+/F2 13 Tf 54.00 186.00 Td (Implemented Workspaces and Views) Tj
+/F1 10 Tf 66.00 160.00 Td (- Communication Inbox) Tj
+/F1 10 Tf 66.00 146.00 Td (- Human Approval Center) Tj
+/F1 10 Tf 66.00 132.00 Td (- Event Log) Tj
+/F1 10 Tf 66.00 118.00 Td (- Reports Dashboard) Tj
+/F1 10 Tf 66.00 104.00 Td (- Knowledge Hub) Tj
+/F1 10 Tf 66.00 90.00 Td (- Integrations and AI Workspace) Tj
+/F1 10 Tf 66.00 76.00 Td (- Business Intelligence Workspace) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Length 86 >>
+stream
+BT /F1 8 Tf 54.00 28 Td (AgenticOps AI Technical White Paper v1.0 - Page 2 of 9) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents [8 0 R 9 0 R] >>
+endobj
+11 0 obj
+<< /Length 3053 >>
+stream
+BT
+/F1 10 Tf 66.00 738.00 Td (- Web3 security demo and reports) Tj
+/F2 13 Tf 54.00 711.00 Td (Implemented File and Document Intelligence) Tj
+/F1 10 Tf 66.00 685.00 Td (- TXT analysis) Tj
+/F1 10 Tf 66.00 671.00 Td (- PDF analysis for text-based PDFs) Tj
+/F1 10 Tf 66.00 657.00 Td (- DOCX analysis) Tj
+/F1 10 Tf 66.00 643.00 Td (- CSV analysis) Tj
+/F1 10 Tf 66.00 629.00 Td (- XLSX analysis) Tj
+/F1 10 Tf 54.00 610.00 Td (The platform does not claim OCR for scanned PDFs, macro execution, certified accounting audit,) Tj
+/F1 10 Tf 54.00 596.00 Td (legal advice, or autonomous business execution.) Tj
+/F2 13 Tf 54.00 569.00 Td (Implemented Communication Integrations) Tj
+/F1 10 Tf 66.00 543.00 Td (- Gmail integration with readonly access) Tj
+/F1 10 Tf 66.00 529.00 Td (- Telegram webhook integration) Tj
+/F1 10 Tf 66.00 515.00 Td (- Facebook Messenger integration) Tj
+/F1 10 Tf 66.00 501.00 Td (- Instagram integration foundation) Tj
+/F1 10 Tf 66.00 487.00 Td (- Discord Gateway worker) Tj
+/F1 10 Tf 54.00 468.00 Td (Gmail remains readonly. Discord processing runs through a persistent worker. Telegram and Meta) Tj
+/F1 10 Tf 54.00 454.00 Td (webhook handling operate in analyze-only or approval-required mode. Instagram support is) Tj
+/F1 10 Tf 54.00 440.00 Td (described as a foundation where production event coverage depends on provider delivery, account) Tj
+/F1 10 Tf 54.00 426.00 Td (configuration, and permissions.) Tj
+/F2 13 Tf 54.00 399.00 Td (Implemented Intelligence Outputs) Tj
+/F1 10 Tf 66.00 373.00 Td (- Explainable AI-assisted analysis) Tj
+/F1 10 Tf 66.00 359.00 Td (- Deterministic risk scoring for Web3 security rules) Tj
+/F1 10 Tf 66.00 345.00 Td (- Confidence scoring) Tj
+/F1 10 Tf 66.00 331.00 Td (- Risk signals) Tj
+/F1 10 Tf 66.00 317.00 Td (- Intent and sentiment where supported) Tj
+/F1 10 Tf 66.00 303.00 Td (- Recommended actions) Tj
+/F1 10 Tf 66.00 289.00 Td (- Suggested reply outlines) Tj
+/F1 10 Tf 66.00 275.00 Td (- Human review recommendations) Tj
+/F1 10 Tf 66.00 261.00 Td (- Batch analysis and reports) Tj
+/F1 10 Tf 66.00 247.00 Td (- Durable integration event and workflow persistence using Upstash KV) Tj
+/F2 17 Tf 54.00 216.00 Td (AI Reasoning) Tj
+/F1 10 Tf 54.00 182.00 Td (AgenticOps AI uses a layered reasoning model:) Tj
+/F1 10 Tf 54.00 163.00 Td (Deterministic Rules + OpenRouter LLM Reasoning + Human Approval) Tj
+/F1 10 Tf 54.00 144.00 Td (Deterministic rules provide stable, reproducible signals. For example, requests for seed) Tj
+/F1 10 Tf 54.00 130.00 Td (phrases, private keys, fake administrator contact, suspicious links, remote access, OTPs,) Tj
+/F1 10 Tf 54.00 116.00 Td (passwords, prompt injection, and spam are detected through explicit rule logic. These rules) Tj
+/F1 10 Tf 54.00 102.00 Td (produce rule IDs, severity, evidence, and recommended actions.) Tj
+/F1 10 Tf 54.00 83.00 Td (OpenRouter-backed LLM reasoning adds classification, summarization, intent, sentiment,) Tj
+/F1 10 Tf 54.00 69.00 Td (confidence, and response guidance. AI reasoning is useful because many communications are) Tj
+ET
+endstream
+endobj
+12 0 obj
+<< /Length 86 >>
+stream
+BT /F1 8 Tf 54.00 28 Td (AgenticOps AI Technical White Paper v1.0 - Page 3 of 9) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents [11 0 R 12 0 R] >>
+endobj
+14 0 obj
+<< /Length 3528 >>
+stream
+BT
+/F1 10 Tf 54.00 738.00 Td (ambiguous, context-dependent, or operational rather than purely security-related.) Tj
+/F1 10 Tf 54.00 719.00 Td (Human approval is the final safety boundary. Suggested replies and suggested actions remain) Tj
+/F1 10 Tf 54.00 705.00 Td (internal recommendations unless explicitly approved through a controlled workflow. Version 1.0) Tj
+/F1 10 Tf 54.00 691.00 Td (does not execute autonomous external actions.) Tj
+/F1 10 Tf 54.00 672.00 Td (Explainability matters because organizations need to know why a message was classified as risky,) Tj
+/F1 10 Tf 54.00 658.00 Td (urgent, or high priority. AgenticOps AI surfaces deterministic rule matches, confidence scores,) Tj
+/F1 10 Tf 54.00 644.00 Td (risk signals, and written explanations so human reviewers can make informed decisions.) Tj
+/F2 17 Tf 54.00 613.00 Td (Architecture) Tj
+/F1 10 Tf 54.00 579.00 Td (AgenticOps AI uses a provider-neutral communication pipeline. Each source adapter converts) Tj
+/F1 10 Tf 54.00 565.00 Td (external or uploaded content into internal structures before analysis.) Tj
+/F1 8 Tf 68.00 546.00 Td (flowchart TD) Tj
+/F1 8 Tf 68.00 535.00 Td (A[Incoming message or file] --> B[Validate and bound input]) Tj
+/F1 8 Tf 68.00 524.00 Td (B --> C[Normalize message or extracted content]) Tj
+/F1 8 Tf 68.00 513.00 Td (C --> D[Identify communication context]) Tj
+/F1 8 Tf 68.00 502.00 Td (D --> E[Deterministic checks]) Tj
+/F1 8 Tf 68.00 491.00 Td (E --> F[AI-assisted analysis]) Tj
+/F1 8 Tf 68.00 480.00 Td (F --> G[Structured output]) Tj
+/F1 8 Tf 68.00 469.00 Td (G --> H[Communication Inbox]) Tj
+/F1 8 Tf 68.00 458.00 Td (G --> I[Reports Dashboard]) Tj
+/F1 8 Tf 68.00 447.00 Td (G --> J[Approval Center]) Tj
+/F1 8 Tf 68.00 436.00 Td (G --> K[Event Log and audit record]) Tj
+/F2 13 Tf 54.00 408.00 Td (Pipeline Stages) Tj
+/F1 10 Tf 66.00 382.00 Td (1. Message or file ingestion receives manual text, supported files, Gmail messages, Telegram) Tj
+/F1 10 Tf 66.00 368.00 Td (updates, Discord messages, Facebook Messenger events, or supported Instagram events.) Tj
+/F1 10 Tf 66.00 354.00 Td (2. Validation enforces bounded inputs, supported file types, and safe parsing constraints.) Tj
+/F1 10 Tf 66.00 340.00 Td (3. Normalization converts provider-specific payloads into a shared internal model.) Tj
+/F1 10 Tf 66.00 326.00 Td (4. Context identification separates Web3 security, business communication, email, social, and) Tj
+/F1 10 Tf 66.00 312.00 Td (general contexts where supported.) Tj
+/F1 10 Tf 66.00 298.00 Td (5. Deterministic checks run stable security rules where applicable.) Tj
+/F1 10 Tf 66.00 284.00 Td (6. AI-assisted analysis produces structured intelligence.) Tj
+/F1 10 Tf 66.00 270.00 Td (7. Outputs are shown in dashboards, reports, inboxes, event logs, and approval workflows.) Tj
+/F1 10 Tf 66.00 256.00 Td (8. Human review remains required for sensitive recommendations and any future external) Tj
+/F1 10 Tf 66.00 242.00 Td (execution.) Tj
+/F2 17 Tf 54.00 211.00 Td (MCP Service) Tj
+/F1 10 Tf 54.00 177.00 Td (AgenticOps AI exposes an A2MCP-compatible Communication Intelligence service for external AI) Tj
+/F1 10 Tf 54.00 163.00 Td (systems.) Tj
+/F1 10 Tf 54.00 144.00 Td (Production endpoints:) Tj
+/F1 10 Tf 66.00 125.00 Td (- MCP endpoint: https://agenticopsai.xyz/api/mcp) Tj
+/F1 10 Tf 66.00 111.00 Td (- Analysis endpoint: https://agenticopsai.xyz/api/okx/analyze) Tj
+/F1 10 Tf 66.00 97.00 Td (- Health endpoint: https://agenticopsai.xyz/api/v1/health) Tj
+/F1 10 Tf 54.00 78.00 Td (Callable tool:) Tj
+ET
+endstream
+endobj
+15 0 obj
+<< /Length 86 >>
+stream
+BT /F1 8 Tf 54.00 28 Td (AgenticOps AI Technical White Paper v1.0 - Page 4 of 9) Tj ET
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents [14 0 R 15 0 R] >>
+endobj
+17 0 obj
+<< /Length 3293 >>
+stream
+BT
+/F1 10 Tf 66.00 738.00 Td (- analyze_communication_risk) Tj
+/F1 10 Tf 54.00 719.00 Td (External AI systems can call the MCP endpoint to discover the available tool and invoke message) Tj
+/F1 10 Tf 54.00 705.00 Td (analysis. The service accepts bounded message content, communication context, and source) Tj
+/F1 10 Tf 54.00 691.00 Td (channel. It returns summary, intent, sentiment, priority, risk level, risk signals, recommended) Tj
+/F1 10 Tf 54.00 677.00 Td (action, suggested reply outline, human-review requirement, confidence, and explanation.) Tj
+/F1 10 Tf 54.00 658.00 Td (The MCP service is analyze-only. It does not expose Gmail synchronization, OAuth operations,) Tj
+/F1 10 Tf 54.00 644.00 Td (provider credentials, private integration events, approval mutation, or autonomous execution.) Tj
+/F2 17 Tf 54.00 613.00 Td (Security) Tj
+/F1 10 Tf 54.00 579.00 Td (Version 1.0 applies several security controls:) Tj
+/F1 10 Tf 66.00 560.00 Td (- Bounded public input sizes.) Tj
+/F1 10 Tf 66.00 546.00 Td (- Zod validation for structured requests and responses.) Tj
+/F1 10 Tf 66.00 532.00 Td (- Sanitized API errors.) Tj
+/F1 10 Tf 66.00 518.00 Td (- No committed secrets.) Tj
+/F1 10 Tf 66.00 504.00 Td (- Server-only provider credentials.) Tj
+/F1 10 Tf 66.00 490.00 Td (- Gmail readonly scope only.) Tj
+/F1 10 Tf 66.00 476.00 Td (- Encrypted durable OAuth-token storage for Google tokens.) Tj
+/F1 10 Tf 66.00 462.00 Td (- Webhook validation for supported providers.) Tj
+/F1 10 Tf 66.00 448.00 Td (- Telegram secret-token validation.) Tj
+/F1 10 Tf 66.00 434.00 Td (- Discord internal-secret validation.) Tj
+/F1 10 Tf 66.00 420.00 Td (- Meta signature validation where app secret is available.) Tj
+/F1 10 Tf 66.00 406.00 Td (- No raw OAuth tokens exposed to the browser.) Tj
+/F1 10 Tf 66.00 392.00 Td (- No autonomous replies, moderation, inbox mutation, ad actions, or payment actions.) Tj
+/F1 10 Tf 66.00 378.00 Td (- Human approval for recommendations and future external actions.) Tj
+/F1 10 Tf 54.00 359.00 Td (The platform stores bounded analysis data and workflow records where durable repositories are) Tj
+/F1 10 Tf 54.00 345.00 Td (configured. It avoids storing raw provider payloads or unbounded private message bodies by) Tj
+/F1 10 Tf 54.00 331.00 Td (default.) Tj
+/F2 17 Tf 54.00 300.00 Td (Technical Stack) Tj
+/F1 10 Tf 54.00 266.00 Td (Version 1.0 uses:) Tj
+/F1 10 Tf 66.00 247.00 Td (- Next.js App Router) Tj
+/F1 10 Tf 66.00 233.00 Td (- React) Tj
+/F1 10 Tf 66.00 219.00 Td (- TypeScript) Tj
+/F1 10 Tf 66.00 205.00 Td (- Tailwind CSS) Tj
+/F1 10 Tf 66.00 191.00 Td (- Zod) Tj
+/F1 10 Tf 66.00 177.00 Td (- OpenAI-compatible client configured for OpenRouter-compatible LLM reasoning) Tj
+/F1 10 Tf 66.00 163.00 Td (- Upstash Redis / Vercel KV for durable integration events and workflows) Tj
+/F1 10 Tf 66.00 149.00 Td (- Encrypted OAuth token storage for Google tokens) Tj
+/F1 10 Tf 66.00 135.00 Td (- Gmail API with gmail.readonly) Tj
+/F1 10 Tf 66.00 121.00 Td (- Telegram webhook processing) Tj
+/F1 10 Tf 66.00 107.00 Td (- Meta webhook processing for Facebook Messenger and Instagram foundation events) Tj
+/F1 10 Tf 66.00 93.00 Td (- Discord.js Gateway worker for persistent Discord ingestion) Tj
+/F1 10 Tf 66.00 79.00 Td (- Node.js worker runtime for Discord deployment) Tj
+ET
+endstream
+endobj
+18 0 obj
+<< /Length 86 >>
+stream
+BT /F1 8 Tf 54.00 28 Td (AgenticOps AI Technical White Paper v1.0 - Page 5 of 9) Tj ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents [17 0 R 18 0 R] >>
+endobj
+20 0 obj
+<< /Length 2448 >>
+stream
+BT
+/F1 10 Tf 66.00 738.00 Td (- Maintained document parsing libraries for TXT, PDF, DOCX, CSV, and XLSX workflows) Tj
+/F1 10 Tf 66.00 724.00 Td (- Vitest, ESLint, TypeScript checking, and production smoke tests) Tj
+/F2 17 Tf 54.00 693.00 Td (Current Deployment) Tj
+/F1 10 Tf 54.00 659.00 Td (Production website:) Tj
+/F1 10 Tf 66.00 640.00 Td (- https://agenticopsai.xyz) Tj
+/F1 10 Tf 54.00 621.00 Td (Production service endpoints:) Tj
+/F1 10 Tf 66.00 602.00 Td (- https://agenticopsai.xyz/api/mcp) Tj
+/F1 10 Tf 66.00 588.00 Td (- https://agenticopsai.xyz/api/okx/analyze) Tj
+/F1 10 Tf 66.00 574.00 Td (- https://agenticopsai.xyz/api/v1/health) Tj
+/F1 10 Tf 54.00 555.00 Td (Version 1.0 production validation included:) Tj
+/F1 10 Tf 66.00 536.00 Td (- Build validation) Tj
+/F1 10 Tf 66.00 522.00 Td (- Lint validation) Tj
+/F1 10 Tf 66.00 508.00 Td (- TypeScript typecheck) Tj
+/F1 10 Tf 66.00 494.00 Td (- Unit tests) Tj
+/F1 10 Tf 66.00 480.00 Td (- Endpoint validation) Tj
+/F1 10 Tf 66.00 466.00 Td (- Production smoke verification against the custom production domain) Tj
+/F1 10 Tf 54.00 447.00 Td (The Next.js application is deployed on Vercel. The Discord Gateway worker runs separately as a) Tj
+/F1 10 Tf 54.00 433.00 Td (persistent service. Durable integration event storage uses Upstash KV / Vercel KV configuration.) Tj
+/F2 17 Tf 54.00 402.00 Td (Use Cases) Tj
+/F2 13 Tf 54.00 360.00 Td (Web3 Communities) Tj
+/F1 10 Tf 54.00 334.00 Td (Detect scams, phishing, fake administrators, wallet-risk patterns, credential requests,) Tj
+/F1 10 Tf 54.00 320.00 Td (suspicious links, and social engineering. Generate explainable moderator guidance for human) Tj
+/F1 10 Tf 54.00 306.00 Td (review.) Tj
+/F2 13 Tf 54.00 279.00 Td (Business Operations) Tj
+/F1 10 Tf 54.00 253.00 Td (Analyze communications and uploaded business files for intent, priority, risk, requested) Tj
+/F1 10 Tf 54.00 239.00 Td (actions, missing context, and recommended next steps.) Tj
+/F2 13 Tf 54.00 212.00 Td (Customer Support) Tj
+/F1 10 Tf 54.00 186.00 Td (Identify support requests, complaints, urgency, sentiment, missing information, and escalation) Tj
+/F1 10 Tf 54.00 172.00 Td (needs.) Tj
+/F2 13 Tf 54.00 145.00 Td (Fraud Detection) Tj
+/F1 10 Tf 54.00 119.00 Td (Surface phishing indicators, credential requests, social engineering patterns, impersonation,) Tj
+/F1 10 Tf 54.00 105.00 Td (and suspicious action requests.) Tj
+/F2 13 Tf 54.00 78.00 Td (Operational Risk) Tj
+ET
+endstream
+endobj
+21 0 obj
+<< /Length 86 >>
+stream
+BT /F1 8 Tf 54.00 28 Td (AgenticOps AI Technical White Paper v1.0 - Page 6 of 9) Tj ET
+endstream
+endobj
+22 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents [20 0 R 21 0 R] >>
+endobj
+23 0 obj
+<< /Length 2348 >>
+stream
+BT
+/F1 10 Tf 54.00 733.00 Td (Review business communications, documents, spreadsheets, and budget records for preliminary risk) Tj
+/F1 10 Tf 54.00 719.00 Td (indicators, anomalies, missing information, and follow-up questions.) Tj
+/F2 13 Tf 54.00 692.00 Td (Communication Intelligence) Tj
+/F1 10 Tf 54.00 666.00 Td (Normalize communications from supported sources into one pipeline for structured analysis, inbox) Tj
+/F1 10 Tf 54.00 652.00 Td (views, reports, event logs, and approval workflows.) Tj
+/F2 17 Tf 54.00 621.00 Td (OKX Integration) Tj
+/F1 10 Tf 54.00 587.00 Td (AgenticOps AI exposes an A2MCP-compatible Communication Intelligence service.) Tj
+/F1 10 Tf 54.00 568.00 Td (Current callable tool:) Tj
+/F1 10 Tf 66.00 549.00 Td (- analyze_communication_risk) Tj
+/F1 10 Tf 54.00 530.00 Td (The service has been submitted to OKX for review. This white paper does not claim OKX approval) Tj
+/F1 10 Tf 54.00 516.00 Td (or public listing until review is complete.) Tj
+/F1 10 Tf 54.00 497.00 Td (The submitted service is analyze-only and uses:) Tj
+/F1 10 Tf 66.00 478.00 Td (- MCP endpoint: https://agenticopsai.xyz/api/mcp) Tj
+/F1 10 Tf 66.00 464.00 Td (- Service name: Communication Intelligence) Tj
+/F1 10 Tf 66.00 450.00 Td (- Fee: 0 USDT) Tj
+/F1 10 Tf 66.00 436.00 Td (- Human-review boundary: required for suggested actions and external execution) Tj
+/F2 17 Tf 54.00 405.00 Td (Future Roadmap \(Planned Features\)) Tj
+/F1 10 Tf 54.00 371.00 Td (Everything in this section is planned future work unless separately marked implemented elsewhere) Tj
+/F1 10 Tf 54.00 357.00 Td (in the product.) Tj
+/F2 13 Tf 54.00 330.00 Td (Communication Channels) Tj
+/F1 10 Tf 66.00 304.00 Td (- X \(Twitter\)) Tj
+/F1 10 Tf 66.00 290.00 Td (- LinkedIn) Tj
+/F1 10 Tf 66.00 276.00 Td (- Slack) Tj
+/F1 10 Tf 66.00 262.00 Td (- Microsoft Teams) Tj
+/F1 10 Tf 66.00 248.00 Td (- WhatsApp Business) Tj
+/F2 13 Tf 54.00 221.00 Td (Social Intelligence) Tj
+/F1 10 Tf 66.00 195.00 Td (- Social comment intelligence) Tj
+/F1 10 Tf 66.00 181.00 Td (- Direct message intelligence) Tj
+/F1 10 Tf 66.00 167.00 Td (- Brand monitoring) Tj
+/F1 10 Tf 66.00 153.00 Td (- Reputation analytics) Tj
+/F2 13 Tf 54.00 126.00 Td (Marketing Intelligence) Tj
+/F1 10 Tf 66.00 100.00 Td (- Social ad management with human approval) Tj
+/F1 10 Tf 66.00 86.00 Td (- AI marketing intelligence) Tj
+ET
+endstream
+endobj
+24 0 obj
+<< /Length 86 >>
+stream
+BT /F1 8 Tf 54.00 28 Td (AgenticOps AI Technical White Paper v1.0 - Page 7 of 9) Tj ET
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents [23 0 R 24 0 R] >>
+endobj
+26 0 obj
+<< /Length 2657 >>
+stream
+BT
+/F2 13 Tf 54.00 738.00 Td (Business Operations) Tj
+/F1 10 Tf 66.00 712.00 Td (- Gmail send/modify actions with user approval) Tj
+/F1 10 Tf 66.00 698.00 Td (- Calendar intelligence) Tj
+/F1 10 Tf 66.00 684.00 Td (- Workflow automation) Tj
+/F2 13 Tf 54.00 657.00 Td (Enterprise) Tj
+/F1 10 Tf 66.00 631.00 Td (- BigQuery integration) Tj
+/F1 10 Tf 66.00 617.00 Td (- Google Cloud integrations) Tj
+/F1 10 Tf 66.00 603.00 Td (- Business intelligence expansion) Tj
+/F2 13 Tf 54.00 576.00 Td (AI Platform) Tj
+/F1 10 Tf 66.00 550.00 Td (- Multiple LLM providers) Tj
+/F1 10 Tf 66.00 536.00 Td (- AI agent orchestration) Tj
+/F1 10 Tf 66.00 522.00 Td (- AI business operator) Tj
+/F2 17 Tf 54.00 491.00 Td (Conclusion) Tj
+/F1 10 Tf 54.00 457.00 Td (AgenticOps AI is a Communication Intelligence Platform designed to help teams understand,) Tj
+/F1 10 Tf 54.00 443.00 Td (prioritize, and safely respond to modern communications. Version 1.0 represents the first) Tj
+/F1 10 Tf 54.00 429.00 Td (production release: Web3 Community Security, Business Communication Intelligence, connected) Tj
+/F1 10 Tf 54.00 415.00 Td (ingestion foundations, document analysis, explainable AI outputs, reports, event logs, and human) Tj
+/F1 10 Tf 54.00 401.00 Td (approval workflows.) Tj
+/F1 10 Tf 54.00 382.00 Td (The long-term vision is a broader AI operations layer for communication, business intelligence,) Tj
+/F1 10 Tf 54.00 368.00 Td (audit, compliance, marketing, and workflow automation. The Version 1.0 boundary remains clear:) Tj
+/F1 10 Tf 54.00 354.00 Td (analyze communications, explain risk, recommend actions, and keep humans in control.) Tj
+/F2 17 Tf 54.00 323.00 Td (Appendix) Tj
+/F2 13 Tf 54.00 281.00 Td (API Example) Tj
+/F1 8 Tf 68.00 255.00 Td (curl -X POST https://agenticopsai.xyz/api/okx/analyze \\) Tj
+/F1 8 Tf 68.00 244.00 Td (-H "content-type: application/json" \\) Tj
+/F1 8 Tf 68.00 233.00 Td (-d '{) Tj
+/F1 8 Tf 68.00 222.00 Td ("content": "Urgent wallet verification. Send your seed phrase now.",) Tj
+/F1 8 Tf 68.00 211.00 Td ("context": "web3-community",) Tj
+/F1 8 Tf 68.00 200.00 Td ("source": "telegram") Tj
+/F1 8 Tf 68.00 189.00 Td (}') Tj
+/F2 13 Tf 54.00 161.00 Td (API Response Example) Tj
+/F1 8 Tf 68.00 135.00 Td ({) Tj
+/F1 8 Tf 68.00 124.00 Td ("summary": "AI analysis failed; deterministic result was preserved.",) Tj
+/F1 8 Tf 68.00 113.00 Td ("intent": "General Communication review",) Tj
+/F1 8 Tf 68.00 102.00 Td ("sentiment": "neutral",) Tj
+/F1 8 Tf 68.00 91.00 Td ("priority": "critical",) Tj
+/F1 8 Tf 68.00 80.00 Td ("riskLevel": "critical",) Tj
+/F1 8 Tf 68.00 69.00 Td ("riskSignals": ["SEC-001: Seed phrase or recovery phrase request"],) Tj
+ET
+endstream
+endobj
+27 0 obj
+<< /Length 86 >>
+stream
+BT /F1 8 Tf 54.00 28 Td (AgenticOps AI Technical White Paper v1.0 - Page 8 of 9) Tj ET
+endstream
+endobj
+28 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents [26 0 R 27 0 R] >>
+endobj
+29 0 obj
+<< /Length 2861 >>
+stream
+BT
+/F1 8 Tf 68.00 738.00 Td ("recommendedAction": "Use deterministic security results only and escalate for human review.",) Tj
+/F1 8 Tf 68.00 727.00 Td ("suggestedReplyOutline": "Suggested reply for human review: Do not share seed phrases, private keys, passwords, OTP) Tj
+/F1 8 Tf 68.00 716.00 Td (codes or payment details.",) Tj
+/F1 8 Tf 68.00 705.00 Td ("requiresHumanReview": true,) Tj
+/F1 8 Tf 68.00 694.00 Td ("confidence": 0,) Tj
+/F1 8 Tf 68.00 683.00 Td ("explanation": "Source telegram was treated as untrusted input. Deterministic risk was CRITICAL.") Tj
+/F1 8 Tf 68.00 672.00 Td (}) Tj
+/F2 13 Tf 54.00 644.00 Td (MCP Example) Tj
+/F1 8 Tf 68.00 618.00 Td ({) Tj
+/F1 8 Tf 68.00 607.00 Td ("jsonrpc": "2.0",) Tj
+/F1 8 Tf 68.00 596.00 Td ("id": 1,) Tj
+/F1 8 Tf 68.00 585.00 Td ("method": "tools/call",) Tj
+/F1 8 Tf 68.00 574.00 Td ("params": {) Tj
+/F1 8 Tf 68.00 563.00 Td ("name": "analyze_communication_risk",) Tj
+/F1 8 Tf 68.00 552.00 Td ("arguments": {) Tj
+/F1 8 Tf 68.00 541.00 Td ("content": "Fake admin asks for a private key.",) Tj
+/F1 8 Tf 68.00 530.00 Td ("context": "web3-community",) Tj
+/F1 8 Tf 68.00 519.00 Td ("source": "discord") Tj
+/F1 8 Tf 68.00 508.00 Td (}) Tj
+/F1 8 Tf 68.00 497.00 Td (}) Tj
+/F1 8 Tf 68.00 486.00 Td (}) Tj
+/F2 13 Tf 54.00 458.00 Td (Glossary) Tj
+/F1 10 Tf 66.00 432.00 Td (- A2MCP: Agent-to-MCP service mode for exposing a callable tool to external AI systems.) Tj
+/F1 10 Tf 66.00 418.00 Td (- Communication Intelligence: Structured analysis of message content, context, risk, priority,) Tj
+/F1 10 Tf 66.00 404.00 Td (sentiment, and recommended action.) Tj
+/F1 10 Tf 66.00 390.00 Td (- Deterministic Rule: A stable rule that produces reproducible security signals without) Tj
+/F1 10 Tf 66.00 376.00 Td (relying on model judgment.) Tj
+/F1 10 Tf 66.00 362.00 Td (- Human Approval: A workflow boundary requiring a person to review recommendations before) Tj
+/F1 10 Tf 66.00 348.00 Td (external action.) Tj
+/F1 10 Tf 66.00 334.00 Td (- MCP: Model Context Protocol-style interface for tool discovery and invocation.) Tj
+/F1 10 Tf 66.00 320.00 Td (- Normalized Message: Provider-neutral representation of communication content before) Tj
+/F1 10 Tf 66.00 306.00 Td (analysis.) Tj
+/F1 10 Tf 66.00 292.00 Td (- Upstash KV: Durable key-value storage used for integration events and workflow records.) Tj
+/F2 13 Tf 54.00 265.00 Td (Architecture References) Tj
+/F1 10 Tf 66.00 239.00 Td (- docs/architecture.md) Tj
+/F1 10 Tf 66.00 225.00 Td (- docs/implementation-plan.md) Tj
+/F1 10 Tf 66.00 211.00 Td (- docs/okx-submission.md) Tj
+/F1 10 Tf 66.00 197.00 Td (- docs/api-testing.md) Tj
+/F1 10 Tf 66.00 183.00 Td (- lib/messages/) Tj
+/F1 10 Tf 66.00 169.00 Td (- lib/integrations/) Tj
+/F1 10 Tf 66.00 155.00 Td (- lib/security/) Tj
+/F1 10 Tf 66.00 141.00 Td (- lib/analysis/) Tj
+/F1 10 Tf 66.00 127.00 Td (- lib/business/) Tj
+ET
+endstream
+endobj
+30 0 obj
+<< /Length 86 >>
+stream
+BT /F1 8 Tf 54.00 28 Td (AgenticOps AI Technical White Paper v1.0 - Page 9 of 9) Tj ET
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents [29 0 R 30 0 R] >>
+endobj
+xref
+0 32
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000171 00000 n 
+0000000241 00000 n 
+0000000316 00000 n 
+0000003610 00000 n 
+0000003746 00000 n 
+0000003890 00000 n 
+0000007186 00000 n 
+0000007322 00000 n 
+0000007467 00000 n 
+0000010573 00000 n 
+0000010710 00000 n 
+0000010857 00000 n 
+0000014438 00000 n 
+0000014575 00000 n 
+0000014722 00000 n 
+0000018068 00000 n 
+0000018205 00000 n 
+0000018352 00000 n 
+0000020853 00000 n 
+0000020990 00000 n 
+0000021137 00000 n 
+0000023538 00000 n 
+0000023675 00000 n 
+0000023822 00000 n 
+0000026532 00000 n 
+0000026669 00000 n 
+0000026816 00000 n 
+0000029730 00000 n 
+0000029867 00000 n 
+trailer
+<< /Size 32 /Root 1 0 R >>
+startxref
+30014
+%%EOF
