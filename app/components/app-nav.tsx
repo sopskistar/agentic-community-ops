@@ -15,6 +15,8 @@ const navItems = [
   { label: "ASP Docs", href: "/docs/asp" },
 ];
 
+const logoPath = "/logos/agenticops-ai-final-1080.png";
+
 export function AppNav() {
   const pathname = usePathname();
   const [theme, setTheme] = useState<"light" | "dark">(() => getInitialTheme());
@@ -45,7 +47,7 @@ export function AppNav() {
             className="group flex w-fit items-center gap-3 rounded-xl"
           >
             <Image
-              src="/logo/Agentic-Ops.jpg"
+              src={logoPath}
               alt="AgenticOps AI logo"
               width={44}
               height={44}

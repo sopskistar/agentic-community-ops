@@ -8,7 +8,7 @@ AgenticOps AI is positioned as an AI Communication Intelligence Platform. The cu
 
 The roadmap expands into AI Email Workspace, AI Marketing Intelligence, AI Business Intelligence, AI Audit & Compliance and AI Business Operator workflows through document ingestion, channel-aware analysis, approval workflows, safe automation and developer platform APIs. Roadmap features must stay clearly labeled until implemented; the application must not claim live Facebook, Instagram, email sending, live chat, auto-send, enterprise tenancy or database-backed functionality before those features exist. The current UI uses status labels such as Implemented, In Progress, Planned and Future to preserve that distinction.
 
-The official logo asset is served from `public/logo/Agentic-Ops.jpg` and used by application branding and metadata without altering the supplied JPG. Next.js app icon files also use exact copies at `app/icon.jpg` and `app/apple-icon.jpg`; the existing `app/favicon.ico` remains because the favicon convention is `.ico` only.
+The official logo asset is served from `public/logos/agenticops-ai-final-1080.png` and used by application branding, metadata and social preview images without altering the supplied PNG. Browser icon metadata points to the official PNG asset.
 
 ## Capability Status
 

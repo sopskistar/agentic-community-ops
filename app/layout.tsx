@@ -6,6 +6,7 @@ import { AppNav } from "./components/app-nav";
 import { appDescription, appName, appVersion, getAppBaseUrl } from "../lib/app-config";
 
 const appUrl = getAppBaseUrl();
+const logoPath = "/logos/agenticops-ai-final-1080.png";
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
@@ -23,9 +24,9 @@ export const metadata: Metadata = {
     "human approval workflows",
   ],
   icons: {
-    icon: "/logo/Agentic-Ops.jpg",
-    shortcut: "/logo/Agentic-Ops.jpg",
-    apple: "/apple-icon.jpg",
+    icon: logoPath,
+    shortcut: logoPath,
+    apple: logoPath,
   },
   alternates: {
     canonical: "/",
@@ -38,9 +39,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/logo/Agentic-Ops.jpg",
-        width: 440,
-        height: 440,
+        url: logoPath,
+        width: 1080,
+        height: 1080,
         alt: "AgenticOps AI logo",
       },
     ],
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${appName} | AI Communication Intelligence Platform`,
     description: appDescription,
-    images: ["/logo/Agentic-Ops.jpg"],
+    images: [logoPath],
   },
   robots: {
     index: true,
@@ -87,7 +88,7 @@ export default function RootLayout({
             <div>
               <div className="flex items-center gap-3">
                 <Image
-                  src="/logo/Agentic-Ops.jpg"
+                  src={logoPath}
                   alt="AgenticOps AI logo"
                   width={36}
                   height={36}
