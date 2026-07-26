@@ -6,7 +6,7 @@ import { AppNav } from "./components/app-nav";
 import { appDescription, appName, appVersion, getAppBaseUrl } from "../lib/app-config";
 
 const appUrl = getAppBaseUrl();
-const logoPath = "/logos/agenticops-ai-avatar-v2.png";
+const logoPath = "/logos/agenticops-ai-avatar-v2.jpg";
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),

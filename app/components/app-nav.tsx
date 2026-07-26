@@ -15,7 +15,7 @@ const navItems = [
   { label: "ASP Docs", href: "/docs/asp" },
 ];
 
-const logoPath = "/logos/agenticops-ai-avatar-v2.png";
+const logoPath = "/logos/agenticops-ai-avatar-v2.jpg";
 
 export function AppNav() {
   const pathname = usePathname();

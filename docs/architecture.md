@@ -8,7 +8,7 @@ AgenticOps AI is positioned as an AI Communication Intelligence Platform. The cu
 
 The roadmap expands into AI Email Workspace, AI Marketing Intelligence, AI Business Intelligence, AI Audit & Compliance and AI Business Operator workflows through document ingestion, channel-aware analysis, approval workflows, safe automation and developer platform APIs. Roadmap features must stay clearly labeled until implemented; the application must not claim live Facebook, Instagram, email sending, live chat, auto-send, enterprise tenancy or database-backed functionality before those features exist. The current UI uses status labels such as Implemented, In Progress, Planned and Future to preserve that distinction.
 
-The official avatar asset is served from `public/logos/agenticops-ai-avatar-v2.png` and used by application branding, metadata and social preview images without altering the supplied PNG. Browser icon metadata points to the official PNG asset.
+The official avatar asset is served from `public/logos/agenticops-ai-avatar-v2.jpg` and used by application branding, metadata and social preview images as an upload-safe derivative of the supplied source image. Browser icon metadata points to the official avatar asset.
 
 ## Capability Status
 
