@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
   title: "White Paper | AgenticOps AI",
   description:
-    "AgenticOps AI Version 1.0 technical white paper for the Communication Intelligence Platform.",
+    "AgenticOps AI Version 1.0 technical white paper for the AI Security and Communication Intelligence Platform.",
 };
 
 const pdfPath = "/whitepaper/AgenticOps-AI-White-Paper-v1.pdf";
@@ -94,7 +94,7 @@ export default function WhitePaperPage() {
               AgenticOps AI
             </h1>
             <p className="mt-3 max-w-3xl text-2xl font-semibold text-slate-100">
-              Communication Intelligence Platform
+              AI Security and Communication Intelligence Platform
             </p>
             <p className="mt-5 max-w-3xl text-sm leading-6 text-slate-300">
               Version 1.0 documents the first production release: Web3
