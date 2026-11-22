@@ -257,3 +257,42 @@ controls. Run the full validation suite before committing.
 
 No open-source license has been selected yet. Treat this repository as private
 unless a license is added.
+
+---
+
+## Cloud Engineering & DevOps
+
+*Repository-specific account of implemented and documented engineering work; planned infrastructure is not presented as experience.*
+
+### Cloud platforms
+- Next.js server/API deployment instructions target Vercel; Discord Gateway ingestion uses a separate Railway-compatible persistent worker.
+- Durable integration/workflow state uses Vercel KV or Upstash REST where configured; Web3 project storage also has local JSON limitations.
+
+### DevOps & CI/CD
+- Git-based releases, runnable build checks and separate service environment settings are documented.
+- No independently established Terraform, Kubernetes or multi-region HA infrastructure is claimed.
+
+### Networking & API engineering
+- Gmail OAuth, Telegram/Meta webhooks, Discord Gateway, encrypted OAuth token storage and internal worker-to-web authentication are described.
+- Provider permissions and app-review prerequisites limit which integrations work in production.
+
+### Monitoring & reliability
+- Durable workflow events, human approval, health/event logs and integration error tracking are part of the design.
+- A configured worker is not proof that every third-party webhook or provider review was accepted.
+
+### Architecture & infrastructure diagram
+
+```mermaid
+flowchart LR
+  U[Operator] --> V[Next.js app and APIs on Vercel]
+  D[Discord Gateway worker - Railway] --> V
+  T[Telegram and other integrations] --> V
+  V --> K[(Vercel KV or Upstash)]
+  V --> A[Approval and event workflows]
+```
+
+**Deployment:** Repository setup instructions; production access/worker status require current live checks
+
+**Technical documentation:** [API testing](docs/api-testing.md) · [API contracts](README.md#api-documentation) · [Deployment](README.md#deployment).
+
+**Evidence boundary:** Actual hosted status and external provider approval vary; do not count integrations as verified until provider-specific acceptance is recorded.
